@@ -8,13 +8,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 import structlog
-from prometheus_client import make_asgi_app
 
 from src.config.settings import settings
 from src.db.database import engine, Base
 from src.api.routes import api_router
 from src.api.routes.auth import router as auth_router
-from src.utils.logging import setup_logging
+from src.utils.logging import setup_logging, LoggingMiddleware
+from src.utils.metrics import setup_metrics
 from src.security.middleware import create_security_middleware
 
 # Configure structured logging
@@ -29,6 +29,10 @@ async def lifespan(app: FastAPI):
     logger.info("Starting AROHAN API server")
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"Debug mode: {settings.DEBUG}")
+
+    # Setup metrics
+    setup_metrics(app)
+    logger.info("Prometheus metrics initialized")
 
     # Create database tables
     try:
@@ -53,6 +57,9 @@ app = FastAPI(
     redoc_url="/redoc" if settings.DEBUG else None,
     lifespan=lifespan
 )
+
+# Add logging middleware for correlation IDs
+app.add_middleware(LoggingMiddleware)
 
 
 # Global exception handler
@@ -80,11 +87,6 @@ async def health_check():
         "version": "2.0.0",
         "environment": settings.ENVIRONMENT
     }
-
-
-# Metrics endpoint for Prometheus
-metrics_app = make_asgi_app()
-app.mount("/metrics", metrics_app)
 
 
 # Include API routes

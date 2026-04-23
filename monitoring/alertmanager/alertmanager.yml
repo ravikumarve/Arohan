@@ -1,0 +1,132 @@
+global:
+  resolve_timeout: 5m
+  # Slack webhook configuration (to be configured)
+  # slack_api_url: 'https://hooks.slack.com/services/YOUR/WEBHOOK/URL'
+
+# Route configuration
+route:
+  group_by: ['alertname', 'service', 'severity']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'default'
+
+  routes:
+    # Critical alerts go to critical receiver
+    - match:
+        severity: critical
+      receiver: 'critical'
+      continue: false
+
+    # Warning alerts go to warning receiver
+    - match:
+        severity: warning
+      receiver: 'warning'
+      continue: false
+
+    # API-specific alerts
+    - match:
+        service: arohan-api
+      receiver: 'api-team'
+      continue: true
+
+    # Database-specific alerts
+    - match:
+        service: postgres
+      receiver: 'database-team'
+      continue: true
+
+    # STT-specific alerts
+    - match:
+        service: stt
+      receiver: 'ml-team'
+      continue: true
+
+# Receivers configuration
+receivers:
+  - name: 'default'
+    # Email notifications (to be configured)
+    # email_configs:
+    #   - to: 'team@arohan.ai'
+    #     from: 'alertmanager@arohan.ai'
+    #     smarthost: 'smtp.gmail.com:587'
+    #     auth_username: 'alertmanager@arohan.ai'
+    #     auth_password: 'your-password'
+
+  - name: 'critical'
+    # Critical alerts - immediate notification
+    # email_configs:
+    #   - to: 'oncall@arohan.ai'
+    #     from: 'alertmanager@arohan.ai'
+    #     smarthost: 'smtp.gmail.com:587'
+    #     auth_username: 'alertmanager@arohan.ai'
+    #     auth_password: 'your-password'
+    # slack_configs:
+    #   - api_url: 'https://hooks.slack.com/services/YOUR/WEBHOOK/URL'
+    #     channel: '#alerts-critical'
+    #     title: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
+    #     text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+
+  - name: 'warning'
+    # Warning alerts - standard notification
+    # email_configs:
+    #   - to: 'team@arohan.ai'
+    #     from: 'alertmanager@arohan.ai'
+    #     smarthost: 'smtp.gmail.com:587'
+    #     auth_username: 'alertmanager@arohan.ai'
+    #     auth_password: 'your-password'
+    # slack_configs:
+    #   - api_url: 'https://hooks.slack.com/services/YOUR/WEBHOOK/URL'
+    #     channel: '#alerts-warning'
+    #     title: '⚠️ WARNING: {{ .GroupLabels.alertname }}'
+    #     text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+
+  - name: 'api-team'
+    # API-specific alerts
+    # email_configs:
+    #   - to: 'api-team@arohan.ai'
+    #     from: 'alertmanager@arohan.ai'
+    #     smarthost: 'smtp.gmail.com:587'
+    #     auth_username: 'alertmanager@arohan.ai'
+    #     auth_password: 'your-password'
+
+  - name: 'database-team'
+    # Database-specific alerts
+    # email_configs:
+    #   - to: 'db-team@arohan.ai'
+    #     from: 'alertmanager@arohan.ai'
+    #     smarthost: 'smtp.gmail.com:587'
+    #     auth_username: 'alertmanager@arohan.ai'
+    #     auth_password: 'your-password'
+
+  - name: 'ml-team'
+    # ML/STT-specific alerts
+    # email_configs:
+    #   - to: 'ml-team@arohan.ai'
+    #     from: 'alertmanager@arohan.ai'
+    #     smarthost: 'smtp.gmail.com:587'
+    #     auth_username: 'alertmanager@arohan.ai'
+    #     auth_password: 'your-password'
+
+# Inhibition rules
+inhibit_rules:
+  # If critical alert is firing, inhibit warning alerts for same instance
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']
+
+  # If API is down, inhibit all API-specific alerts
+  - source_match:
+      alertname: 'APIDown'
+    target_match_re:
+      service: 'arohan-api'
+    equal: ['instance']
+
+  # If Database is down, inhibit all database-specific alerts
+  - source_match:
+      alertname: 'DatabaseDown'
+    target_match_re:
+      service: 'postgres'
+    equal: ['instance']
