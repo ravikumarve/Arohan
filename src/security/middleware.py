@@ -316,7 +316,7 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
     )
     
     PATH_TRAVERSAL_PATTERN = re.compile(
-        r"(\.\./|\.\.\\\)",
+        r"(\.\.\/|\.\.\\\\)",
         re.IGNORECASE
     )
     
@@ -613,7 +613,7 @@ def create_security_middleware(
     if enable_cors:
         app = get_cors_middleware(
             app,
-            allowed_origins=settings.cors_origins,
+            allowed_origins=settings.CORS_ORIGINS,
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],

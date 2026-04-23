@@ -39,8 +39,8 @@ class CompanyCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=255)
     domain: str = Field(..., min_length=1, max_length=255)
     industry: Optional[str] = Field(None, max_length=100)
-    size: Optional[str] = Field(None, regex="^(1-10|11-50|51-200|201-500|500+)$")
-    plan: str = Field(default="startup", regex="^(startup|growth|enterprise)$")
+    size: Optional[str] = Field(None, pattern="^(1-10|11-50|51-200|201-500|500+)$")
+    plan: str = Field(default="startup", pattern="^(startup|growth|enterprise)$")
     settings: Optional[Dict[str, Any]] = None
 
     @validator('domain')
@@ -54,9 +54,9 @@ class CompanyUpdate(BaseModel):
     """Company update request"""
     name: Optional[str] = Field(None, min_length=1, max_length=255)
     industry: Optional[str] = Field(None, max_length=100)
-    size: Optional[str] = Field(None, regex="^(1-10|11-50|51-200|201-500|500+)$")
-    plan: Optional[str] = Field(None, regex="^(startup|growth|enterprise)$")
-    status: Optional[str] = Field(None, regex="^(active|suspended|deleted)$")
+    size: Optional[str] = Field(None, pattern="^(1-10|11-50|51-200|201-500|500+)$")
+    plan: Optional[str] = Field(None, pattern="^(startup|growth|enterprise)$")
+    status: Optional[str] = Field(None, pattern="^(active|suspended|deleted)$")
     settings: Optional[Dict[str, Any]] = None
 
 
@@ -110,7 +110,7 @@ class UserUpdate(BaseModel):
     phone: Optional[str] = Field(None, max_length=20)
     name: Optional[str] = Field(None, min_length=1, max_length=255)
     role: Optional[UserRole] = None
-    status: Optional[str] = Field(None, regex="^(active|inactive|deleted)$")
+    status: Optional[str] = Field(None, pattern="^(active|inactive|deleted)$")
     settings: Optional[Dict[str, Any]] = None
 
 
@@ -157,7 +157,7 @@ class RequisitionCreate(BaseModel):
     score_threshold: int = Field(default=70, ge=0, le=100)
     geo_radius_km: int = Field(default=10, ge=1, le=100)
     pin_code: Optional[str] = Field(None, max_length=10)
-    shift_preference: Optional[str] = Field(None, regex="^(day|night|flexible)$")
+    shift_preference: Optional[str] = Field(None, pattern="^(day|night|flexible)$")
     salary_range: Optional[str] = Field(None, max_length=50)
     settings: Optional[Dict[str, Any]] = None
 
@@ -170,9 +170,9 @@ class RequisitionUpdate(BaseModel):
     score_threshold: Optional[int] = Field(None, ge=0, le=100)
     geo_radius_km: Optional[int] = Field(None, ge=1, le=100)
     pin_code: Optional[str] = Field(None, max_length=10)
-    shift_preference: Optional[str] = Field(None, regex="^(day|night|flexible)$")
+    shift_preference: Optional[str] = Field(None, pattern="^(day|night|flexible)$")
     salary_range: Optional[str] = Field(None, max_length=50)
-    status: Optional[str] = Field(None, regex="^(open|closed|paused)$")
+    status: Optional[str] = Field(None, pattern="^(open|closed|paused)$")
     settings: Optional[Dict[str, Any]] = None
 
 
@@ -213,7 +213,7 @@ class CampaignUpdate(BaseModel):
     """Campaign update request"""
     name: Optional[str] = Field(None, min_length=1, max_length=255)
     description: Optional[str] = None
-    status: Optional[str] = Field(None, regex="^(active|completed|paused)$")
+    status: Optional[str] = Field(None, pattern="^(active|completed|paused)$")
     settings: Optional[Dict[str, Any]] = None
 
 
@@ -247,7 +247,7 @@ class CandidateCreate(BaseModel):
     name: Optional[str] = Field(None, max_length=255)
     email: Optional[EmailStr] = None
     language_detected: str = Field(default="hi-IN", max_length=10)
-    inbound_channel: Optional[str] = Field(None, regex="^(ivr|whatsapp_audio|whatsapp_text)$")
+    inbound_channel: Optional[str] = Field(None, pattern="^(ivr|whatsapp_audio|whatsapp_text)$")
 
     @validator('phone')
     def validate_phone(cls, v):
@@ -260,7 +260,7 @@ class CandidateUpdate(BaseModel):
     """Candidate update request"""
     name: Optional[str] = Field(None, max_length=255)
     email: Optional[EmailStr] = None
-    status: Optional[str] = Field(None, regex="^(pending|in_progress|completed|shortlisted|rejected)$")
+    status: Optional[str] = Field(None, pattern="^(pending|in_progress|completed|shortlisted|rejected)$")
     geo_data: Optional[Dict[str, Any]] = None
     language_data: Optional[Dict[str, Any]] = None
     demographic_data: Optional[Dict[str, Any]] = None
@@ -353,7 +353,7 @@ class ScorecardCreate(BaseModel):
     domain_knowledge_score: Optional[float] = Field(None, ge=0, le=100)
     situational_judgment_score: Optional[float] = Field(None, ge=0, le=100)
     confidence_score: Optional[float] = Field(None, ge=0, le=100)
-    language_fluency: Optional[str] = Field(None, regex="^(native|proficient|functional)$")
+    language_fluency: Optional[str] = Field(None, pattern="^(native|proficient|functional)$")
     assessor_notes: Optional[str] = None
     recommended_roles: Optional[List[str]] = None
     shortlist_flag: bool = False
@@ -367,7 +367,7 @@ class ScorecardUpdate(BaseModel):
     domain_knowledge_score: Optional[float] = Field(None, ge=0, le=100)
     situational_judgment_score: Optional[float] = Field(None, ge=0, le=100)
     confidence_score: Optional[float] = Field(None, ge=0, le=100)
-    language_fluency: Optional[str] = Field(None, regex="^(native|proficient|functional)$")
+    language_fluency: Optional[str] = Field(None, pattern="^(native|proficient|functional)$")
     assessor_notes: Optional[str] = None
     recommended_roles: Optional[List[str]] = None
     shortlist_flag: Optional[bool] = None
@@ -406,7 +406,7 @@ class CandidateSessionCreate(BaseModel):
     candidate_id: UUID
     session_id: str = Field(..., min_length=1, max_length=100)
     language_detected: str = Field(default="hi-IN", max_length=10)
-    inbound_channel: str = Field(default="ivr", regex="^(ivr|whatsapp_audio|whatsapp_text)$")
+    inbound_channel: str = Field(default="ivr", pattern="^(ivr|whatsapp_audio|whatsapp_text)$")
 
 
 class CandidateSessionResponse(BaseModel):
@@ -442,7 +442,7 @@ class AgentRequest(BaseModel):
     """Agent orchestration request"""
     candidate_id: UUID
     requisition_id: Optional[UUID] = None
-    agent_type: str = Field(..., regex="^(proctor|assessor|matchmaker|orchestrator)$")
+    agent_type: str = Field(..., pattern="^(proctor|assessor|matchmaker|orchestrator)$")
     parameters: Optional[Dict[str, Any]] = None
 
 
@@ -462,7 +462,7 @@ class InterviewStartRequest(BaseModel):
     candidate_id: UUID
     requisition_id: UUID
     language: str = Field(default="hi-IN", max_length=10)
-    channel: str = Field(default="ivr", regex="^(ivr|whatsapp_audio|whatsapp_text)$")
+    channel: str = Field(default="ivr", pattern="^(ivr|whatsapp_audio|whatsapp_text)$")
     settings: Optional[Dict[str, Any]] = None
 
 
@@ -570,7 +570,7 @@ class PaginationParams(BaseModel):
     page: int = Field(default=1, ge=1)
     page_size: int = Field(default=20, ge=1, le=100)
     sort_by: Optional[str] = None
-    sort_order: Optional[str] = Field(default="desc", regex="^(asc|desc)$")
+    sort_order: Optional[str] = Field(default="desc", pattern="^(asc|desc)$")
 
 
 class PaginatedResponse(BaseModel):

@@ -54,18 +54,6 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Apply security middleware
-app = create_security_middleware(
-    app,
-    enable_security_headers=True,
-    enable_rate_limiting=True,
-    enable_request_validation=True,
-    enable_input_sanitization=True,
-    enable_cors=True,
-    enable_https_redirect=False,
-    enable_trusted_host=False,
-)
-
 
 # Global exception handler
 @app.exception_handler(Exception)
@@ -116,6 +104,19 @@ async def root():
         "health": "/health",
         "metrics": "/metrics"
     }
+
+
+# Apply security middleware (must be applied last)
+app = create_security_middleware(
+    app,
+    enable_security_headers=True,
+    enable_rate_limiting=True,
+    enable_request_validation=True,
+    enable_input_sanitization=True,
+    enable_cors=True,
+    enable_https_redirect=False,
+    enable_trusted_host=False,
+)
 
 
 if __name__ == "__main__":

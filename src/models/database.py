@@ -4,7 +4,7 @@ SQLAlchemy ORM models for all database tables
 """
 
 from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, Text, ForeignKey, JSON, Enum, Index
-from sqlalchemy.dialects.postgresql import UUID, ARRAY, JSONB
+from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
@@ -24,7 +24,7 @@ class Company(Base):
     size = Column(String(50))  # "1-10", "11-50", "51-200", "201-500", "500+"
     plan = Column(String(50), default="startup")  # "startup", "growth", "enterprise"
     status = Column(String(20), default="active")  # "active", "suspended", "deleted"
-    settings = Column(JSONB, default={})
+    settings = Column(JSON, default={})
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -52,7 +52,7 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     status = Column(String(20), default="active")  # "active", "inactive", "deleted"
     last_login = Column(DateTime)
-    settings = Column(JSONB, default={})
+    settings = Column(JSON, default={})
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -75,14 +75,14 @@ class Requisition(Base):
     company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
     title = Column(String(255), nullable=False)
     description = Column(Text)
-    requirements = Column(JSONB, default={})
+    requirements = Column(JSON, default={})
     score_threshold = Column(Integer, default=70)  # Minimum score for shortlisting
     geo_radius_km = Column(Integer, default=10)  # Geographic search radius
     pin_code = Column(String(10))  # Location pin code
     shift_preference = Column(String(50))  # "day", "night", "flexible"
     salary_range = Column(String(50))  # "₹20,000-25,000"
     status = Column(String(20), default="open")  # "open", "closed", "paused"
-    statistics = Column(JSONB, default={})
+    statistics = Column(JSON, default={})
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -109,8 +109,8 @@ class Campaign(Base):
     name = Column(String(255), nullable=False)
     description = Column(Text)
     status = Column(String(20), default="active")  # "active", "completed", "paused"
-    settings = Column(JSONB, default={})
-    statistics = Column(JSONB, default={})
+    settings = Column(JSON, default={})
+    statistics = Column(JSON, default={})
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     completed_at = Column(DateTime)
@@ -140,9 +140,9 @@ class Candidate(Base):
     language_detected = Column(String(10), default="hi-IN")
     inbound_channel = Column(String(50))  # "ivr", "whatsapp_audio", "whatsapp_text"
     status = Column(String(20), default="pending")  # "pending", "in_progress", "completed", "shortlisted", "rejected"
-    geo_data = Column(JSONB, default={})
-    language_data = Column(JSONB, default={})
-    demographic_data = Column(JSONB, default={})
+    geo_data = Column(JSON, default={})
+    language_data = Column(JSON, default={})
+    demographic_data = Column(JSON, default={})
     enriched_at = Column(DateTime)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -173,7 +173,7 @@ class Transcript(Base):
     language_detected = Column(String(10))
     audio_url = Column(String(500))
     audio_duration_seconds = Column(Integer)
-    segments = Column(JSONB, default=[])  # Array of transcript segments
+    segments = Column(JSON, default=[])  # Array of transcript segments
     confidence_score = Column(Float)
     normalized = Column(Boolean, default=False)
     normalized_at = Column(DateTime)
@@ -205,9 +205,9 @@ class Scorecard(Base):
     confidence_score = Column(Float)  # 1-100
     language_fluency = Column(String(20))  # "native", "proficient", "functional"
     assessor_notes = Column(Text)
-    recommended_roles = Column(ARRAY(String))
+    recommended_roles = Column(JSON, default=[])
     shortlist_flag = Column(Boolean, default=False)
-    metrics = Column(JSONB, default={})
+    metrics = Column(JSON, default={})
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -236,12 +236,12 @@ class CandidateSession(Base):
     interview_duration_seconds = Column(Integer, default=0)
     language_detected = Column(String(10), default="hi-IN")
     inbound_channel = Column(String(50), default="ivr")
-    transcript_segments = Column(JSONB, default=[])
-    question_responses = Column(JSONB, default=[])
+    transcript_segments = Column(JSON, default=[])
+    question_responses = Column(JSON, default=[])
     drop_off_count = Column(Integer, default=0)
     last_question_asked = Column(Text)
-    recovery_context = Column(JSONB, default={})
-    matched_requisitions = Column(JSONB, default=[])
+    recovery_context = Column(JSON, default={})
+    matched_requisitions = Column(JSON, default=[])
     created_at = Column(DateTime, default=datetime.utcnow)
     last_active_at = Column(DateTime, default=datetime.utcnow)
     completed_at = Column(DateTime)
@@ -267,7 +267,7 @@ class AuditTrail(Base):
     entity_type = Column(String(50), nullable=False)  # "candidate", "requisition", "campaign", "user"
     entity_id = Column(UUID(as_uuid=True), nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
-    changes = Column(JSONB, default={})
+    changes = Column(JSON, default={})
     ip_address = Column(String(50))
     user_agent = Column(String(500))
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -290,7 +290,7 @@ class Event(Base):
     entity_type = Column(String(50), nullable=False)
     entity_id = Column(UUID(as_uuid=True), nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
-    changes = Column(JSONB, default={})
+    changes = Column(JSON, default={})
     ip_address = Column(String(50))
     user_agent = Column(String(500))
     audited = Column(Boolean, default=False)

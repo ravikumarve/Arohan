@@ -92,7 +92,10 @@ class Settings(BaseSettings):
     AUDIO_MAX_DURATION_SECONDS: int = Field(default=300, description="Maximum audio duration in seconds")
     AUDIO_SAMPLE_RATE: int = Field(default=16000, description="Audio sample rate")
     AUDIO_CHANNELS: int = Field(default=1, description="Audio channels")
-    SUPPORTED_AUDIO_FORMATS: str = Field(default="wav,mp3,m4a,ogg", description="Supported audio formats")
+    SUPPORTED_AUDIO_FORMATS: List[str] = Field(
+        default=["wav", "mp3", "m4a", "ogg"],
+        description="Supported audio formats"
+    )
 
     # Performance
     CACHE_TTL_SECONDS: int = Field(default=3600, description="Cache TTL in seconds")
@@ -132,9 +135,10 @@ class Settings(BaseSettings):
         return v
 
     class Config:
-        env_file = ".env"
+        env_file = "config/.env"
         env_file_encoding = "utf-8"
         case_sensitive = True
+        extra = "ignore"  # Ignore extra fields from .env file
 
 
 # Create global settings instance
