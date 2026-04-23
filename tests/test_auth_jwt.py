@@ -12,6 +12,7 @@ from src.auth.jwt import (
     decode_token,
     verify_token,
     is_token_expired,
+    get_token_expiry,
     get_token_user_id,
     get_token_company_id,
     get_token_role,
@@ -328,8 +329,12 @@ class TestTokenRefresh:
         # Should get new tokens
         assert new_tokens is not None
         assert "access_token" in new_tokens
-        assert "sub" in new_tokens
-        assert new_tokens["sub"] == "user123"
+        assert "refresh_token" in new_tokens
+        
+        # Verify the new access token contains the correct user data
+        new_payload = decode_token(new_tokens["access_token"])
+        assert new_payload is not None
+        assert new_payload["sub"] == "user123"
     
     def test_refresh_with_invalid_token(self):
         """Test refreshing with invalid token"""

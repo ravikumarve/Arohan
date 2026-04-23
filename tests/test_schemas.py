@@ -93,8 +93,8 @@ class TestCompanySchemas:
         
         assert company.name == "Updated Company"
         assert company.industry == "Finance"
-        assert company.domain is None
         assert company.size is None
+        assert company.plan is None
     
     def test_company_response(self):
         """Test company response"""

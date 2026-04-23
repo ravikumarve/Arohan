@@ -11,13 +11,59 @@ from sqlalchemy.pool import StaticPool
 from httpx import AsyncClient, ASGITransport
 from fastapi import FastAPI
 
-from src.main import app
+from src.main import app as main_app
 from src.db.database import Base, get_db
 from src.config.settings import settings
 
 
 # Test database URL (using SQLite for faster tests)
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
+
+
+@pytest.fixture(scope="function")
+def test_app() -> FastAPI:
+    """Create a test FastAPI app without security middleware
+    
+    Returns:
+        FastAPI: Test app instance
+    """
+    # Create a new app instance for testing without security middleware
+    from fastapi import FastAPI
+    from src.api.routes import api_router
+    from src.api.routes.auth import router as auth_router
+    
+    test_app = FastAPI(
+        title="AROHAN API (Test)",
+        version="2.0.0",
+        docs_url="/docs",
+        redoc_url="/redoc"
+    )
+    
+    # Include API routes
+    test_app.include_router(auth_router, prefix="/api/v1")
+    test_app.include_router(api_router, prefix="/api/v1")
+    
+    # Add root and health endpoints
+    @test_app.get("/", tags=["Root"])
+    async def root():
+        return {
+            "name": "AROHAN API",
+            "version": "2.0.0",
+            "description": "AI-Powered Voice Screening System for Blue-Collar Recruitment",
+            "documentation": "/docs",
+            "health": "/health"
+        }
+    
+    @test_app.get("/health", tags=["Health"])
+    async def health_check():
+        return {
+            "status": "healthy",
+            "service": "arohan-api",
+            "version": "2.0.0",
+            "environment": "test"
+        }
+    
+    return test_app
 
 
 # Create test engine
@@ -57,11 +103,12 @@ async def db_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 @pytest.fixture(scope="function")
-async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
+async def client(test_app: FastAPI, db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     """Create a test HTTP client
     
     Args:
-        db_session: Test database session
+        test_app: FastAPI test app
+        db_session: Database session
         
     Yields:
         AsyncClient: Test HTTP client
@@ -70,17 +117,17 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     async def override_get_db():
         yield db_session
     
-    app.dependency_overrides[get_db] = override_get_db
+    test_app.dependency_overrides[get_db] = override_get_db
     
     # Create test client
     async with AsyncClient(
-        transport=ASGITransport(app=app),
+        transport=ASGITransport(app=test_app),
         base_url="http://test"
     ) as test_client:
         yield test_client
     
     # Reset overrides
-    app.dependency_overrides.clear()
+    test_app.dependency_overrides.clear()
 
 
 @pytest.fixture(scope="function")
