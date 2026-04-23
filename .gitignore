@@ -7,6 +7,8 @@
 # ============================================
 # Agent configuration and planning documents
 AGENTS.md
+# Copied agent files from agency-agents
+agents/
 
 # ============================================
 # Python/FastAPI Exclusions
