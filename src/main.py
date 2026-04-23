@@ -13,7 +13,9 @@ from prometheus_client import make_asgi_app
 from src.config.settings import settings
 from src.db.database import engine, Base
 from src.api.routes import api_router
+from src.api.routes.auth import router as auth_router
 from src.utils.logging import setup_logging
+from src.security.middleware import create_security_middleware
 
 # Configure structured logging
 setup_logging()
@@ -52,13 +54,16 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+# Apply security middleware
+app = create_security_middleware(
+    app,
+    enable_security_headers=True,
+    enable_rate_limiting=True,
+    enable_request_validation=True,
+    enable_input_sanitization=True,
+    enable_cors=True,
+    enable_https_redirect=False,
+    enable_trusted_host=False,
 )
 
 
@@ -95,6 +100,7 @@ app.mount("/metrics", metrics_app)
 
 
 # Include API routes
+app.include_router(auth_router, prefix="/api/v1")
 app.include_router(api_router, prefix="/api/v1")
 
 
