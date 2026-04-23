@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AROHAN — Voice-Native Mass Screening Mesh for Bharat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f5f3ee;
+    --accent: #e85d26;
+    --accent2: #f5a623;
+    --muted: #6b6760;
+    --border: #ddd9d0;
+    --card: #ffffff;
+    --green: #1a7a4a;
+    --code-bg: #111118;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232,93,38,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,93,38,0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(232,93,38,0.18) 0%, transparent 65%);
+    top: -200px;
+    right: -100px;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 64px 40px 56px;
+    width: 100%;
+  }
+
+  .badge-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.03em;
+  }
+  .badge.accent { border-color: var(--accent); color: var(--accent); }
+  .badge.green { border-color: #2dd47a; color: #2dd47a; }
+
+  .hero-logo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .logo-mark {
+    flex-shrink: 0;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 7vw, 72px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: #ffffff;
+  }
+
+  .hero-title span { color: var(--accent); }
+
+  .hero-sub {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 8px;
+    animation: fadeUp 0.7s 0.15s ease both;
+  }
+
+  .hero-tagline {
+    font-size: 18px;
+    color: rgba(255,255,255,0.6);
+    max-width: 560px;
+    margin-top: 16px;
+    line-height: 1.55;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.7s 0.28s ease both;
+  }
+
+  .btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.15s, opacity 0.15s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn:hover { transform: translateY(-2px); opacity: 0.92; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-outline { background: transparent; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.25); }
+
+  /* ─── FLOW DIAGRAM ─── */
+  .flow-strip {
+    background: var(--ink);
+    padding: 0 40px 56px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .flow-strip svg { display: block; margin: 0 auto; max-width: 100%; }
+
+  /* ─── CONTENT ─── */
+  .content {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+  section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 20px;
+    line-height: 1.15;
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  p { color: #3a3835; margin-bottom: 16px; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ─── STAT ROW ─── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 40px 0;
+  }
+
+  .stat {
+    background: var(--card);
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ─── AGENT CARDS ─── */
+  .agents {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .agent-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .agent-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  }
+  .agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .agent-card.proctor::before { background: var(--accent); }
+  .agent-card.assessor::before { background: var(--accent2); }
+  .agent-card.matchmaker::before { background: var(--green); }
+
+  .agent-designation {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .agent-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+  .agent-card.proctor .agent-name { color: var(--accent); }
+  .agent-card.assessor .agent-name { color: var(--accent2); }
+  .agent-card.matchmaker .agent-name { color: var(--green); }
+
+  .agent-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+
+  .agent-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tool-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--paper);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ─── FEATURE GRID ─── */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: box-shadow 0.2s;
+  }
+  .feature-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .feature-body h3 { font-size: 15px; margin-bottom: 4px; }
+  .feature-body p { font-size: 13px; color: var(--muted); margin: 0; }
+
+  /* ─── STT PIPELINE ─── */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 32px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .pipeline-stage {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px 28px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .pipeline-stage:last-child { border-bottom: none; }
+  .pipeline-stage:hover { background: #fafaf8; }
+
+  .stage-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--border);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 36px;
+  }
+
+  .stage-body h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .stage-body p { font-size: 13px; color: var(--muted); margin: 0; }
+
+  /* ─── CODE BLOCKS ─── */
+  pre {
+    background: var(--code-bg);
+    color: #c9d1d9;
+    border-radius: 10px;
+    padding: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 20px 0;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .kw { color: #ff7b72; }
+  .fn { color: #d2a8ff; }
+  .str { color: #a5d6ff; }
+  .cm { color: #6e7681; }
+  .num { color: #79c0ff; }
+
+  /* ─── API TABLE ─── */
+  .api-group { margin-top: 28px; }
+  .api-group h3 { margin-bottom: 12px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafaf8; }
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    background: #f0ede6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  /* ─── PRICING ─── */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .pricing-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .pricing-card:hover { transform: translateY(-3px); }
+  .pricing-card.featured {
+    background: var(--ink);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .pricing-card.featured .tier { color: var(--accent); }
+  .pricing-card.featured .price-sub { color: rgba(255,255,255,0.5); }
+  .pricing-card.featured .p-features { color: rgba(255,255,255,0.7); }
+
+  .tier {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .price {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .price-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  .p-features { font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+
+  /* ─── ROADMAP ─── */
+  .roadmap { display: flex; flex-direction: column; gap: 0; margin-top: 32px; }
+
+  .rm-item {
+    display: flex;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .rm-item:last-child { border-bottom: none; }
+
+  .rm-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    min-width: 80px;
+    text-align: center;
+  }
+  .rm-status.done { background: #d4f5e4; color: var(--green); }
+  .rm-status.progress { background: #fff3cd; color: #9a6700; }
+  .rm-status.planned { background: #f0ede6; color: var(--muted); }
+
+  .rm-text { font-size: 14px; }
+  .rm-ver { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-left: auto; flex-shrink: 0; }
+
+  /* ─── PERFORMANCE ─── */
+  .perf-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .perf-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .perf-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .perf-label { font-size: 12px; color: var(--muted); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 48px 40px;
+    font-size: 13px;
+  }
+  footer .tagline {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 12px;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.04); }
+  }
+
+  .pulse { animation: pulse-ring 3s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+
+    <div class="badge-row">
+      <span class="badge accent">v2.0.0-enterprise</span>
+      <span class="badge green">18/18 tests passing</span>
+      <span class="badge">Apache 2.0</span>
+      <span class="badge">FastAPI · LangGraph</span>
+      <span class="badge">Bhashini · Whisper STT</span>
+    </div>
+
+    <div class="hero-sub">Voice-Native Mass Screening Mesh for Bharat</div>
+
+    <div class="hero-logo">
+      <!-- AROHAN SVG Logo Mark -->
+      <div class="logo-mark">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer ring -->
+          <circle cx="36" cy="36" r="34" stroke="#e85d26" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4" class="pulse"/>
+          <!-- Mountain / ascent shape -->
+          <path d="M18 50 L36 20 L54 50 Z" fill="none" stroke="#e85d26" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Inner peak accent -->
+          <path d="M29 50 L36 33 L43 50" fill="none" stroke="#f5a623" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Sound wave left -->
+          <path d="M10 28 Q8 36 10 44" stroke="rgba(232,93,38,0.5)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M6 23 Q2 36 6 49" stroke="rgba(232,93,38,0.25)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Sound wave right -->
+          <path d="M62 28 Q64 36 62 44" stroke="rgba(232,93,38,0.5)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M66 23 Q70 36 66 49" stroke="rgba(232,93,38,0.25)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Center mic dot -->
+          <circle cx="36" cy="36" r="3" fill="#e85d26"/>
+        </svg>
+      </div>
+
+      <h1 class="hero-title">AROHAN<span>.</span></h1>
+    </div>
+
+    <p class="hero-tagline">No resume. No webcam. No dashboard. A candidate gives a missed call — and gets a full AI-powered voice interview in their language, scored and matched to open roles before a recruiter opens their inbox.</p>
+
+    <div class="hero-cta">
+      <a href="https://github.com/ravikumarve/Arohan" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        View on GitHub
+      </a>
+      <a href="http://localhost:8000/docs" class="btn btn-outline">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M5 5h6M5 11h4"/></svg>
+        API Docs
+      </a>
+    </div>
+  </div>
+
+  <!-- Architecture flow strip -->
+  <div class="flow-strip">
+    <svg viewBox="0 0 860 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:860px;width:100%">
+      <!-- Nodes -->
+      <rect x="0" y="20" width="120" height="40" rx="6" fill="#1a1a24" stroke="rgba(232,93,38,0.4)" stroke-width="1"/>
+      <text x="60" y="44" font-family="DM Mono, monospace" font-size="11" fill="#e85d26" text-anchor="middle">Candidate</text>
+      <text x="60" y="56" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">IVR / WhatsApp</text>
+
+      <rect x="160" y="20" width="120" height="40" rx="6" fill="#1a1a24" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <text x="220" y="38" font-family="DM Mono, monospace" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">Gateway</text>
+      <text x="220" y="52" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">FastAPI · Twilio</text>
+
+      <rect x="320" y="20" width="120" height="40" rx="6" fill="#1a1a24" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <text x="380" y="38" font-family="DM Mono, monospace" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">STT Engine</text>
+      <text x="380" y="52" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Bhashini · Whisper</text>
+
+      <rect x="480" y="20" width="100" height="40" rx="6" fill="#2a1a0e" stroke="rgba(232,93,38,0.6)" stroke-width="1.5"/>
+      <text x="530" y="38" font-family="DM Mono, monospace" font-size="10" fill="#e85d26" text-anchor="middle">Proctor</text>
+      <text x="530" y="52" font-family="DM Mono, monospace" font-size="9" fill="rgba(232,93,38,0.5)" text-anchor="middle">LangGraph</text>
+
+      <rect x="620" y="20" width="100" height="40" rx="6" fill="#1a1a10" stroke="rgba(245,166,35,0.5)" stroke-width="1"/>
+      <text x="670" y="38" font-family="DM Mono, monospace" font-size="10" fill="#f5a623" text-anchor="middle">Assessor</text>
+      <text x="670" y="52" font-family="DM Mono, monospace" font-size="9" fill="rgba(245,166,35,0.4)" text-anchor="middle">Pinecone</text>
+
+      <rect x="760" y="20" width="100" height="40" rx="6" fill="#0d1a12" stroke="rgba(45,212,122,0.4)" stroke-width="1"/>
+      <text x="810" y="38" font-family="DM Mono, monospace" font-size="10" fill="#2dd47a" text-anchor="middle">Matchmaker</text>
+      <text x="810" y="52" font-family="DM Mono, monospace" font-size="9" fill="rgba(45,212,122,0.4)" text-anchor="middle">ATS · Geo</text>
+
+      <!-- Arrows -->
+      <path d="M120 40 L158 40" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" marker-end="url(#arr)"/>
+      <path d="M280 40 L318 40" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" marker-end="url(#arr)"/>
+      <path d="M440 40 L478 40" stroke="rgba(232,93,38,0.5)" stroke-width="1.5" marker-end="url(#arr-o)"/>
+      <path d="M580 40 L618 40" stroke="rgba(245,166,35,0.5)" stroke-width="1.5" marker-end="url(#arr-y)"/>
+      <path d="M720 40 L758 40" stroke="rgba(45,212,122,0.5)" stroke-width="1.5" marker-end="url(#arr-g)"/>
+
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0 0 L6 3 L0 6 Z" fill="rgba(255,255,255,0.2)"/>
+        </marker>
+        <marker id="arr-o" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0 0 L6 3 L0 6 Z" fill="rgba(232,93,38,0.6)"/>
+        </marker>
+        <marker id="arr-y" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0 0 L6 3 L0 6 Z" fill="rgba(245,166,35,0.6)"/>
+        </marker>
+        <marker id="arr-g" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0 0 L6 3 L0 6 Z" fill="rgba(45,212,122,0.6)"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CONTENT ═══════════════════════════════ -->
+<div class="content">
+
+  <!-- STATS -->
+  <section style="padding-top: 56px;">
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">₹15</div>
+        <div class="stat-label">Cost per screening vs ₹200–500 in HR hours</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">80%</div>
+        <div class="stat-label">Reduction in time-to-hire</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">22</div>
+        <div class="stat-label">Indian languages via Bhashini</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section>
+    <span class="section-label">The Problem</span>
+    <h2>India hires 12 million workers a year.<br>The process is broken.</h2>
+    <p>Most apply for roles in logistics, retail, construction, BPO, and manufacturing — sectors that move fast and hire in bulk. The existing recruitment funnel was designed for knowledge workers: upload a PDF resume, schedule a Zoom call, complete a web form. None of that works at the ground level.</p>
+    <p>HR teams spend ₹200–500 per candidate in human hours before a single interview happens. Candidates in Tier 2/3 cities have shared phones, 3G connections, and no webcam. Resume screening for roles where no one has a resume worth reading. Webcam interviews where bandwidth is the bottleneck. Dropped calls with no recovery. Assessment tools built for English speakers.</p>
+    <p>AROHAN cuts the per-screening cost to ₹15–20 in compute and telephony. At 1,000 screenings a month, that is a ₹1.85L cost saving per client. And the candidate never needs to do anything except pick up a phone.</p>
+  </section>
+
+  <!-- AGENTS -->
+  <section>
+    <span class="section-label">Agent Topology</span>
+    <h2>Three agents. One pipeline. Zero human bottlenecks.</h2>
+    <p>AROHAN's intelligence is split across three specialized cognitive nodes connected via a LangGraph stateful flow. Each agent has exactly one responsibility.</p>
+
+    <div class="agents">
+      <div class="agent-card proctor">
+        <span class="agent-designation">Interviewer · Node 01</span>
+        <div class="agent-name">The Proctor</div>
+        <p class="agent-desc">Conducts a fluid, empathetic 5-minute interview. Manages dropped calls, handles code-switched speech, and dynamically adjusts question difficulty based on every answer.</p>
+        <div class="agent-tools">
+          <span class="tool-tag">TwilioVoiceGen</span>
+          <span class="tool-tag">DynamicScripting</span>
+          <span class="tool-tag">SessionStateManager</span>
+          <span class="tool-tag">LangGraph</span>
+        </div>
+      </div>
+
+      <div class="agent-card assessor">
+        <span class="agent-designation">Evaluator · Node 02</span>
+        <div class="agent-name">The Assessor</div>
+        <p class="agent-desc">Analyzes the complete transcript for confidence, keyword accuracy, and situational judgment. Outputs a structured 1–100 scorecard with sub-scores per trait using Pinecone vector similarity.</p>
+        <div class="agent-tools">
+          <span class="tool-tag">SentimentAnalyzer</span>
+          <span class="tool-tag">SkillMatrix</span>
+          <span class="tool-tag">PineconeVectorStore</span>
+        </div>
+      </div>
+
+      <div class="agent-card matchmaker">
+        <span class="agent-designation">Dispatcher · Node 03</span>
+        <div class="agent-name">The Matchmaker</div>
+        <p class="agent-desc">Compares the Assessor's scorecard against every open requisition within the candidate's geographic radius. Fires the ATS webhook and notifies the candidate on WhatsApp in seconds.</p>
+        <div class="agent-tools">
+          <span class="tool-tag">GeoSpatialQuery</span>
+          <span class="tool-tag">ATS-Webhook</span>
+          <span class="tool-tag">WhatsAppNotifier</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section>
+    <span class="section-label">Core Differentiators</span>
+    <h2>Built for conditions that western SaaS ignores.</h2>
+
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#fff1eb;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#e85d26" stroke-width="1.8"><path d="M10 2v6l4 2"/><circle cx="10" cy="10" r="8"/></svg>
+        </div>
+        <div class="feature-body">
+          <h3>Resume-less Triage</h3>
+          <p>Candidates apply with a missed call or WhatsApp "Hi." No PDF, no form, no app download. AROHAN initiates screening immediately.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#f0f9f4;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1a7a4a" stroke-width="1.8"><path d="M4 10 Q10 4 16 10 Q10 16 4 10"/><circle cx="10" cy="10" r="2.5"/></svg>
+        </div>
+        <div class="feature-body">
+          <h3>Dialect-Agnostic STT</h3>
+          <p>Bhashini handles 22 Indian languages natively. Whisper covers English-heavy responses. RNNoise strips background noise before either model sees the audio.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#fffbeb;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#9a6700" stroke-width="1.8"><path d="M10 3 L17 7 L17 13 L10 17 L3 13 L3 7 Z"/><path d="M10 3 L10 17M3 7 L17 13M3 13 L17 7"/></svg>
+        </div>
+        <div class="feature-body">
+          <h3>Adaptive Interrogation</h3>
+          <p>No static scripts. Strong answer → harder follow-up. Weak answer → simpler reframe. Every response reshapes the next question.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#fff1eb;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#e85d26" stroke-width="1.8"><path d="M2 10 L6 14 L18 6"/></svg>
+        </div>
+        <div class="feature-body">
+          <h3>Drop-off Recovery</h3>
+          <p>Call drops mid-interview? Session state saved to Redis instantly. WhatsApp prompt sent in 60 seconds. Candidate resumes exactly where they left off.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#f0f9f4;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1a7a4a" stroke-width="1.8"><circle cx="10" cy="10" r="2"/><path d="M10 3 L10 7M10 13 L10 17M3 10 L7 10M13 10 L17 10"/></svg>
+        </div>
+        <div class="feature-body">
+          <h3>Geo-Aware Routing</h3>
+          <p>Matchmaker queries open requisitions within a configurable radius of the candidate's pin code. A driver in Nagpur doesn't get routed to Bengaluru.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#fffbeb;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#9a6700" stroke-width="1.8"><rect x="3" y="5" width="14" height="10" rx="2"/><path d="M7 5 V3 M13 5 V3"/></svg>
+        </div>
+        <div class="feature-body">
+          <h3>Multi-Tenant Architecture</h3>
+          <p>One AROHAN deployment runs multiple clients — isolated PostgreSQL schemas, Redis namespaces, and WhatsApp numbers per tenant.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STT PIPELINE -->
+  <section>
+    <span class="section-label">STT Pipeline</span>
+    <h2>Four stages between a voice note and a clean transcript.</h2>
+    <p>Standard STT APIs fail on Indian field audio — markets, construction sites, moving vehicles. AROHAN pre-processes every audio file before a single token is transcribed.</p>
+
+    <div class="pipeline">
+      <div class="pipeline-stage">
+        <div class="stage-num">01</div>
+        <div class="stage-body">
+          <h3>Noise Suppression</h3>
+          <p>RNNoise (WebRTC-derived) strips background noise before audio reaches any STT model. Handles traffic, machinery, crowded market environments.</p>
+        </div>
+      </div>
+      <div class="pipeline-stage">
+        <div class="stage-num">02</div>
+        <div class="stage-body">
+          <h3>Language Detection</h3>
+          <p>FastLangDetect runs on the first 5 seconds of audio to identify the primary language. Routes to the correct Bhashini model or Whisper language parameter.</p>
+        </div>
+      </div>
+      <div class="pipeline-stage">
+        <div class="stage-num">03</div>
+        <div class="stage-body">
+          <h3>Domain Vocabulary Injection</h3>
+          <p>Job-role-specific vocabulary injected as Whisper <code>logit_bias</code> to force-decode role names, city names, company names, and industry jargon. Configurable per employer client.</p>
+        </div>
+      </div>
+      <div class="pipeline-stage">
+        <div class="stage-num">04</div>
+        <div class="stage-body">
+          <h3>Transcript Normalization</h3>
+          <p>Numbers, dates, and currency spoken in Hindi or regional form converted to canonical format. <code>"paanch hazaar rupaye" → ₹5,000</code>, <code>"teen baje" → 15:00</code>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK START -->
+  <section>
+    <span class="section-label">Quick Start</span>
+    <h2>Running in under 5 minutes with Docker.</h2>
+
+    <pre><code><span class="cm"># Clone</span>
+git clone https://github.com/ravikumarve/Arohan.git
+cd Arohan
+
+<span class="cm"># Configure environment</span>
+cp config/.env.template config/.env
+nano config/.env  <span class="cm"># Add your API keys</span>
+
+<span class="cm"># Start all services</span>
+docker-compose up -d
+
+<span class="cm"># Verify</span>
+curl http://localhost:8000/health</code></pre>
+
+    <p style="margin-top:0;">For local development without Docker:</p>
+
+    <pre><code>python3.12 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+
+<span class="cm"># Terminal 1: API server</span>
+uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+
+<span class="cm"># Terminal 2: Audio processing workers</span>
+celery -A src.tasks worker --loglevel=info --concurrency=8
+
+<span class="cm"># Terminal 3: Scheduled tasks (alerts, requisition expiry)</span>
+celery -A src.tasks beat --loglevel=info</code></pre>
+  </section>
+
+  <!-- API -->
+  <section>
+    <span class="section-label">API Reference</span>
+    <h2>REST endpoints. Interactive docs at <code>/docs</code>.</h2>
+
+    <div class="api-group">
+      <h3>Campaign Management</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>POST</code></td><td><code>/api/v1/campaigns/</code></td><td>Create a new screening campaign</td></tr>
+          <tr><td><code>GET</code></td><td><code>/api/v1/campaigns/</code></td><td>List all campaigns</td></tr>
+          <tr><td><code>GET</code></td><td><code>/api/v1/campaigns/{id}</code></td><td>Get campaign details + metrics</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="api-group">
+      <h3>Candidate Management</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>GET</code></td><td><code>/api/v1/candidates/</code></td><td>List candidates with filtering + pagination</td></tr>
+          <tr><td><code>GET</code></td><td><code>/api/v1/candidates/{id}</code></td><td>Full candidate profile + scorecard</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/v1/candidates/{id}/shortlist</code></td><td>Mark candidate as shortlisted</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/v1/candidates/{id}/reject</code></td><td>Reject candidate with reason</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="api-group">
+      <h3>Agent Orchestration</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>POST</code></td><td><code>/api/v1/agents/proctor/start</code></td><td>Initiate interview session</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/v1/agents/proctor/{id}/continue</code></td><td>Resume a dropped session</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/v1/agents/assessor/evaluate</code></td><td>Trigger scorecard generation</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/v1/agents/matchmaker/find</code></td><td>Run geo-aware job matching</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="api-group">
+      <h3>Health &amp; Monitoring</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>GET</code></td><td><code>/health</code></td><td>Basic health check</td></tr>
+          <tr><td><code>GET</code></td><td><code>/health/detailed</code></td><td>Per-service health status</td></tr>
+          <tr><td><code>GET</code></td><td><code>/health/readiness</code></td><td>Kubernetes readiness probe</td></tr>
+          <tr><td><code>GET</code></td><td><code>/metrics</code></td><td>Prometheus metrics endpoint</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PERFORMANCE -->
+  <section>
+    <span class="section-label">Performance Targets</span>
+    <h2>p95 targets for production.</h2>
+    <div class="perf-grid">
+      <div class="perf-item"><div class="perf-val">&lt;200ms</div><div class="perf-label">API response time (p95)</div></div>
+      <div class="perf-item"><div class="perf-val">&lt;100ms</div><div class="perf-label">Average database query</div></div>
+      <div class="perf-item"><div class="perf-val">&lt;500ms</div><div class="perf-label">Scorecard retrieval</div></div>
+      <div class="perf-item"><div class="perf-val">&lt;800ms</div><div class="perf-label">Candidate list endpoint</div></div>
+      <div class="perf-item"><div class="perf-val">&lt;60s</div><div class="perf-label">Drop-off recovery WhatsApp ping</div></div>
+      <div class="perf-item"><div class="perf-val">1000+</div><div class="perf-label">Concurrent screenings (Celery)</div></div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section>
+    <span class="section-label">Monetization</span>
+    <h2>Pay-per-screening. No seat licenses.</h2>
+    <p>Traditional BPO and retail recruitment agencies spend ₹200–500 per candidate in human HR hours for initial screening alone. AROHAN brings this to ₹10–18 in compute and telephony — roughly 85% gross margin at scale.</p>
+
+    <div class="pricing">
+      <div class="pricing-card">
+        <span class="tier">Startup</span>
+        <div class="price">₹18</div>
+        <div class="price-sub">per screening · up to 500/mo</div>
+        <div class="p-features">IVR + WhatsApp<br>3 role templates<br>Basic dashboard</div>
+      </div>
+      <div class="pricing-card featured">
+        <span class="tier">Growth</span>
+        <div class="price">₹14</div>
+        <div class="price-sub">per screening · 500–5,000/mo</div>
+        <div class="p-features">Custom question banks<br>ATS webhook<br>Priority support</div>
+      </div>
+      <div class="pricing-card">
+        <span class="tier">Enterprise</span>
+        <div class="price">₹10</div>
+        <div class="price-sub">per screening · 5,000+/mo</div>
+        <div class="p-features">Geo-routing<br>White-label dashboard<br>SLA guarantee</div>
+      </div>
+      <div class="pricing-card">
+        <span class="tier">On-Premise</span>
+        <div class="price">License</div>
+        <div class="price-sub">one-time · unlimited</div>
+        <div class="p-features">Air-gapped deploy<br>Full source access<br>Setup support</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section>
+    <span class="section-label">Roadmap</span>
+    <h2>What's shipped. What's next.</h2>
+    <div class="roadmap">
+      <div class="rm-item"><span class="rm-status done">Done</span><span class="rm-text">Proctor + Assessor + Matchmaker agent core</span><span class="rm-ver">v2.0.0</span></div>
+      <div class="rm-item"><span class="rm-status done">Done</span><span class="rm-text">Bhashini + Whisper dual-STT pipeline</span><span class="rm-ver">v2.0.0</span></div>
+      <div class="rm-item"><span class="rm-status done">Done</span><span class="rm-text">Drop-off recovery via Redis checkpointing</span><span class="rm-ver">v2.0.0</span></div>
+      <div class="rm-item"><span class="rm-status done">Done</span><span class="rm-text">RabbitMQ + Celery async audio processing</span><span class="rm-ver">v2.0.0</span></div>
+      <div class="rm-item"><span class="rm-status done">Done</span><span class="rm-text">Adaptive question sequencing (LangGraph DAG)</span><span class="rm-ver">v2.0.0</span></div>
+      <div class="rm-item"><span class="rm-status done">Done</span><span class="rm-text">JWT auth + multi-tenant isolation + RBAC</span><span class="rm-ver">v2.0.0</span></div>
+      <div class="rm-item"><span class="rm-status progress">In Progress</span><span class="rm-text">Employer ATS dashboard (Next.js 14 + shadcn/ui)</span><span class="rm-ver">v2.1</span></div>
+      <div class="rm-item"><span class="rm-status progress">In Progress</span><span class="rm-text">Pinecone trait-embedding scoring (vector similarity)</span><span class="rm-ver">v2.1</span></div>
+      <div class="rm-item"><span class="rm-status planned">Planned</span><span class="rm-text">Bulk campaign mode — upload 500 phone numbers, auto-schedule</span><span class="rm-ver">v2.1</span></div>
+      <div class="rm-item"><span class="rm-status planned">Planned</span><span class="rm-text">Regional language expansion: Odia, Kannada, Gujarati</span><span class="rm-ver">v2.2</span></div>
+      <div class="rm-item"><span class="rm-status planned">Planned</span><span class="rm-text">HRMS integrations: Keka, DarwinBox, greytHR</span><span class="rm-ver">v3.0</span></div>
+      <div class="rm-item"><span class="rm-status planned">Planned</span><span class="rm-text">On-device STT via Whisper.cpp — zero API cost mode</span><span class="rm-ver">v3.0</span></div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section>
+    <span class="section-label">Technology Stack</span>
+    <h2>Every choice justified.</h2>
+    <table>
+      <thead><tr><th>Layer</th><th>Technology</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Agent Orchestration</td><td><code>LangGraph</code></td><td>DAG-based stateful flows with native checkpointing for drop-off recovery</td></tr>
+        <tr><td>API Framework</td><td><code>FastAPI · Python 3.12</code></td><td>Async throughout — handles concurrent audio webhook ingestion</td></tr>
+        <tr><td>Telephony</td><td><code>Twilio Programmable Voice</code></td><td>Missed call detection + outbound IVR callback</td></tr>
+        <tr><td>Messaging</td><td><code>Meta WhatsApp Cloud API</code></td><td>500M+ Indian users — zero install friction</td></tr>
+        <tr><td>STT Primary</td><td><code>Bhashini API</code></td><td>Trained on Indian acoustic data across 22 languages — outperforms Whisper on field audio</td></tr>
+        <tr><td>STT Fallback</td><td><code>OpenAI Whisper</code></td><td>CPU-deployable for on-premise clients; English-heavy responses</td></tr>
+        <tr><td>Task Queue</td><td><code>RabbitMQ + Celery</code></td><td>Dead-letter queues + durability for bursty mass-hire drives</td></tr>
+        <tr><td>Session State</td><td><code>Redis</code></td><td>LangGraph checkpoint storage for drop-off recovery</td></tr>
+        <tr><td>Database</td><td><code>PostgreSQL 15</code></td><td>ACID compliance for financial-grade ledger and scorecard data</td></tr>
+        <tr><td>Vector Store</td><td><code>Pinecone</code></td><td>Candidate response → ideal trait embedding similarity (robust to dialect variation)</td></tr>
+        <tr><td>Dashboard</td><td><code>Next.js 14 + shadcn/ui</code></td><td>Employer-facing read-only ATS view</td></tr>
+        <tr><td>Noise Suppression</td><td><code>RNNoise / WebRTC VAD</code></td><td>Pre-STT field noise removal</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- CONTRIBUTING -->
+  <section>
+    <span class="section-label">Contributing</span>
+    <h2>High-impact areas for PRs.</h2>
+    <p>Contributions are most valuable in these specific directories:</p>
+    <table>
+      <thead><tr><th>Path</th><th>What to contribute</th></tr></thead>
+      <tbody>
+        <tr><td><code>src/nlp/dialect_maps/</code></td><td>Regional vocabulary arrays, code-switching patterns, unit/number normalization rules</td></tr>
+        <tr><td><code>tests/fixtures/audio/</code></td><td>Real-world voice samples (see CONTRIBUTING.md for privacy/consent guidelines)</td></tr>
+        <tr><td><code>src/db/seeds/question_banks/</code></td><td>New role-specific question banks: delivery, warehouse, retail, pharma</td></tr>
+        <tr><td><code>src/nlp/noise/</code></td><td>RNNoise filter tuning for specific acoustic environments</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:20px;">Before submitting a PR: run <code>pytest tests/ -v</code>, add tests for any new agent behavior, and ensure scorecard calculation changes hit 95% coverage on the modified module.</p>
+  </section>
+
+  <!-- SUPPORT -->
+  <section style="border-bottom:none;">
+    <span class="section-label">Support</span>
+    <h2>Links.</h2>
+    <table>
+      <tbody>
+        <tr><td>Documentation</td><td><a href="https://docs.arohan.ai" style="color:var(--accent);">docs.arohan.ai</a></td></tr>
+        <tr><td>Status Page</td><td><a href="https://status.arohan.ai" style="color:var(--accent);">status.arohan.ai</a></td></tr>
+        <tr><td>GitHub Issues</td><td><a href="https://github.com/ravikumarve/Arohan/issues" style="color:var(--accent);">github.com/ravikumarve/Arohan/issues</a></td></tr>
+        <tr><td>API Support</td><td><a href="mailto:api-support@arohan.ai" style="color:var(--accent);">api-support@arohan.ai</a></td></tr>
+        <tr><td>Interactive API Docs</td><td><a href="http://localhost:8000/docs" style="color:var(--accent);">localhost:8000/docs</a></td></tr>
+        <tr><td>License</td><td>Apache 2.0 — see LICENSE for commercial deployment terms</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+  <div class="tagline">No resume required. No dashboard needed.<br>Just a phone and a voice.</div>
+  <p style="margin-top:16px;">
+    <a href="https://github.com/ravikumarve/Arohan">GitHub</a> &nbsp;·&nbsp;
+    <a href="https://docs.arohan.ai">Docs</a> &nbsp;·&nbsp;
+    <a href="mailto:api-support@arohan.ai">Support</a>
+  </p>
+  <p style="margin-top:20px; font-size:12px;">Apache 2.0 License · Built for Bharat · v2.0.0-enterprise</p>
+</footer>
+
+</body>
+</html>
