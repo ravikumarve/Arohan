@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'react-hot-toast';
 import { LoadingSpinner } from '@/components/ui/loading/LoadingSpinner';
+import { useTimeout } from '@/hooks/use-timeout';
 
 const IntegrationsTab = memo(() => {
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
@@ -22,6 +23,9 @@ const IntegrationsTab = memo(() => {
     rabbitmq: true,
     postgresql: true,
   });
+  
+  // Use custom hook for timeout management
+  const { safeSetTimeout, isMounted } = useTimeout();
 
   // Memoize integrations data
   const integrations = useMemo(() => [
@@ -116,33 +120,42 @@ const IntegrationsTab = memo(() => {
   ], []);
 
   const handleToggleIntegration = useCallback((integrationId: string) => {
+    if (!isMounted.current) return;
+    
     setIntegrationStates(prev => ({ ...prev, [integrationId]: !prev[integrationId] }));
     toast.success(`${integrationId} ${integrationStates[integrationId] ? 'disabled' : 'enabled'}`);
-  }, [integrationStates]);
+  }, [integrationStates, isMounted]);
 
   const handleTestConnection = useCallback((integrationId: string) => {
+    if (!isMounted.current) return;
+    
     setLoadingStates(prev => ({ ...prev, [integrationId]: true }));
     
-    // Simulate API call
-    setTimeout(() => {
-      setLoadingStates(prev => ({ ...prev, [integrationId]: false }));
-      toast.success(`${integrationId} connection test successful`);
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setLoadingStates(prev => ({ ...prev, [integrationId]: false }));
+        toast.success(`${integrationId} connection test successful`);
+      }
     }, 2000);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const handleSync = useCallback((integrationId: string) => {
+    if (!isMounted.current) return;
+    
     setLoadingStates(prev => ({ ...prev, [integrationId]: true }));
     
-    // Simulate API call
-    setTimeout(() => {
-      setLoadingStates(prev => ({ ...prev, [integrationId]: false }));
-      toast.success(`${integrationId} synced successfully`);
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setLoadingStates(prev => ({ ...prev, [integrationId]: false }));
+        toast.success(`${integrationId} synced successfully`);
+      }
     }, 1500);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const handleConfigure = useCallback((integrationId: string) => {
+    if (!isMounted.current) return;
     toast.info(`Configuration panel for ${integrationId} would open here`);
-  }, []);
+  }, [isMounted]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {

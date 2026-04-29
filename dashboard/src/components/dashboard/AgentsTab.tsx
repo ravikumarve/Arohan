@@ -8,9 +8,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'react-hot-toast';
 import { LoadingSpinner } from '@/components/ui/loading/LoadingSpinner';
+import { useTimeout } from '@/hooks/use-timeout';
 
 const AgentsTab = memo(() => {
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
+  
+  // Use custom hook for timeout management
+  const { safeSetTimeout, isMounted } = useTimeout();
 
   // Memoize agents data
   const agents = useMemo(() => [
@@ -44,22 +48,27 @@ const AgentsTab = memo(() => {
   ], []);
 
   const handleTestAgent = useCallback((agentName: string) => {
+    if (!isMounted.current) return;
+    
     setLoadingStates(prev => ({ ...prev, [agentName]: true }));
     
-    // Simulate API call
-    setTimeout(() => {
-      setLoadingStates(prev => ({ ...prev, [agentName]: false }));
-      toast.success(`${agentName} test completed successfully`);
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setLoadingStates(prev => ({ ...prev, [agentName]: false }));
+        toast.success(`${agentName} test completed successfully`);
+      }
     }, 2000);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const handleConfigureAgent = useCallback((agentName: string) => {
+    if (!isMounted.current) return;
     toast.info(`Configuration panel for ${agentName} would open here`);
-  }, []);
+  }, [isMounted]);
 
   const handleViewLogs = useCallback((agentName: string) => {
+    if (!isMounted.current) return;
     toast.info(`Logs for ${agentName} would open here`);
-  }, []);
+  }, [isMounted]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {

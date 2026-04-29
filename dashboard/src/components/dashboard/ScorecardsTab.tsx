@@ -8,10 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-hot-toast';
+import { useTimeout } from '@/hooks/use-timeout';
 
 const ScorecardsTab = memo(() => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Use custom hook for timeout management
+  const { safeSetTimeout, isMounted } = useTimeout();
 
   // Memoize scorecards data
   const scorecards = useMemo(() => [
@@ -111,20 +115,26 @@ const ScorecardsTab = memo(() => {
   }, [scorecards, searchQuery]);
 
   const handleViewDetails = useCallback((scorecardId: string) => {
+    if (!isMounted.current) return;
     toast.info(`Scorecard details for ${scorecardId} would open here`);
-  }, []);
+  }, [isMounted]);
 
   const handleDownloadReport = useCallback((scorecardId: string) => {
+    if (!isMounted.current) return;
     toast.success(`Report for ${scorecardId} downloaded`);
-  }, []);
+  }, [isMounted]);
 
   const handleExportAll = useCallback(() => {
+    if (!isMounted.current) return;
+    
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success('All scorecards exported successfully');
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setLoading(false);
+        toast.success('All scorecards exported successfully');
+      }
     }, 1500);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-400';

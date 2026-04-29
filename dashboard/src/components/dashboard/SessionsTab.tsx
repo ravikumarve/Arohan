@@ -8,10 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-hot-toast';
+import { useTimeout } from '@/hooks/use-timeout';
 
 const SessionsTab = memo(() => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Use custom hook for timeout management
+  const { safeSetTimeout, isMounted } = useTimeout();
 
   // Memoize sessions data
   const sessions = useMemo(() => [
@@ -86,20 +90,26 @@ const SessionsTab = memo(() => {
   }, [sessions, searchQuery]);
 
   const handleViewDetails = useCallback((sessionId: string) => {
+    if (!isMounted.current) return;
     toast.info(`Session details for ${sessionId} would open here`);
-  }, []);
+  }, [isMounted]);
 
   const handleDownloadReport = useCallback((sessionId: string) => {
+    if (!isMounted.current) return;
     toast.success(`Report for ${sessionId} downloaded`);
-  }, []);
+  }, [isMounted]);
 
   const handleExportAll = useCallback(() => {
+    if (!isMounted.current) return;
+    
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success('All sessions exported successfully');
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setLoading(false);
+        toast.success('All sessions exported successfully');
+      }
     }, 1500);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {

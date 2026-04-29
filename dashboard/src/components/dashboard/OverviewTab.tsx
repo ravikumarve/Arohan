@@ -7,10 +7,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'react-hot-toast';
+import { useTimeout } from '@/hooks/use-timeout';
 
 const OverviewTab = memo(() => {
   const [loading, setLoading] = useState(false);
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
+  
+  // Use custom hook for timeout management
+  const { safeSetTimeout, isMounted } = useTimeout();
 
   // Memoize static data to prevent unnecessary re-renders
   const stats = useMemo(() => [
@@ -39,37 +43,52 @@ const OverviewTab = memo(() => {
 
   // Memoize callback functions to prevent unnecessary re-renders
   const handleLiveStatus = useCallback(() => {
+    if (!isMounted.current) return;
+    
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      toast.success('Live status updated - All systems operational');
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setLoading(false);
+        toast.success('Live status updated - All systems operational');
+      }
     }, 1000);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const handleTestIVR = useCallback(() => {
+    if (!isMounted.current) return;
+    
     setLoadingStates(prev => ({ ...prev, ivr: true }));
-    setTimeout(() => {
-      setLoadingStates(prev => ({ ...prev, ivr: false }));
-      toast.success('IVR test initiated - Check your phone');
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setLoadingStates(prev => ({ ...prev, ivr: false }));
+        toast.success('IVR test initiated - Check your phone');
+      }
     }, 1000);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const handleTestWhatsApp = useCallback(() => {
+    if (!isMounted.current) return;
+    
     setLoadingStates(prev => ({ ...prev, whatsapp: true }));
-    setTimeout(() => {
-      setLoadingStates(prev => ({ ...prev, whatsapp: false }));
-      toast.success('WhatsApp test initiated - Check your WhatsApp');
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setLoadingStates(prev => ({ ...prev, whatsapp: false }));
+        toast.success('WhatsApp test initiated - Check your WhatsApp');
+      }
     }, 1000);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const handleRunDiagnostics = useCallback(() => {
+    if (!isMounted.current) return;
+    
     setLoadingStates(prev => ({ ...prev, diagnostics: true }));
-    setTimeout(() => {
-      setLoadingStates(prev => ({ ...prev, diagnostics: false }));
-      toast.success('Diagnostics completed - All systems healthy');
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setLoadingStates(prev => ({ ...prev, diagnostics: false }));
+        toast.success('Diagnostics completed - All systems healthy');
+      }
     }, 2000);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const getStatusColor = (status: string) => {
     switch (status) {

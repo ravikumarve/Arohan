@@ -8,10 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'react-hot-toast';
 import { LoadingSpinner } from '@/components/ui/loading/LoadingSpinner';
+import { useTimeout } from '@/hooks/use-timeout';
 
 const MonitoringTab = memo(() => {
   const [loading, setLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  
+  // Use custom hook for timeout management
+  const { safeSetTimeout, isMounted } = useTimeout();
 
   // Memoize system metrics
   const systemMetrics = useMemo(() => ({
@@ -121,20 +125,26 @@ const MonitoringTab = memo(() => {
   ], []);
 
   const handleRefresh = useCallback(() => {
+    if (!isMounted.current) return;
+    
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success('Monitoring data refreshed');
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setLoading(false);
+        toast.success('Monitoring data refreshed');
+      }
     }, 1000);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const handleViewLogs = useCallback((serviceName: string) => {
+    if (!isMounted.current) return;
     toast.info(`Logs for ${serviceName} would open here`);
-  }, []);
+  }, [isMounted]);
 
   const handleViewAlert = useCallback((alertId: string) => {
+    if (!isMounted.current) return;
     toast.info(`Alert details for ${alertId} would open here`);
-  }, []);
+  }, [isMounted]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {

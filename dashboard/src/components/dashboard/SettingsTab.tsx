@@ -10,10 +10,14 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'react-hot-toast';
 import { LoadingSpinner } from '@/components/ui/loading/LoadingSpinner';
+import { useTimeout } from '@/hooks/use-timeout';
 
 const SettingsTab = memo(() => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  
+  // Use custom hook for timeout management
+  const { safeSetTimeout, isMounted } = useTimeout();
   
   // API Settings
   const [apiSettings, setApiSettings] = useState({
@@ -54,56 +58,65 @@ const SettingsTab = memo(() => {
   });
 
   const handleSaveSettings = useCallback(() => {
+    if (!isMounted.current) return;
+    
     setSaving(true);
-    setTimeout(() => {
-      setSaving(false);
-      toast.success('Settings saved successfully');
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setSaving(false);
+        toast.success('Settings saved successfully');
+      }
     }, 1500);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const handleResetSettings = useCallback(() => {
+    if (!isMounted.current) return;
+    
     setLoading(true);
-    setTimeout(() => {
-      setApiSettings({
-        twilioAccountSid: '',
-        twilioAuthToken: '',
-        twilioPhoneNumber: '',
-        metaAppId: '',
-        metaAppSecret: '',
-        metaPhoneNumberId: '',
-        metaAccessToken: '',
-        bhashiniApiKey: '',
-        openaiApiKey: '',
-        pineconeApiKey: '',
-        pineconeIndexName: '',
-      });
-      setNotificationSettings({
-        emailAlerts: true,
-        smsAlerts: true,
-        whatsappAlerts: true,
-        pushNotifications: true,
-        dailyReports: false,
-        weeklyReports: true,
-        criticalAlerts: true,
-        systemUpdates: true,
-      });
-      setSecuritySettings({
-        twoFactorAuth: false,
-        ipWhitelist: false,
-        sessionTimeout: 30,
-        passwordExpiry: 90,
-        auditLogging: true,
-        encryptionAtRest: true,
-        dataRetention: 365,
-      });
-      setLoading(false);
-      toast.success('Settings reset to defaults');
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        setApiSettings({
+          twilioAccountSid: '',
+          twilioAuthToken: '',
+          twilioPhoneNumber: '',
+          metaAppId: '',
+          metaAppSecret: '',
+          metaPhoneNumberId: '',
+          metaAccessToken: '',
+          bhashiniApiKey: '',
+          openaiApiKey: '',
+          pineconeApiKey: '',
+          pineconeIndexName: '',
+        });
+        setNotificationSettings({
+          emailAlerts: true,
+          smsAlerts: true,
+          whatsappAlerts: true,
+          pushNotifications: true,
+          dailyReports: false,
+          weeklyReports: true,
+          criticalAlerts: true,
+          systemUpdates: true,
+        });
+        setSecuritySettings({
+          twoFactorAuth: false,
+          ipWhitelist: false,
+          sessionTimeout: 30,
+          passwordExpiry: 90,
+          auditLogging: true,
+          encryptionAtRest: true,
+          dataRetention: 365,
+        });
+        setLoading(false);
+        toast.success('Settings reset to defaults');
+      }
     }, 1000);
-  }, []);
+  }, [safeSetTimeout, isMounted]);
 
   const handleTestConnection = useCallback((service: string) => {
+    if (!isMounted.current) return;
     toast.success(`${service} connection test successful`);
-  }, []);
+  }, [isMounted]);
 
   const handleApiSettingChange = useCallback((field: string, value: string) => {
     setApiSettings(prev => ({ ...prev, [field]: value }));
