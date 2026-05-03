@@ -1,0 +1,149 @@
+'use client';
+
+import { useState } from 'react';
+import { Bell, Search, User, LogOut, Settings } from 'lucide-react';
+
+export default function AdminHeader() {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  return (
+    <header className="bg-admin-background-secondary border-b border-admin-background-tertiary px-6 py-4">
+      <div className="flex items-center justify-between">
+        {/* Search */}
+        <div className="flex-1 max-w-md">
+          {isSearchOpen ? (
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-admin-primary-light" />
+              <input
+                type="text"
+                placeholder="Search users, companies, campaigns..."
+                className="w-full pl-10 pr-4 py-2 bg-admin-background-tertiary border border-admin-background-tertiary rounded-lg text-white placeholder-admin-primary-light focus:outline-none focus:border-admin-primary"
+                autoFocus
+                onBlur={() => setIsSearchOpen(false)}
+              />
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="flex items-center gap-2 text-admin-primary-light hover:text-white transition-colors"
+            >
+              <Search className="w-5 h-5" />
+              <span className="hidden sm:inline">Search...</span>
+            </button>
+          )}
+        </div>
+
+        {/* Right side actions */}
+        <div className="flex items-center gap-4">
+          {/* Notifications */}
+          <div className="relative">
+            <button
+              onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+              className="relative p-2 text-admin-primary-light hover:text-white transition-colors"
+              aria-label="Notifications"
+            >
+              <Bell className="w-5 h-5" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-admin-danger rounded-full" />
+            </button>
+
+            {isNotificationsOpen && (
+              <div className="absolute right-0 mt-2 w-80 bg-admin-background-secondary border border-admin-background-tertiary rounded-lg shadow-xl z-50">
+                <div className="p-4 border-b border-admin-background-tertiary">
+                  <h3 className="font-semibold text-white">Notifications</h3>
+                </div>
+                <div className="max-h-64 overflow-y-auto">
+                  <NotificationItem
+                    title="New company onboarded"
+                    message="LogisticsPro Ltd has joined the platform"
+                    time="2 hours ago"
+                    unread
+                  />
+                  <NotificationItem
+                    title="System alert"
+                    message="Queue service experiencing high load"
+                    time="5 hours ago"
+                    unread
+                  />
+                  <NotificationItem
+                    title="Payment received"
+                    message="Growth plan payment from RetailMax"
+                    time="1 day ago"
+                  />
+                </div>
+                <div className="p-4 border-t border-admin-background-tertiary">
+                  <button className="text-sm text-admin-primary hover:text-white transition-colors">
+                    View all notifications
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* User menu */}
+          <div className="relative">
+            <button
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+              className="flex items-center gap-3 p-2 hover:bg-admin-background-tertiary rounded-lg transition-colors"
+              aria-label="User menu"
+            >
+              <div className="w-8 h-8 bg-admin-primary rounded-full flex items-center justify-center">
+                <User className="w-4 h-4 text-white" />
+              </div>
+              <div className="hidden sm:block text-left">
+                <p className="text-sm font-medium text-white">Admin User</p>
+                <p className="text-xs text-admin-primary-light">Platform Administrator</p>
+              </div>
+            </button>
+
+            {isUserMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-admin-background-secondary border border-admin-background-tertiary rounded-lg shadow-xl z-50">
+                <div className="p-4 border-b border-admin-background-tertiary">
+                  <p className="font-medium text-white">Admin User</p>
+                  <p className="text-sm text-admin-primary-light">admin@arohan.com</p>
+                </div>
+                <div className="py-2">
+                  <button className="flex items-center gap-2 w-full px-4 py-2 text-left text-admin-primary-light hover:text-white hover:bg-admin-background-tertiary transition-colors">
+                    <Settings className="w-4 h-4" />
+                    <span>Settings</span>
+                  </button>
+                  <button className="flex items-center gap-2 w-full px-4 py-2 text-left text-admin-primary-light hover:text-white hover:bg-admin-background-tertiary transition-colors">
+                    <LogOut className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+// Notification Item Component
+function NotificationItem({
+  title,
+  message,
+  time,
+  unread,
+}: {
+  title: string;
+  message: string;
+  time: string;
+  unread?: boolean;
+}) {
+  return (
+    <div className={`p-4 border-b border-admin-background-tertiary hover:bg-admin-background-tertiary transition-colors ${unread ? 'bg-admin-background-tertiary/50' : ''}`}>
+      <div className="flex items-start gap-3">
+        {unread && <div className="w-2 h-2 bg-admin-primary rounded-full mt-2" />}
+        <div className="flex-1">
+          <p className="text-sm font-medium text-white">{title}</p>
+          <p className="text-xs text-admin-primary-light mt-1">{message}</p>
+          <p className="text-xs text-admin-primary-light/70 mt-2">{time}</p>
+        </div>
+      </div>
+    </div>
+  );
+}

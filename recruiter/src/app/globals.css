@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --recruiter-primary: 139 92 246;
+    --recruiter-primary-light: 167 139 250;
+    --recruiter-primary-dark: 124 58 237;
+    --recruiter-secondary: 236 72 153;
+    --recruiter-secondary-light: 244 114 182;
+    --recruiter-success: 16 185 129;
+    --recruiter-warning: 245 158 11;
+    --recruiter-danger: 239 68 68;
+    --recruiter-info: 59 130 246;
+    --recruiter-background-primary: 15 15 35;
+    --recruiter-background-secondary: 26 26 46;
+    --recruiter-background-tertiary: 37 37 66;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-recruiter-background-tertiary;
+  }
+  
+  body {
+    @apply bg-recruiter-background-primary text-white;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
