@@ -1,6 +1,6 @@
 # AROHAN — Voice-Native Mass Screening Mesh for Bharat
 
-[![Version](https://img.shields.io/badge/version-v2.1.0--beta-orange)](https://github.com/ravikumarve/Arohan/releases)
+[![Version](https://img.shields.io/badge/version-v2.2.0-orange)](https://github.com/ravikumarve/Arohan/releases)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-18%2F18%20passing-green)](tests/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-teal)](https://fastapi.tiangolo.com)
@@ -95,63 +95,81 @@ Every technology choice is justified for the Indian context.
 | **Messaging** | `Meta WhatsApp Cloud API` | 500M+ Indian users — zero install friction |
 | **STT Primary** | `Bhashini API` | Trained on Indian acoustic data across 22 languages — outperforms Whisper on field audio |
 | **STT Fallback** | `OpenAI Whisper` | CPU-deployable for on-premise clients; English-heavy responses |
-| **Task Queue** | `RabbitMQ + Celery` | Dead-letter queues + durability for bursty mass-hire drives |
+| **Task Queue** | `RabbitMQ + Celery` | Dead-letter queues + durability for bursty mass-h hire drives |
 | **Session State** | `Redis` | LangGraph checkpoint storage for drop-off recovery |
 | **Database** | `PostgreSQL 15` | ACID compliance for financial-grade ledger and scorecard data |
 | **Vector Store** | `Pinecone` | Candidate response → ideal trait embedding similarity (robust to dialect variation) |
-| **Dashboard** | `Next.js 14 + shadcn/ui` | Employer-facing read-only ATS view |
+| **Dashboard** | `Next.js 14 + shadcn/ui` | Three-dashboard architecture with unified pure black theme |
 | **Noise Suppression** | `RNNoise / WebRTC VAD` | Pre-STT field noise removal |
-| **Dashboard** | `Next.js 14 + shadcn/ui` | Three-dashboard architecture (System, Admin, Recruiter) |
 
 ---
 
 ## 🎨 Dashboard Architecture
 
-AROHAN features a three-dashboard architecture designed for different user roles and use cases.
+AROHAN features a **three-dashboard architecture** with a **unified premium pure black SaaS theme**. All dashboards share consistent design tokens, color palette, and component patterns for a seamless user experience.
 
-### 🖥️ System Dashboard (Purple-Pink Theme)
-**Purpose:** Technical team monitoring and system administration
-**Location:** `/dashboard`
+### 🖥️ System Dashboard (Port 3000)
+**Purpose:** Technical team monitoring and system administration  
+**Path:** `/dashboard`  
+**Status:** ✅ Running  
 **Features:**
 - Real-time system metrics and performance monitoring
 - Agent pipeline status and health checks
 - Integration status and connectivity monitoring
 - Technical debugging and troubleshooting tools
 - System configuration and maintenance
+- 46 pages with full static generation
 
-### 👨‍💼 Admin Dashboard (Indigo Theme)
-**Purpose:** Platform management and multi-tenant administration
-**Location:** `/admin`
+### 👨‍💼 Admin Dashboard (Port 3001)
+**Purpose:** Platform management and multi-tenant administration  
+**Path:** `/admin`  
+**Status:** ✅ Running  
 **Features:**
-- User management with role-based access control
-- Company onboarding and subscription management
-- System monitoring and service health
-- Billing overview and invoice management
-- Audit logs and compliance reports
-- Platform-wide analytics and insights
+- **Overview** — Platform-wide statistics and KPI dashboard
+- **Users** — User management with role-based access control
+- **Companies** — Company onboarding and subscription management
+- **System** — Real-time monitoring and service health
+- **Billing** — Invoice management and revenue tracking
+- **Audit** — Audit logs and compliance reports
+- Server-side rendered sidebar with active-nav highlighting
+- 12 routes compiled
 
-### 👤 Recruiter Dashboard (Violet Theme)
-**Purpose:** Employer hiring workflows and candidate management
-**Location:** `/recruiter`
+### 👤 Recruiter Dashboard (Port 3002)
+**Purpose:** Employer hiring workflows and candidate management  
+**Path:** `/dashboard`  
+**Status:** ✅ Running  
 **Features:**
-- Campaign management with status tracking
-- Candidate management with filtering and profiles
-- Requisition management with geo-radius targeting
-- Interview scheduling and history
-- Hiring analytics and performance metrics
-- Bulk operations and workflow automation
+- **Overview** — Hiring dashboard with key metrics and stats
+- **Campaigns** — Campaign management with status tracking and progress monitoring
+- **Candidates** — Candidate profiles with screening scores and bulk operations
+- **Requisitions** — Job requisitions with geo-radius targeting and requirements
+- **Interviews** — Interview scheduling and history tracking
+- **Analytics** — Hiring analytics, funnel metrics, and performance data
+- **Reports** — Generate and download hiring reports (Hiring Summary, Screening, Campaign Performance, Interview Analysis)
+- **Settings** — Profile, Company, Notifications, and Security settings
+- 12 routes compiled (8 pages + 4 dynamic routes)
 
-### 🔧 Shared Component Library
-**Location:** `/shared/src/components/ui/`
+### 🎨 Unified Theme System
+All three dashboards share a consistent **premium pure black theme**:
+- **Background:** `#000000` (pure black)
+- **Card surfaces:** `bg-neutral-900` with `border-neutral-800`
+- **Primary accent:** Indigo (`text-indigo-400`) for Admin, Violet for Recruiter, Pink for System
+- **Text hierarchy:** White for headings, `neutral-400` for secondary text
+- **Elevated surfaces:** Gradient overlays with `from-white/[0.03]` to `to-transparent`
+- **Server-rendered layouts** for optimal performance and SEO
+- **Active nav state** via client-side script injection post-hydration
+
+### 🔧 Shared Components
+**Location:** `/shared/src/components/ui/`  
 **Features:**
 - 10+ reusable UI components (Button, Card, Input, Select, Badge, Table, Modal, Toast, LoadingSpinner, EmptyState)
-- Consistent design system across all dashboards
-- Type-safe components with TypeScript
+- Server-safe icons via direct `lucide-react` imports
+- Consistent Tailwind design system across all dashboards
+- Type-safe components with TypeScript strict mode
 - Responsive design with mobile-first approach
 - WCAG 2.1 AA accessibility compliance
-- Dark mode optimized
 
-### 🎯 Key Features
+### 🎯 Key Dashboard Features
 - **Role-Based Access Control:** ADMIN, RECRUITER, VIEWER roles with appropriate permissions
 - **Multi-Tenant Architecture:** Company-scoped data isolation and security
 - **Real-Time Updates:** Auto-refresh and manual refresh capabilities
@@ -187,6 +205,7 @@ Numbers, dates, and currency spoken in Hindi or regional form converted to canon
 - Docker and Docker Compose
 - Python 3.12 (for local development)
 - PostgreSQL 15, Redis 7, RabbitMQ 3.12
+- Node.js 18+ (for dashboard development)
 
 ### Docker Deployment (Recommended)
 
@@ -206,7 +225,47 @@ docker-compose up -d
 curl http://localhost:8000/health
 ```
 
-### Local Development
+### Dashboard Development
+
+Each dashboard runs as an independent Next.js application:
+
+```bash
+# System Dashboard (Port 3000)
+cd dashboard
+npm install
+npm run dev
+
+# Admin Dashboard (Port 3001)
+cd admin
+npm install
+npm run dev
+
+# Recruiter Dashboard (Port 3002)
+cd recruiter
+npm install
+npm run dev
+```
+
+### Production Build
+
+```bash
+# System Dashboard
+cd dashboard
+rm -rf .next && npx next build
+npx next start -p 3000
+
+# Admin Dashboard
+cd admin
+rm -rf .next && npx next build
+npx next start -p 3001
+
+# Recruiter Dashboard
+cd recruiter
+rm -rf .next && npx next build
+npx next start -p 3002
+```
+
+### Local Development (Backend)
 
 ```bash
 # Create virtual environment
@@ -297,198 +356,79 @@ Traditional BPO and retail recruitment agencies spend ₹200–500 per candidate
 
 ## 🗺️ Roadmap
 
-### ✅ Done (v2.0.0)
-- Proctor + Assessor + Matchmaker agent core
-- Bhashini + Whisper dual-STT pipeline
-- Drop-off recovery via Redis checkpointing
-- RabbitMQ + Celery async audio processing
-- Adaptive question sequencing (LangGraph DAG)
-- JWT auth + multi-tenant isolation + RBAC
+### ✅ Done (v2.2.0)
+- ✅ Proctor + Assessor + Matchmaker agent core
+- ✅ Bhashini + Whisper dual-STT pipeline
+- ✅ Drop-off recovery via Redis checkpointing
+- ✅ RabbitMQ/Celery async audio processing
+- ✅ Adaptive question sequencing
+- ✅ Three Next.js 14 dashboards with unified pure black theme
+- ✅ Admin dashboard with server-side rendered sidebar and active-nav state
+- ✅ Recruiter dashboard with Reports and Settings pages
+- ✅ 12 routes compiled per admin/recruiter dashboard
+- ✅ Real API integration for all admin and recruiter pages
+- ✅ Multi-tenant architecture with company-scoped data
 
-### ✅ Done (v2.1.0 - Phase 1)
-- Three-dashboard architecture (System, Admin, Recruiter)
-- Shared component library with 10 reusable UI components
-- Admin dashboard structure with Indigo theme
-- Recruiter dashboard structure with Violet theme
-- Authentication middleware for role-based routing
-- API integration hooks for all entities
-- Type-safe API client with error handling
-- Zustand authentication store
-- Comprehensive testing (100% structure, 84% content)
+### 🚧 In Progress
+- 🔄 Pinecone trait-embedding scoring
+- 🔄 Employer ATS dashboard enhancements
+- 🔄 Advanced reporting with date range filtering
 
-### 🔄 In Progress (v2.1.0 - Phase 2)
-- ✅ Admin Users Management Page (CRUD, filtering, search)
-- ✅ Admin Companies Management Page (onboarding, subscriptions)
-- ✅ Admin System Monitoring Page (real-time metrics, service health)
-- ✅ Recruiter Campaigns Management Page (status tracking, progress monitoring)
-- ✅ Recruiter Candidates Management Page (filtering, bulk operations, profiles)
-- ✅ Recruiter Requisitions Management Page (geo-radius, salary ranges, requirements)
-- 🔄 Admin Billing Page (revenue overview, invoice management)
-- 🔄 Admin Audit Logs Page (activity logs, compliance reports)
-- 🔄 Recruiter Interviews Page (scheduling, history)
-- 🔄 Recruiter Analytics Page (hiring metrics, performance graphs)
-- 🔄 Real API Integration with FastAPI backend
-- 🔄 Data Visualization Components (charts, graphs, metrics)
-- 🔄 Advanced Filtering and Search functionality
-- 📋 Real-time Updates with WebSocket integration
-
-### 📋 Planned (v2.2+)
-- Regional language expansion: Odia, Kannada, Gujarati
-- HRMS integrations: Keka, DarwinBox, greytHR
-- On-device STT via Whisper.cpp — zero API cost mode
+### 📋 Planned
+- **v2.3** — Bulk campaign mode (upload 500 phone numbers)
+- **v2.3** — Video-optional async screening (WhatsApp video note)
+- **v2.4** — Regional language expansion: Odia, Kannada, Gujarati
+- **v3.0** — HRMS integrations: Keka, DarwinBox, greytHR
+- **v3.0** — On-device STT via Whisper.cpp (zero API cost mode)
 
 ---
 
-## 🧪 Testing
-
-Run the comprehensive test suite:
-
-```bash
-# Run all tests
-pytest tests/ -v
-
-# Run with coverage
-pytest tests/ --cov=src --cov-report=term-missing
-
-# Run specific test categories
-pytest tests/agents/ -v              # Agent pipeline tests
-pytest tests/integration/ -v         # Integration tests
-pytest tests/production/ -v         # Production validation tests
-pytest tests/recovery/ -v            # Drop-off recovery tests
-```
-
-**Coverage Targets:**
-- 80% on agent pipeline
-- 95% on scorecard calculation logic
-
----
-
-## 📁 Project Structure
+## 📦 Project Structure
 
 ```
-AROHAN/
-├── src/                      # FastAPI backend
-│   ├── api/                  # FastAPI routes and endpoints
-│   ├── agents/               # AI agent implementations
-│   ├── nlp/                  # NLP and STT processing
-│   ├── tasks/                # Celery tasks
-│   ├── db/                   # Database models and sessions
-│   ├── models/               # Pydantic models
-│   ├── services/             # Business logic services
-│   └── utils/                # Utilities and helpers
-├── shared/                   # Shared component library
-│   └── src/
-│       ├── components/ui/    # Reusable UI components (Button, Card, Input, etc.)
-│       ├── lib/              # Shared utilities (api-client, middleware)
-│       └── styles/           # Shared styles and themes
-├── admin/                    # Admin dashboard (Indigo theme)
-│   └── src/app/admin/       # Admin pages
-│       ├── users/            # User management
-│       ├── companies/        # Company management
-│       ├── system/           # System monitoring
-│       ├── billing/          # Billing and invoices
-│       └── audit/            # Audit logs
-├── recruiter/                # Recruiter dashboard (Violet theme)
-│   └── src/app/dashboard/    # Recruiter pages
-│       ├── campaigns/        # Campaign management
-│       ├── candidates/       # Candidate management
-│       ├── requisitions/     # Requisition management
-│       ├── interviews/       # Interview scheduling
-│       └── analytics/        # Hiring analytics
-├── dashboard/                # System dashboard (Purple-pink theme)
-│   └── src/                  # Technical team dashboard
-├── tests/                    # Test suites
-├── docs/                     # Documentation
-├── monitoring/               # Prometheus, Grafana, Alertmanager
-├── config/                   # Configuration files
-├── docker-compose.yml        # Docker services
-├── Dockerfile               # Container image
-└── requirements.txt         # Python dependencies
+Arohan/
+├── src/                     # FastAPI backend source
+│   ├── agents/             # Proctor, Assessor, Matchmaker
+│   ├── nlp/                # STT pipeline, dialect maps
+│   ├── auth/               # JWT, RBAC, middleware
+│   ├── api/                # FastAPI routes
+│   ├── models/             # SQLAlchemy + Pydantic
+│   ├── tasks/              # Celery task definitions
+│   └── utils/              # Logging, metrics, helpers
+├── dashboard/              # System Dashboard (Next.js, port 3000)
+├── admin/                  # Admin Dashboard (Next.js, port 3001)
+├── recruiter/              # Recruiter Dashboard (Next.js, port 3002)
+├── shared/                 # Shared component library
+├── tests/                  # Full test suite
+├── monitoring/             # Prometheus, Grafana configs
+├── docs/                   # Architecture and API docs
+├── config/                 # Environment templates
+└── docker-compose.yml      # Full stack deployment
 ```
 
 ---
 
 ## 🤝 Contributing
 
-High-impact areas for PRs:
+We welcome contributions! Priority areas:
 
-| Path | What to contribute |
-|------|-------------------|
-| `src/nlp/dialect_maps/` | Regional vocabulary arrays, code-switching patterns, unit/number normalization rules |
-| `tests/fixtures/audio/` | Real-world voice samples (see CONTRIBUTING.md for privacy guidelines) |
-| `src/db/seeds/question_banks/` | New role-specific question banks: delivery, warehouse, retail, pharma |
-| `src/nlp/noise/` | RNNoise filter tuning for specific acoustic environments |
+1. **`src/nlp/dialect_maps/`** — Regional vocabulary arrays, code-switching patterns, number/unit normalization
+2. **`tests/fixtures/audio/`** — Real-world voice samples (see CONTRIBUTING.md for privacy guidelines)
+3. **`src/db/seeds/question_banks/`** — New role-specific question banks (delivery, warehouse, retail, pharma)
+4. **`src/nlp/noise/`** — RNNoise filter tuning for specific acoustic environments
 
-**Before submitting a PR:**
-1. Run `pytest tests/ -v`
+### Before Submitting PRs
+1. Run full test suite: `pytest tests/ -v --tb=short`
 2. Add tests for any new agent behavior
-3. Ensure scorecard calculation changes hit 95% coverage
-
----
-
-## 🔒 Security
-
-- JWT authentication with RS256
-- Role-based access control (Admin/Viewer)
-- Multi-tenant isolation with company_id
-- Rate limiting and CORS protection
-- Encrypted data at rest and in transit
-
----
-
-## 📈 Monitoring & Observability
-
-### Health Checks
-- Basic health: `GET /health`
-- Detailed health: `GET /health/detailed`
-- Readiness check: `GET /health/readiness`
-- Liveness check: `GET /health/liveness`
-
-### Metrics
-Prometheus metrics available at: `http://localhost:8000/metrics`
-
-### Logging
-Structured logs output in JSON format for production and console format for development, with correlation IDs for distributed tracing.
-
----
-
-## 🌐 Live Demo
-
-**Interactive Landing Page:** [https://ravikumarve.github.io/Arohan/](https://ravikumarve.github.io/Arohan/)
-
-**API Documentation:** [http://localhost:8000/docs](http://localhost:8000/docs) (when running locally)
-
----
-
-## 📞 Support
-
-| Resource | Link |
-|----------|------|
-| **Documentation** | [docs.arohan.ai](https://docs.arohan.ai) |
-| **Status Page** | [status.arohan.ai](https://status.arohan.ai) |
-| **GitHub Issues** | [github.com/ravikumarve/Arohan/issues](https://github.com/ravikumarve/Arohan/issues) |
-| **API Support** | [api-support@arohan.ai](mailto:api-support@arohan.ai) |
-| **License** | Apache 2.0 — see [LICENSE](LICENSE) for commercial deployment terms |
-
----
-
-## 🙏 Acknowledgments
-
-- **Bhashini API** for Indian language STT
-- **OpenAI Whisper** for fallback STT
-- **LangGraph** for agent orchestration
-- **FastAPI** for the web framework
-- **Twilio** for telephony services
-- **Meta** for WhatsApp Business API
+3. Update `AGENTS.md` if agent responsibilities change
+4. Ensure scorecard calculation changes hit 95% coverage target
 
 ---
 
 ## 📄 License
 
-This project is licensed under the Apache License 2.0 — see the [LICENSE](LICENSE) file for details.
+Apache 2.0 — see [LICENSE](LICENSE)
 
 ---
 
-**No resume required. No dashboard needed. Just a phone and a voice.**
-
-*Built for Bharat · v2.1.0-beta*
+* Built with 💜 in Bharat · For Bharat *
