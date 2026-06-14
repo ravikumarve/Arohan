@@ -163,3 +163,26 @@ secrets/
 # Cache
 .cache/
 *.cache
+
+# Node.js
+node_modules/
+.next/
+*.tsbuildinfo
+next-env.d.ts
+package-lock.json
+nohup.out
+
+# Screenshots
+/screenshots/
+
+# Session and temp report files (root level only)
+session-*.md
+/DASHBOARD_MARKET_ANALYSIS.md
+/INTERVIEWS_PAGE_COMPLETE.md
+/Master_Dashboard_UI_UX_Plan.md
+/PHASE_2_ADMIN_COMPLETION_REPORT.md
+/PHASE_2_RECRUITER_STATUS.md
+/PHASE_2_STATUS.md
+/PRIORITY_1_COMPLETE.md
+/PRIORITY_2_COMPLETE.md
+/UI_UX_UPGRADE_PLAN.md

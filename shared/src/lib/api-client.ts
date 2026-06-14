@@ -57,18 +57,6 @@ export class ApiClient {
     return this.token;
   }
 
-  private getHeaders() {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
-    }
-
-    return headers;
-  }
-
   async get<T>(url: string, params?: any): Promise<ApiResponse<T>> {
     try {
       const response = await this.client.get<ApiResponse<T>>(url, { params });

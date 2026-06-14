@@ -9,12 +9,46 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Admin Dashboard Colors - Indigo Theme
+        // Standard theme tokens (critical fix for broken pages)
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        // Admin-specific colors (kept for backward compat)
         admin: {
           primary: {
-            DEFAULT: '#6366f1',      // Indigo 500
-            dark: '#4f46e5',         // Indigo 600
-            light: '#818cf8',        // Indigo 400
+            DEFAULT: '#6366f1',
+            dark: '#4f46e5',
+            light: '#818cf8',
             50: '#eef2ff',
             100: '#e0e7ff',
             200: '#c7d2fe',
@@ -27,14 +61,14 @@ module.exports = {
             900: '#312e81',
             950: '#1e1b4b',
           },
-          success: '#10b981',        // Emerald 500
-          warning: '#f59e0b',        // Amber 500
-          danger: '#ef4444',         // Red 500
-          info: '#3b82f6',           // Blue 500
+          success: '#10b981',
+          warning: '#f59e0b',
+          danger: '#ef4444',
+          info: '#3b82f6',
           background: {
-            primary: '#0f172a',      // Slate 900
-            secondary: '#1e293b',    // Slate 800
-            tertiary: '#334155',     // Slate 700
+            primary: '#000000',
+            secondary: '#0a0a0a',
+            tertiary: '#171717',
           },
         },
       },

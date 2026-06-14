@@ -4,33 +4,82 @@
 
 @layer base {
   :root {
-    --recruiter-primary: 139 92 246;
-    --recruiter-primary-light: 167 139 250;
-    --recruiter-primary-dark: 124 58 237;
-    --recruiter-secondary: 236 72 153;
-    --recruiter-secondary-light: 244 114 182;
-    --recruiter-success: 16 185 129;
-    --recruiter-warning: 245 158 11;
-    --recruiter-danger: 239 68 68;
-    --recruiter-info: 59 130 246;
-    --recruiter-background-primary: 15 15 35;
-    --recruiter-background-secondary: 26 26 46;
-    --recruiter-background-tertiary: 37 37 66;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 262 83% 58%;
+    --radius: 0.5rem;
   }
-}
 
-@layer base {
   * {
-    @apply border-recruiter-background-tertiary;
+    @apply border-border;
   }
-  
+
   body {
-    @apply bg-recruiter-background-primary text-white;
+    @apply bg-background text-foreground;
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgb(0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Selection */
+::selection {
+  background-color: rgba(139, 92, 246, 0.3);
+  color: rgb(255, 255, 255);
 }

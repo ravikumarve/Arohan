@@ -2,13 +2,10 @@
 export * from './lib/types';
 
 // API Client
-export { createApiClient } from './lib/api-client';
-
-// Create default API client instance
-export const apiClient = createApiClient();
+export { createApiClient, ApiClient } from './lib/api-client';
 
 // Auth
-export { useAuthStore, useAuth } from './lib/auth';
+export { useAuthStore } from './lib/auth';
 
 // Utils
 export * from './lib/utils';
@@ -21,7 +18,3 @@ export * from './components/ui';
 
 // Hooks
 export * from './hooks';
-
-// Middleware
-export { createAuthMiddleware, adminAuthMiddleware, recruiterAuthMiddleware } from './middleware/auth';
-export type { AuthConfig } from './middleware/auth';
