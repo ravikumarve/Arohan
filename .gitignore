@@ -175,14 +175,32 @@ nohup.out
 # Screenshots
 /screenshots/
 
-# Session and temp report files (root level only)
-session-*.md
-/DASHBOARD_MARKET_ANALYSIS.md
-/INTERVIEWS_PAGE_COMPLETE.md
-/Master_Dashboard_UI_UX_Plan.md
-/PHASE_2_ADMIN_COMPLETION_REPORT.md
-/PHASE_2_RECRUITER_STATUS.md
-/PHASE_2_STATUS.md
-/PRIORITY_1_COMPLETE.md
-/PRIORITY_2_COMPLETE.md
-/UI_UX_UPGRADE_PLAN.md
+# AI/IDE agent artifact files (not project source)
+agENT_REVIEW_*.md
+CRITICAL_*.md
+DASHBOARD_ARCHITECTURE*.md
+DASHBOARD_COMPARISON*.md
+IMPLEMENTATION_SUMMARY*.md
+LIGHTHOUSE_*.md
+PHASE_*.md
+QUICK_START*.md
+SETTINGS_*.md
+TABS_FIXED*.md
+COMPLETE_*.md
+AGENTS.md
+CLAUDE.md
+backend-architect.md
+product-manager.md
+software-architect.md
+ARH.md
+COMPLETE_SYSTEM.md
+PROJECT_COMPLETE.md
+PROJECT_STRUCTURE.md
+*_MIGRATION_COMPLETE.md
+*_UPDATE_STATUS.md
+LANDING_PAGE_COMPLETE.md
+DESIGN_GUIDE.md
+STYLING_FIXED.md
+UI_UX_UPGRADE_PLAN.md
+COMPONENT_DOCUMENTATION.md
+_*.md
