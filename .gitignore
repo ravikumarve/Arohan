@@ -175,6 +175,16 @@ nohup.out
 # Screenshots
 /screenshots/
 
+# Session files
+session-*.md
+
+# Root-level dev artifacts (not removed already)
+/DASHBOARD_MARKET_ANALYSIS.md
+/INTERVIEWS_PAGE_COMPLETE.md
+/Master_Dashboard_UI_UX_Plan.md
+/PRIORITY_1_COMPLETE.md
+/PRIORITY_2_COMPLETE.md
+
 # AI/IDE agent artifact files (not project source)
 agENT_REVIEW_*.md
 CRITICAL_*.md
