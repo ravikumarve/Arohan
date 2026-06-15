@@ -1,14 +1,14 @@
 "use client"
 
 import * as React from "react"
-
 import { cn } from "@arohan/shared"
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      className="relative w-full overflow-x-auto rounded-lg"
+      style={{ border: '1px solid var(--border-glass)', background: 'var(--surface-glass)' }}
     >
       <table
         data-slot="table"
@@ -24,6 +24,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
     <thead
       data-slot="table-header"
       className={cn("[&_tr]:border-b", className)}
+      style={{ borderColor: 'var(--border-glass)' }}
       {...props}
     />
   )
@@ -44,9 +45,13 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0",
+        "border-t font-medium [&>tr]:last:border-b-0",
         className
       )}
+      style={{
+        borderColor: 'var(--border-glass)',
+        background: 'rgba(255,255,255,0.02)',
+      }}
       {...props}
     />
   )
@@ -57,9 +62,12 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted",
+        "transition-colors data-[state=selected]:bg-white/5",
         className
       )}
+      style={{
+        borderBottom: '1px solid var(--border-glass)',
+      }}
       {...props}
     />
   )
@@ -70,9 +78,14 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0",
+        "h-10 px-3 text-left align-middle font-medium whitespace-nowrap text-xs uppercase tracking-wider",
         className
       )}
+      style={{
+        color: 'var(--text-tertiary)',
+        fontFamily: 'JetBrains Mono, monospace',
+        borderBottom: '1px solid var(--border-glass)',
+      }}
       {...props}
     />
   )
@@ -83,9 +96,10 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0",
+        "p-3 align-middle whitespace-nowrap",
         className
       )}
+      style={{ color: 'var(--text-secondary)' }}
       {...props}
     />
   )
@@ -98,7 +112,8 @@ function TableCaption({
   return (
     <caption
       data-slot="table-caption"
-      className={cn("mt-4 text-sm text-muted-foreground", className)}
+      className={cn("mt-4 text-sm", className)}
+      style={{ color: 'var(--text-tertiary)' }}
       {...props}
     />
   )
