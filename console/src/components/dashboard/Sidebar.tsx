@@ -1,8 +1,8 @@
-// Sidebar Component with memoization and accessibility
+// Glass-effect Sidebar — Console Design System
+// Features: glass backdrop, architectural borders, Space Grotesk display, JetBrains Mono labels
 
 import { memo } from 'react';
 import { LayoutDashboard, Bot, Users, MessageSquare, FileText, BarChart3, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface SidebarProps {
   activeTab: string;
@@ -32,39 +32,90 @@ const Sidebar = memo(({ activeTab, setActiveTab }: SidebarProps) => {
   };
 
   return (
-    <aside 
-      className="w-64 bg-slate-900 border-r border-slate-800 p-4"
+    <aside
+      className="w-64 min-h-screen border-r border-[var(--border-glass)] p-5 flex flex-col"
+      style={{ background: 'var(--surface)' }}
       aria-label="Main navigation"
     >
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-          <Bot className="w-6 h-6 text-white" />
-        </div>
+      {/* Logo — Space Grotesk with indigo/violet mark */}
+      <div className="flex items-center gap-3 mb-10">
+        <div
+          className="w-[14px] h-[14px] rounded-sm flex-shrink-0"
+          style={{
+            background: 'linear-gradient(135deg, var(--accent-indigo), var(--accent-violet))',
+            boxShadow: '0 0 15px rgba(99, 102, 241, 0.4)',
+          }}
+        />
         <div>
-          <h1 className="text-lg font-bold text-white">AROHAN</h1>
-          <p className="text-xs text-slate-400">Console</p>
+          <h1
+            className="text-lg font-bold text-white tracking-widest"
+            style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}
+          >
+            AROHAN
+          </h1>
+          <p
+            className="text-[0.65rem] tracking-[0.15em] uppercase"
+            style={{ color: 'var(--text-tertiary)', fontFamily: 'JetBrains Mono, monospace' }}
+          >
+            Console
+          </p>
         </div>
       </div>
 
-      <nav aria-label="Console navigation" className="space-y-2">
-        {menuItems.map((item) => (
-          <Button
-            key={item.id}
-            variant="ghost"
-            onClick={() => handleTabClick(item.id)}
-            onKeyDown={(e) => handleKeyDown(e, item.id)}
-            aria-current={activeTab === item.id ? 'page' : undefined}
-            className={`w-full justify-start gap-3 px-4 py-3 h-auto transition-all ${
-              activeTab === item.id
-                ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border border-purple-500/30 hover:from-purple-500/30 hover:to-pink-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
-            }`}
-          >
-            <item.icon className="w-5 h-5" aria-hidden="true" />
-            <span className="font-medium">{item.label}</span>
-          </Button>
-        ))}
+      {/* Navigation — glass items with indigo active state */}
+      <nav aria-label="Console navigation" className="flex-1 space-y-1">
+        {menuItems.map((item) => {
+          const isActive = activeTab === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => handleTabClick(item.id)}
+              onKeyDown={(e) => handleKeyDown(e, item.id)}
+              aria-current={isActive ? 'page' : undefined}
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm font-medium transition-all duration-300 cursor-pointer"
+              style={{
+                background: isActive
+                  ? 'linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.08))'
+                  : 'transparent',
+                border: isActive
+                  ? '1px solid rgba(99,102,241,0.25)'
+                  : '1px solid transparent',
+                color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
+                  e.currentTarget.style.color = 'var(--text-primary)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = 'var(--text-secondary)';
+                }
+              }}
+            >
+              <item.icon className="w-4 h-4" aria-hidden="true" style={{ opacity: isActive ? 1 : 0.5 }} />
+              <span style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif', fontSize: '0.8125rem' }}>
+                {item.label}
+              </span>
+            </button>
+          );
+        })}
       </nav>
+
+      {/* Footer — version / status */}
+      <div
+        className="pt-5 mt-auto border-t"
+        style={{ borderColor: 'var(--border-glass)' }}
+      >
+        <p
+          className="text-[0.6rem] tracking-[0.15em] uppercase"
+          style={{ color: 'var(--text-tertiary)', fontFamily: 'JetBrains Mono, monospace' }}
+        >
+          v2.0 · Internal
+        </p>
+      </div>
     </aside>
   );
 });
