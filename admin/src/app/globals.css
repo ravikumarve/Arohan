@@ -35,7 +35,219 @@
   }
 }
 
-/* Custom scrollbar */
+@layer components {
+  /* Technical grid background — radial fade top */
+  .bg-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at 50% 0%, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black 40%, transparent 80%);
+  }
+
+  /* JetBrains Mono text utility */
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Cobalt accent border on active nav items */
+  .nav-item-cobalt {
+    transition: all 0.2s ease;
+  }
+  .nav-item-cobalt:hover {
+    background: var(--bg-hover, #1e2230);
+    color: var(--text-main, #f8fafc);
+  }
+  .nav-item-cobalt.active {
+    background: rgba(99, 102, 241, 0.15);
+    color: #f8fafc;
+    border-left: 3px solid #6366f1;
+    border-radius: 4px 6px 6px 4px;
+  }
+
+  /* Panel (glass panel with border) */
+  .panel {
+    background: var(--bg-panel, #141720);
+    border: 1px solid var(--border-medium, rgba(255,255,255,0.1));
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .panel-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-medium, rgba(255,255,255,0.1));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .panel-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .panel-body {
+    padding: 1.5rem;
+    flex: 1;
+  }
+
+  /* Badges — plan tier pills */
+  .badge-cobalt {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+    border: 1px solid transparent;
+  }
+  .badge-cobalt.enterprise {
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+  .badge-cobalt.growth {
+    background: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.3);
+  }
+  .badge-cobalt.startup {
+    background: rgba(148, 163, 184, 0.1);
+    color: #94a3b8;
+    border-color: rgba(148, 163, 184, 0.3);
+  }
+
+  /* Status indicators */
+  .status-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+  }
+  .status-dot::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .status-dot.active::before {
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+  }
+  .status-dot.trial::before {
+    background: #f59e0b;
+    box-shadow: 0 0 8px #f59e0b;
+  }
+  .status-dot.inactive::before {
+    background: #475569;
+  }
+
+  /* Metric card */
+  .metric-card-cobalt {
+    background: var(--bg-panel, #141720);
+    border: 1px solid var(--border-medium, rgba(255,255,255,0.1));
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    letter-spacing: -1px;
+  }
+
+  .trend-pill {
+    background: rgba(16, 185, 129, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #10b981;
+  }
+
+  /* Search bar */
+  .search-bar-cobalt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-panel, #141720);
+    border: 1px solid var(--border-medium, rgba(255,255,255,0.1));
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    width: 350px;
+    transition: border-color 0.2s;
+  }
+  .search-bar-cobalt:focus-within {
+    border-color: #6366f1;
+  }
+  .search-bar-cobalt input {
+    background: transparent;
+    border: none;
+    color: #f8fafc;
+    outline: none;
+    width: 100%;
+    font-size: 0.85rem;
+  }
+
+  /* Cobalt button */
+  .btn-cobalt-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: #6366f1;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .btn-cobalt-primary:hover {
+    background: #818cf8;
+    transform: translateY(-1px);
+  }
+
+  .btn-cobalt-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: var(--bg-panel, #141720);
+    border: 1px solid var(--border-medium, rgba(255,255,255,0.1));
+    color: #f8fafc;
+    transition: all 0.2s;
+  }
+  .btn-cobalt-secondary:hover {
+    background: var(--bg-hover, #1e2230);
+  }
+}
+
+/* Custom scrollbar — design spec */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -46,39 +258,15 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Loading spinner */
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-/* Screen reader only */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-/* Selection */
+/* Selection — indigo */
 ::selection {
   background-color: rgba(99, 102, 241, 0.3);
   color: rgb(255, 255, 255);
