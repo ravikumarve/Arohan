@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Building2, Search, Users, CheckCircle, XCircle, MoreVertical } from 'lucide-react';
+import { Building2, Search, Users, CheckCircle, MoreVertical } from 'lucide-react';
 
 const mockCompanies = [
   { id: '1', name: 'TechCorp India Pvt Ltd', email: 'hr@techcorp.in', phone: '+91 80 1234 5678', location: 'Bangalore, Karnataka', status: 'active', users: 45, plan: 'Enterprise' },
@@ -13,104 +13,192 @@ const mockCompanies = [
 
 export const dynamic = 'force-dynamic';
 
+const planStyles: Record<string, string> = {
+  Enterprise: 'badge-cobalt enterprise',
+  Growth: 'badge-cobalt growth',
+  Startup: 'badge-cobalt startup',
+};
+
+const statusStyles: Record<string, string> = {
+  active: 'status-dot active',
+  trial: 'status-dot trial',
+  inactive: 'status-dot inactive',
+};
 
 export default function AdminCompaniesPage() {
   const [search, setSearch] = useState('');
 
-  const filtered = mockCompanies.filter(c => 
-    c.name.toLowerCase().includes(search.toLowerCase()) || 
+  const filtered = mockCompanies.filter(c =>
+    c.name.toLowerCase().includes(search.toLowerCase()) ||
     c.email.toLowerCase().includes(search.toLowerCase())
   );
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-      case 'trial': return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-      case 'inactive': return 'bg-neutral-700 text-neutral-400 border-neutral-600';
-      default: return 'bg-neutral-800 text-neutral-400';
-    }
-  };
-
-  const getPlanColor = (plan: string) => {
-    switch (plan) {
-      case 'Enterprise': return 'text-violet-400';
-      case 'Growth': return 'text-blue-400';
-      case 'Startup': return 'text-emerald-400';
-      default: return 'text-neutral-400';
-    }
-  };
+  const activeCount = mockCompanies.filter(c => c.status === 'active').length;
+  const trialCount = mockCompanies.filter(c => c.status === 'trial').length;
+  const totalUsers = mockCompanies.reduce((sum, c) => sum + c.users, 0);
 
   return (
-    <div className="space-y-8 p-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Companies</h1>
-          <p className="text-neutral-400">Manage companies and their subscriptions</p>
-        </div>
-        <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-colors flex items-center gap-2">
-          <Building2 className="w-4 h-4" /> Add Company
-        </button>
-      </div>
+    <div className="flex-1 overflow-y-auto p-8">
+      <div className="max-w-[1400px] mx-auto flex flex-col gap-8">
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="CONTINUE [text-neutral-400 text-sm">Total Companies</span><Building2 className="w-5 h-5 text-indigo-400" /></div>
-          <div className="text-2xl font-bold text-white">{mockCompanies.length}</div>
+        <div className="flex justify-between items-end">
+          <div>
+            <h1 className="text-[1.8rem] font-semibold tracking-tight" style={{ color: '#f8fafc' }}>
+              Companies
+            </h1>
+            <p className="text-sm" style={{ color: 'var(--text-muted, #94a3b8)' }}>
+              Manage companies and their subscriptions
+            </p>
+          </div>
+          <button className="btn-cobalt-primary text-sm">
+            <Building2 size={14} />
+            Add Company
+          </button>
         </div>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Active</span><CheckCircle className="w-5 h-5 text-emerald-400" /></div>
-          <div className="text-2xl font-bold text-white">3</div>
-        </div>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">In Trial</span><Users className="w-5 h-5 text-amber-400" /></div>
-          <div className="text-2xl font-bold text-white">1</div>
-        </div>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Total Users</span><Users className="w-5 h-5 text-blue-400" /></div>
-          <div className="text-2xl font-bold text-white">249</div>
-        </div>
-      </div>
 
-      <div className="bg-neutral-900 border border-neutral-800 rounded-lg overflow-hidden">
-        <div className="p-4 border-b border-neutral-800">
-          <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-500" />
-            <input type="text" placeholder="Search companies..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full bg-neutral-800 border border-neutral-700 text-white placeholder-neutral-500 rounded-lg pl-10 pr-3 py-2" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="metric-card-cobalt">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm font-medium" style={{ color: 'var(--text-muted, #94a3b8)' }}>Total Companies</span>
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{
+                  background: 'var(--bg-hover, #1e2230)',
+                  border: '1px solid var(--border-light, rgba(255,255,255,0.05))',
+                  color: '#6366f1',
+                }}
+              >
+                <Building2 size={16} />
+              </div>
+            </div>
+            <div className="metric-value">{mockCompanies.length}</div>
+          </div>
+          <div className="metric-card-cobalt">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm font-medium" style={{ color: 'var(--text-muted, #94a3b8)' }}>Active</span>
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{
+                  background: 'var(--bg-hover, #1e2230)',
+                  border: '1px solid var(--border-light, rgba(255,255,255,0.05))',
+                  color: '#10b981',
+                }}
+              >
+                <CheckCircle size={16} />
+              </div>
+            </div>
+            <div className="metric-value">{activeCount}</div>
+          </div>
+          <div className="metric-card-cobalt">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm font-medium" style={{ color: 'var(--text-muted, #94a3b8)' }}>In Trial</span>
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{
+                  background: 'var(--bg-hover, #1e2230)',
+                  border: '1px solid var(--border-light, rgba(255,255,255,0.05))',
+                  color: '#f59e0b',
+                }}
+              >
+                <Users size={16} />
+              </div>
+            </div>
+            <div className="metric-value">{trialCount}</div>
+          </div>
+          <div className="metric-card-cobalt">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm font-medium" style={{ color: 'var(--text-muted, #94a3b8)' }}>Total Users</span>
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{
+                  background: 'var(--bg-hover, #1e2230)',
+                  border: '1px solid var(--border-light, rgba(255,255,255,0.05))',
+                  color: '#38bdf8',
+                }}
+              >
+                <Users size={16} />
+              </div>
+            </div>
+            <div className="metric-value">{totalUsers}</div>
           </div>
         </div>
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-neutral-800">
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Company</th>
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Plan</th>
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Status</th>
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Users</th>
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Location</th>
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((company) => (
-              <tr key={company.id} className="border-b border-neutral-800 hover:bg-neutral-800/50 transition-colors">
-                <td className="p-4">
-                  <div className="font-medium text-white">{company.name}</div>
-                  <div className="text-sm text-neutral-400">{company.email}</div>
-                </td>
-                <td className="p-4">
-                  <span className={`text-sm font-medium ${getPlanColor(company.plan)}`}>{company.plan}</span>
-                </td>
-                <td className="p-4">
-                  <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full border ${getStatusColor(company.status)}`}>{company.status}</span>
-                </td>
-                <td className="p-4 text-neutral-300">{company.users}</td>
-                <td className="p-4 text-neutral-300 text-sm">{company.location}</td>
-                <td className="p-4">
-                  <button className="p-2 hover:bg-neutral-800 rounded-lg transition-colors text-neutral-400 hover:text-white"><MoreVertical className="w-4 h-4" /></button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+        <div className="panel">
+          <div className="panel-header">
+            <h2 className="panel-title" style={{ color: '#f8fafc' }}>All Companies</h2>
+            <div className="search-bar-cobalt" style={{ width: '280px' }}>
+              <Search size={16} style={{ color: 'var(--text-muted, #94a3b8)' }} />
+              <input
+                type="text"
+                placeholder="Search companies..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="panel-body" style={{ padding: 0 }}>
+            <table className="w-full" style={{ borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr
+                  className="text-[0.75rem] uppercase tracking-wider font-semibold"
+                  style={{ color: 'var(--text-faint, #475569)', borderBottom: '1px solid var(--border-medium, rgba(255,255,255,0.1))' }}
+                >
+                  <th className="px-4 py-3 font-semibold">Company</th>
+                  <th className="px-4 py-3 font-semibold">Plan</th>
+                  <th className="px-4 py-3 font-semibold">Status</th>
+                  <th className="px-4 py-3 font-semibold">Users</th>
+                  <th className="px-4 py-3 font-semibold">Location</th>
+                  <th className="px-4 py-3 font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((company) => (
+                  <tr
+                    key={company.id}
+                    className="transition-colors"
+                    style={{ borderBottom: '1px solid var(--border-light, rgba(255,255,255,0.05))' }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.01)'; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                  >
+                    <td className="px-4 py-4">
+                      <div className="text-sm font-medium" style={{ color: '#f8fafc' }}>{company.name}</div>
+                      <div className="text-xs" style={{ color: 'var(--text-muted, #94a3b8)' }}>{company.email}</div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <span className={planStyles[company.plan]}>{company.plan}</span>
+                    </td>
+                    <td className="px-4 py-4">
+                      <span className={statusStyles[company.status]} style={{ color: 'var(--text-secondary, #94a3b8)' }}>
+                        {company.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4 font-mono text-sm" style={{ color: 'var(--text-main, #f8fafc)' }}>
+                      {company.users}
+                    </td>
+                    <td className="px-4 py-4 text-sm" style={{ color: 'var(--text-muted, #94a3b8)' }}>
+                      {company.location}
+                    </td>
+                    <td className="px-4 py-4">
+                      <button
+                        className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                        style={{
+                          background: 'transparent',
+                          border: '1px solid var(--border-medium, rgba(255,255,255,0.1))',
+                          color: 'var(--text-muted, #94a3b8)',
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover, #1e2230)'; e.currentTarget.style.color = '#f8fafc'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted, #94a3b8)'; }}
+                      >
+                        <MoreVertical size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
   );

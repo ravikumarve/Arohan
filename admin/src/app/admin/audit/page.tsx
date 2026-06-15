@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Shield, CheckCircle, AlertTriangle, Info, Clock, User, FileText, Filter } from 'lucide-react';
+import { Search, Shield, AlertTriangle, Info, FileText } from 'lucide-react';
 
 const mockLogs = [
   { id: '1', user: 'Ravi Kumar', action: 'User Created', entity: 'User', entityId: 'USR-123', details: 'Created new user account for Priya Sharma', timestamp: '2025-05-10 10:30:15', severity: 'info' },
@@ -13,6 +13,11 @@ const mockLogs = [
 
 export const dynamic = 'force-dynamic';
 
+const severityConfig: Record<string, { icon: typeof Info; bg: string; color: string }> = {
+  info: { icon: Info, bg: 'rgba(99, 102, 241, 0.15)', color: '#6366f1' },
+  warning: { icon: AlertTriangle, bg: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' },
+  critical: { icon: AlertTriangle, bg: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' },
+};
 
 export default function AdminAuditPage() {
   const [search, setSearch] = useState('');
@@ -24,85 +29,125 @@ export default function AdminAuditPage() {
     return matchesSearch && matchesSeverity;
   });
 
-  const getSeverityIcon = (severity: string) => {
-    switch (severity) {
-      case 'critical': return <AlertTriangle className="w-4 h-4 text-red-400" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-amber-400" />;
-      case 'info': return <Info className="w-4 h-4 text-blue-400" />;
-      default: return <Info className="w-4 h-4 text-neutral-400" />;
-    }
-  };
-
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      case 'warning': return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-      case 'info': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      default: return 'bg-neutral-800 text-neutral-400';
-    }
-  };
+  const stats = [
+    { title: 'Total Logs', value: String(mockLogs.length), icon: FileText, iconColor: '#6366f1' },
+    { title: 'Info', value: String(mockLogs.filter(l => l.severity === 'info').length), icon: Info, iconColor: '#6366f1' },
+    { title: 'Warnings', value: String(mockLogs.filter(l => l.severity === 'warning').length), icon: AlertTriangle, iconColor: '#f59e0b' },
+    { title: 'Critical', value: String(mockLogs.filter(l => l.severity === 'critical').length), icon: Shield, iconColor: '#ef4444' },
+  ];
 
   return (
-    <div className="space-y-8 p-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Audit Logs</h1>
-          <p className="text-neutral-400">System audit trail and activity logs</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Total Logs</span><FileText className="w-5 h-5 text-indigo-400" /></div>
-          <div className="text-2xl font-bold text-white">{mockLogs.length}</div>
-        </div>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Info</span><Info className="w-5 h-5 text-blue-400" /></div>
-          <div className="text-2xl font-bold text-white">3</div>
-        </div>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Warnings</span><AlertTriangle className="w-5 h-5 text-amber-400" /></div>
-          <div className="text-2xl font-bold text-white">2</div>
-        </div>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Critical</span><Shield className="w-5 h-5 text-red-400" /></div>
-          <div className="text-2xl font-bold text-white">0</div>
-        </div>
-      </div>
-
-      <div className="bg-neutral-900 border border-neutral-800 rounded-lg overflow-hidden">
-        <div className="p-4 border-b border-neutral-800 flex flex-col sm:flex-row gap-4">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-500" />
-            <input type="text" placeholder="Search audit logs..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full bg-neutral-800 border border-neutral-700 text-white placeholder-neutral-500 rounded-lg pl-10 pr-3 py-2" />
+    <div className="flex-1 overflow-y-auto p-8">
+      <div className="max-w-[1400px] mx-auto flex flex-col gap-8">
+        {/* Page header */}
+        <div className="flex justify-between items-end">
+          <div>
+            <h1 className="text-[1.8rem] font-semibold tracking-tight" style={{ color: '#f8fafc' }}>
+              Audit Logs
+            </h1>
+            <p className="text-sm" style={{ color: 'var(--text-muted, #94a3b8)' }}>
+              System audit trail and activity logs
+            </p>
           </div>
-          <select onChange={(e) => setSeverityFilter(e.target.value)} className="bg-neutral-800 border border-neutral-700 text-white rounded-lg px-3 py-2">
-            <option value="all">All Severities</option>
-            <option value="info">Info</option>
-            <option value="warning">Warning</option>
-            <option value="critical">Critical</option>
-          </select>
         </div>
-        <div className="divide-y divide-neutral-800">
-          {filtered.map((log) => (
-            <div key={log.id} className="p-4 hover:bg-neutral-800/50 transition-colors">
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5">{getSeverityIcon(log.severity)}</div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-white font-medium">{log.action}</span>
-                    <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full border ${getSeverityColor(log.severity)}`}>{log.severity}</span>
-                  </div>
-                  <p className="text-neutral-400 text-sm">{log.details}</p>
-                  <div className="flex items-center gap-4 mt-2 text-xs text organizational neutrality">
-                    <span className="text-neutral-500 flex items-center gap-1"><User className="w-3 h-3" /> {log.user}</span>
-                    <span className="text-neutral-500 flex items-center gap-1"><Clock className="w-3 h-3" /> {log.timestamp}</span>
-                    <span className="text-neutral-500">{log.entity}: {log.entityId}</span>
-                  </div>
+
+        {/* Stat cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat) => (
+            <div key={stat.title} className="metric-card-cobalt">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm font-medium" style={{ color: 'var(--text-muted, #94a3b8)' }}>
+                  {stat.title}
+                </span>
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center"
+                  style={{
+                    background: 'var(--bg-hover, #1e2230)',
+                    border: '1px solid var(--border-light, rgba(255,255,255,0.05))',
+                    color: stat.iconColor,
+                  }}
+                >
+                  <stat.icon size={16} />
                 </div>
               </div>
+              <div className="metric-value">{stat.value}</div>
             </div>
           ))}
+        </div>
+
+        {/* Logs panel */}
+        <div className="panel">
+          <div className="panel-header">
+            <h2 className="panel-title" style={{ color: '#f8fafc' }}>
+              <Shield size={16} style={{ color: '#6366f1' }} />
+              Audit Trail
+            </h2>
+            <div className="flex gap-3">
+              <div className="search-bar-cobalt" style={{ width: '260px' }}>
+                <Search size={16} style={{ color: 'var(--text-muted, #94a3b8)' }} />
+                <input
+                  type="text"
+                  placeholder="Search audit logs..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <select
+                onChange={(e) => setSeverityFilter(e.target.value)}
+                className="btn-cobalt-secondary"
+                style={{ padding: '0.5rem 2rem 0.5rem 0.8rem', fontSize: '0.8rem', appearance: 'auto' }}
+              >
+                <option value="all">All Severities</option>
+                <option value="info">Info</option>
+                <option value="warning">Warning</option>
+                <option value="critical">Critical</option>
+              </select>
+            </div>
+          </div>
+          <div className="panel-body" style={{ padding: '0 1.5rem' }}>
+            <div className="flex flex-col">
+              {filtered.length === 0 ? (
+                <div className="py-8 text-center text-sm" style={{ color: 'var(--text-muted, #94a3b8)' }}>
+                  No audit logs found matching your search.
+                </div>
+              ) : (
+                filtered.map((log, i) => {
+                  const sev = severityConfig[log.severity] || severityConfig.info;
+                  const LogIcon = sev.icon;
+                  return (
+                    <div
+                      key={log.id}
+                      className="flex gap-4 py-4"
+                      style={{ borderBottom: i < filtered.length - 1 ? '1px solid var(--border-light, rgba(255,255,255,0.05))' : 'none' }}
+                    >
+                      <div
+                        className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
+                        style={{ background: sev.bg, color: sev.color }}
+                      >
+                        <LogIcon size={14} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start gap-2">
+                          <span className="text-sm font-medium" style={{ color: log.severity === 'warning' ? '#f59e0b' : log.severity === 'critical' ? '#ef4444' : '#f8fafc' }}>
+                            {log.action}
+                          </span>
+                          <span className="font-mono text-[0.7rem] flex-shrink-0" style={{ color: 'var(--text-faint, #475569)' }}>
+                            {log.timestamp}
+                          </span>
+                        </div>
+                        <p className="text-xs mt-1" style={{ color: 'var(--text-muted, #94a3b8)', lineHeight: 1.4 }}>
+                          {log.details}
+                        </p>
+                        <div className="font-mono text-[0.65rem] mt-1.5" style={{ color: 'var(--text-faint, #475569)' }}>
+                          {log.entity}: {log.entityId} · By: {log.user}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
