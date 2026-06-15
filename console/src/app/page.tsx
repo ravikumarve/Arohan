@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, lazy, Suspense } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Toaster as CustomToaster } from "@/components/Toaster";
@@ -125,9 +126,19 @@ export default function ConsolePage() {
             </div>
           </header>
 
-          {/* Tab content */}
+          {/* Tab content — animated transitions */}
           <div className="flex-1 p-8" style={{ position: 'relative', zIndex: 1 }}>
-            {renderTab()}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.2, ease: 'easeInOut' }}
+              >
+                {renderTab()}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </main>
       </div>
