@@ -3,7 +3,6 @@
 import { memo, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Settings, Bell, Shield, Database, Save, RotateCcw, CheckCircle, AlertTriangle } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,10 +14,10 @@ import { useTimeout } from '@/hooks/use-timeout';
 const SettingsTab = memo(() => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  
+
   // Use custom hook for timeout management
   const { safeSetTimeout, isMounted } = useTimeout();
-  
+
   // API Settings
   const [apiSettings, setApiSettings] = useState({
     twilioAccountSid: '',
@@ -59,7 +58,7 @@ const SettingsTab = memo(() => {
 
   const handleSaveSettings = useCallback(() => {
     if (!isMounted.current) return;
-    
+
     setSaving(true);
     safeSetTimeout(() => {
       if (isMounted.current) {
@@ -71,7 +70,7 @@ const SettingsTab = memo(() => {
 
   const handleResetSettings = useCallback(() => {
     if (!isMounted.current) return;
-    
+
     setLoading(true);
     safeSetTimeout(() => {
       if (isMounted.current) {
@@ -140,14 +139,14 @@ const SettingsTab = memo(() => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Settings</h2>
-          <p className="text-slate-400">Configure system preferences and integrations</p>
+          <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Configure system preferences and integrations</p>
         </div>
         <div className="flex gap-2">
           <Button
             onClick={handleResetSettings}
             disabled={loading}
             variant="outline"
-            className="border-slate-700 hover:bg-slate-800"
+            className="border-white/10 text-white hover:bg-white/5 hover:border-white/20"
           >
             {loading ? (
               <LoadingSpinner size="sm" />
@@ -161,7 +160,7 @@ const SettingsTab = memo(() => {
           <Button
             onClick={handleSaveSettings}
             disabled={saving}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+            className="bg-white/5 border border-white/10 text-white hover:bg-white/10"
           >
             {saving ? (
               <LoadingSpinner size="sm" />
@@ -176,23 +175,23 @@ const SettingsTab = memo(() => {
       </div>
 
       {/* API Configuration */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Database className="w-5 h-5 text-purple-400" />
-            <CardTitle className="text-white">API Configuration</CardTitle>
+      <div className="glass rounded-lg p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <Database className="w-5 h-5 text-purple-400" />
+          <div>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+              API Configuration
+            </h3>
+            <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Configure third-party service API keys and credentials</p>
           </div>
-          <CardDescription className="text-slate-400">
-            Configure third-party service API keys and credentials
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
+        </div>
+        <div className="space-y-6">
           {/* Twilio */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Twilio</h3>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>Twilio</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="twilio-account-sid">Account SID</Label>
+                <Label htmlFor="twilio-account-sid" style={{ color: 'var(--text-secondary)' }}>Account SID</Label>
                 <Input
                   id="twilio-account-sid"
                   type="password"
@@ -203,7 +202,7 @@ const SettingsTab = memo(() => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="twilio-auth-token">Auth Token</Label>
+                <Label htmlFor="twilio-auth-token" style={{ color: 'var(--text-secondary)' }}>Auth Token</Label>
                 <Input
                   id="twilio-auth-token"
                   type="password"
@@ -214,7 +213,7 @@ const SettingsTab = memo(() => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="twilio-phone-number">Phone Number</Label>
+                <Label htmlFor="twilio-phone-number" style={{ color: 'var(--text-secondary)' }}>Phone Number</Label>
                 <Input
                   id="twilio-phone-number"
                   value={apiSettings.twilioPhoneNumber}
@@ -227,7 +226,7 @@ const SettingsTab = memo(() => {
                 <Button
                   onClick={() => handleTestConnection('Twilio')}
                   variant="outline"
-                  className="w-full border-slate-700 hover:bg-slate-800"
+                  className="w-full border-white/10 text-white hover:bg-white/5 hover:border-white/20"
                 >
                   Test Connection
                 </Button>
@@ -237,10 +236,10 @@ const SettingsTab = memo(() => {
 
           {/* Meta */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Meta (WhatsApp)</h3>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>Meta (WhatsApp)</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="meta-app-id">App ID</Label>
+                <Label htmlFor="meta-app-id" style={{ color: 'var(--text-secondary)' }}>App ID</Label>
                 <Input
                   id="meta-app-id"
                   value={apiSettings.metaAppId}
@@ -250,7 +249,7 @@ const SettingsTab = memo(() => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="meta-app-secret">App Secret</Label>
+                <Label htmlFor="meta-app-secret" style={{ color: 'var(--text-secondary)' }}>App Secret</Label>
                 <Input
                   id="meta-app-secret"
                   type="password"
@@ -261,7 +260,7 @@ const SettingsTab = memo(() => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="meta-phone-number-id">Phone Number ID</Label>
+                <Label htmlFor="meta-phone-number-id" style={{ color: 'var(--text-secondary)' }}>Phone Number ID</Label>
                 <Input
                   id="meta-phone-number-id"
                   value={apiSettings.metaPhoneNumberId}
@@ -271,7 +270,7 @@ const SettingsTab = memo(() => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="meta-access-token">Access Token</Label>
+                <Label htmlFor="meta-access-token" style={{ color: 'var(--text-secondary)' }}>Access Token</Label>
                 <Input
                   id="meta-access-token"
                   type="password"
@@ -286,10 +285,10 @@ const SettingsTab = memo(() => {
 
           {/* Bhashini */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Bhashini</h3>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>Bhashini</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="bhashini-api-key">API Key</Label>
+                <Label htmlFor="bhashini-api-key" style={{ color: 'var(--text-secondary)' }}>API Key</Label>
                 <Input
                   id="bhashini-api-key"
                   type="password"
@@ -303,7 +302,7 @@ const SettingsTab = memo(() => {
                 <Button
                   onClick={() => handleTestConnection('Bhashini')}
                   variant="outline"
-                  className="w-full border-slate-700 hover:bg-slate-800"
+                  className="w-full border-white/10 text-white hover:bg-white/5 hover:border-white/20"
                 >
                   Test Connection
                 </Button>
@@ -313,10 +312,10 @@ const SettingsTab = memo(() => {
 
           {/* OpenAI */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">OpenAI (Whisper)</h3>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>OpenAI (Whisper)</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="openai-api-key">API Key</Label>
+                <Label htmlFor="openai-api-key" style={{ color: 'var(--text-secondary)' }}>API Key</Label>
                 <Input
                   id="openai-api-key"
                   type="password"
@@ -330,7 +329,7 @@ const SettingsTab = memo(() => {
                 <Button
                   onClick={() => handleTestConnection('OpenAI')}
                   variant="outline"
-                  className="w-full border-slate-700 hover:bg-slate-800"
+                  className="w-full border-white/10 text-white hover:bg-white/5 hover:border-white/20"
                 >
                   Test Connection
                 </Button>
@@ -340,10 +339,10 @@ const SettingsTab = memo(() => {
 
           {/* Pinecone */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Pinecone</h3>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>Pinecone</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="pinecone-api-key">API Key</Label>
+                <Label htmlFor="pinecone-api-key" style={{ color: 'var(--text-secondary)' }}>API Key</Label>
                 <Input
                   id="pinecone-api-key"
                   type="password"
@@ -354,7 +353,7 @@ const SettingsTab = memo(() => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="pinecone-index-name">Index Name</Label>
+                <Label htmlFor="pinecone-index-name" style={{ color: 'var(--text-secondary)' }}>Index Name</Label>
                 <Input
                   id="pinecone-index-name"
                   value={apiSettings.pineconeIndexName}
@@ -367,103 +366,159 @@ const SettingsTab = memo(() => {
                 <Button
                   onClick={() => handleTestConnection('Pinecone')}
                   variant="outline"
-                  className="w-full border-slate-700 hover:bg-slate-800"
+                  className="w-full border-white/10 text-white hover:bg-white/5 hover:border-white/20"
                 >
                   Test Connection
                 </Button>
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Notification Settings */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Bell className="w-5 h-5 text-blue-400" />
-            <CardTitle className="text-white">Notification Settings</CardTitle>
+      <div className="glass rounded-lg p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <Bell className="w-5 h-5 text-blue-400" />
+          <div>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+              Notification Settings
+            </h3>
+            <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Configure how and when you receive notifications</p>
           </div>
-          <CardDescription className="text-slate-400">
-            Configure how and when you receive notifications
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        </div>
+        <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">Email Alerts</p>
-                <p className="text-sm text-slate-400">Receive notifications via email</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Receive notifications via email</p>
               </div>
               <Switch
                 checked={notificationSettings.emailAlerts}
                 onCheckedChange={(checked: boolean) => handleNotificationToggle('emailAlerts', checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">SMS Alerts</p>
-                <p className="text-sm text-slate-400">Receive critical alerts via SMS</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Receive critical alerts via SMS</p>
               </div>
               <Switch
                 checked={notificationSettings.smsAlerts}
                 onCheckedChange={(checked: boolean) => handleNotificationToggle('smsAlerts', checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">WhatsApp Alerts</p>
-                <p className="text-sm text-slate-400">Receive notifications via WhatsApp</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Receive notifications via WhatsApp</p>
               </div>
               <Switch
                 checked={notificationSettings.whatsappAlerts}
                 onCheckedChange={(checked: boolean) => handleNotificationToggle('whatsappAlerts', checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">Push Notifications</p>
-                <p className="text-sm text-slate-400">Receive in-app notifications</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Receive in-app notifications</p>
               </div>
               <Switch
                 checked={notificationSettings.pushNotifications}
                 onCheckedChange={(checked: boolean) => handleNotificationToggle('pushNotifications', checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">Daily Reports</p>
-                <p className="text-sm text-slate-400">Receive daily summary reports</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Receive daily summary reports</p>
               </div>
               <Switch
                 checked={notificationSettings.dailyReports}
                 onCheckedChange={(checked: boolean) => handleNotificationToggle('dailyReports', checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">Weekly Reports</p>
-                <p className="text-sm text-slate-400">Receive weekly analytics reports</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Receive weekly analytics reports</p>
               </div>
               <Switch
                 checked={notificationSettings.weeklyReports}
                 onCheckedChange={(checked: boolean) => handleNotificationToggle('weeklyReports', checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">Critical Alerts</p>
-                <p className="text-sm text-slate-400">Immediate alerts for critical issues</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Immediate alerts for critical issues</p>
               </div>
               <Switch
                 checked={notificationSettings.criticalAlerts}
                 onCheckedChange={(checked: boolean) => handleNotificationToggle('criticalAlerts', checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">System Updates</p>
-                <p className="text-sm text-slate-400">Notifications about system updates</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Notifications about system updates</p>
               </div>
               <Switch
                 checked={notificationSettings.systemUpdates}
@@ -471,64 +526,99 @@ const SettingsTab = memo(() => {
               />
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Security Settings */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-green-400" />
-            <CardTitle className="text-white">Security Settings</CardTitle>
+      <div className="glass rounded-lg p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <Shield className="w-5 h-5 text-green-400" />
+          <div>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+              Security Settings
+            </h3>
+            <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Configure security and compliance settings</p>
           </div>
-          <CardDescription className="text-slate-400">
-            Configure security and compliance settings
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        </div>
+        <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">Two-Factor Authentication</p>
-                <p className="text-sm text-slate-400">Require 2FA for all users</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Require 2FA for all users</p>
               </div>
               <Switch
                 checked={securitySettings.twoFactorAuth}
                 onCheckedChange={(checked: boolean) => handleSecurityToggle('twoFactorAuth', checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">IP Whitelist</p>
-                <p className="text-sm text-slate-400">Restrict access by IP address</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Restrict access by IP address</p>
               </div>
               <Switch
                 checked={securitySettings.ipWhitelist}
                 onCheckedChange={(checked: boolean) => handleSecurityToggle('ipWhitelist', checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">Audit Logging</p>
-                <p className="text-sm text-slate-400">Log all system activities</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Log all system activities</p>
               </div>
               <Switch
                 checked={securitySettings.auditLogging}
                 onCheckedChange={(checked: boolean) => handleSecurityToggle('auditLogging', checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+            <div
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
               <div>
                 <p className="text-white font-medium">Encryption at Rest</p>
-                <p className="text-sm text-slate-400">Encrypt stored data</p>
+                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Encrypt stored data</p>
               </div>
               <Switch
                 checked={securitySettings.encryptionAtRest}
                 onCheckedChange={(checked: boolean) => handleSecurityToggle('encryptionAtRest', checked)}
               />
             </div>
-            <div className="space-y-2 p-4 bg-slate-800/50 rounded-lg">
-              <Label htmlFor="session-timeout">Session Timeout (minutes)</Label>
+            <div
+              className="space-y-2 p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
+              <Label htmlFor="session-timeout" style={{ color: 'var(--text-secondary)' }}>Session Timeout (minutes)</Label>
               <Input
                 id="session-timeout"
                 type="number"
@@ -537,8 +627,15 @@ const SettingsTab = memo(() => {
                 className="bg-slate-800 border-slate-700 text-white"
               />
             </div>
-            <div className="space-y-2 p-4 bg-slate-800/50 rounded-lg">
-              <Label htmlFor="password-expiry">Password Expiry (days)</Label>
+            <div
+              className="space-y-2 p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
+              <Label htmlFor="password-expiry" style={{ color: 'var(--text-secondary)' }}>Password Expiry (days)</Label>
               <Input
                 id="password-expiry"
                 type="number"
@@ -547,8 +644,15 @@ const SettingsTab = memo(() => {
                 className="bg-slate-800 border-slate-700 text-white"
               />
             </div>
-            <div className="space-y-2 p-4 bg-slate-800/50 rounded-lg md:col-span-2">
-              <Label htmlFor="data-retention">Data Retention Period (days)</Label>
+            <div
+              className="space-y-2 p-4 rounded-lg md:col-span-2"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: '0.5rem',
+              }}
+            >
+              <Label htmlFor="data-retention" style={{ color: 'var(--text-secondary)' }}>Data Retention Period (days)</Label>
               <Input
                 id="data-retention"
                 type="number"
@@ -558,15 +662,17 @@ const SettingsTab = memo(() => {
               />
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Status Messages */}
-      <div className="flex items-center gap-4 p-4 bg-slate-800/50 rounded-lg border border-slate-700">
-        <CheckCircle className="w-5 h-5 text-green-400" />
-        <div className="flex-1">
-          <p className="text-white font-medium">All settings are up to date</p>
-          <p className="text-sm text-slate-400">Last saved: 2 minutes ago</p>
+      <div className="glass rounded-lg p-4">
+        <div className="flex items-center gap-4">
+          <CheckCircle className="w-5 h-5 text-green-400" />
+          <div className="flex-1">
+            <p className="text-white font-medium">All settings are up to date</p>
+            <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Last saved: 2 minutes ago</p>
+          </div>
         </div>
       </div>
     </div>

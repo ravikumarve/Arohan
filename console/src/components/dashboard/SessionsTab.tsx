@@ -1,9 +1,8 @@
-// Sessions Tab Component with memoization
+// Sessions Tab Component with memoization — Glass design system
 
 import { memo, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Phone, Clock, CheckCircle, XCircle, AlertCircle, Search, Filter, Download } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -13,7 +12,7 @@ import { useTimeout } from '@/hooks/use-timeout';
 const SessionsTab = memo(() => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   // Use custom hook for timeout management
   const { safeSetTimeout, isMounted } = useTimeout();
 
@@ -79,7 +78,7 @@ const SessionsTab = memo(() => {
   // Filter sessions based on search query
   const filteredSessions = useMemo(() => {
     if (!searchQuery) return sessions;
-    
+
     const query = searchQuery.toLowerCase();
     return sessions.filter(session =>
       session.candidate.toLowerCase().includes(query) ||
@@ -101,7 +100,7 @@ const SessionsTab = memo(() => {
 
   const handleExportAll = useCallback(() => {
     if (!isMounted.current) return;
-    
+
     setLoading(true);
     safeSetTimeout(() => {
       if (isMounted.current) {
@@ -154,13 +153,13 @@ const SessionsTab = memo(() => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Sessions</h2>
-          <p className="text-slate-400">Interview sessions and results</p>
+          <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Interview sessions and results</p>
         </div>
         <Button
           onClick={handleExportAll}
           disabled={loading}
           variant="outline"
-          className="border-slate-700 hover:bg-slate-800"
+          className="border-white/10 text-white hover:bg-white/5 hover:border-white/20"
         >
           {loading ? (
             'Exporting...'
@@ -174,105 +173,112 @@ const SessionsTab = memo(() => {
       </div>
 
       {/* Search and Filter */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardContent className="pt-6">
-          <div className="flex gap-3">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <Input
-                placeholder="Search sessions..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
-              />
-            </div>
-            <Button variant="outline" className="border-slate-700 hover:bg-slate-800">
-              <Filter className="w-4 h-4 mr-2" />
-              Filters
-            </Button>
+      <div className="glass rounded-lg p-6">
+        <div className="flex gap-3">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-tertiary)' }} />
+            <Input
+              placeholder="Search sessions..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
+            />
           </div>
-        </CardContent>
-      </Card>
+          <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 hover:border-white/20">
+            <Filter className="w-4 h-4 mr-2" />
+            Filters
+          </Button>
+        </div>
+      </div>
 
       {/* Sessions Table */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <CardTitle className="text-white">Recent Sessions</CardTitle>
-          <CardDescription className="text-slate-400">
-            Showing {filteredSessions.length} of {sessions.length} sessions
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {filteredSessions.map((session, index) => (
-              <motion.div
-                key={session.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="flex items-center gap-4 p-4 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors border border-slate-700/50 hover:border-slate-700"
-              >
-                <div className="w-10 h-10 rounded-lg bg-slate-700 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-slate-300" />
-                </div>
-                
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <p className="text-white font-medium truncate">{session.candidate}</p>
-                    {getStatusBadge(session.status)}
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-slate-400">
-                    <span className="flex items-center gap-1">
-                      <Phone className="w-3 h-3" />
-                      {session.phone}
-                    </span>
-                    <span>{session.language}</span>
-                    <span>{session.date}</span>
-                  </div>
-                </div>
-
-                <div className="text-right">
-                  {session.score !== null ? (
-                    <p className={`text-lg font-bold ${getScoreColor(session.score)}`}>
-                      {session.score}
-                    </p>
-                  ) : (
-                    <p className="text-lg font-bold text-slate-400">—</p>
-                  )}
-                  <p className="text-xs text-slate-400">{session.duration}</p>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {getStatusIcon(session.status)}
-                  <Button
-                    onClick={() => handleViewDetails(session.id)}
-                    variant="ghost"
-                    size="sm"
-                    className="text-slate-400 hover:text-white hover:bg-slate-700"
-                  >
-                    View
-                  </Button>
-                  <Button
-                    onClick={() => handleDownloadReport(session.id)}
-                    variant="ghost"
-                    size="sm"
-                    className="text-slate-400 hover:text-white hover:bg-slate-700"
-                  >
-                    <Download className="w-4 h-4" />
-                  </Button>
-                </div>
-              </motion.div>
-            ))}
+      <div className="glass rounded-lg p-6">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+              Recent Sessions
+            </h3>
+            <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+              Showing {filteredSessions.length} of {sessions.length} sessions
+            </p>
           </div>
+        </div>
 
-          {filteredSessions.length === 0 && (
-            <div className="text-center py-12">
-              <Users className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-              <p className="text-slate-400">No sessions found matching your search</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+        <div className="space-y-2">
+          {filteredSessions.map((session, index) => (
+            <motion.div
+              key={session.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="flex items-center gap-4 p-4 rounded-lg bg-white/[0.02] border border-white/10 transition-colors hover:bg-white/[0.06]"
+            >
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border-glass)',
+                }}
+              >
+                <Users className="w-5 h-5 text-slate-300" />
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="text-white font-medium truncate">{session.candidate}</p>
+                  {getStatusBadge(session.status)}
+                </div>
+                <div className="flex items-center gap-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  <span className="flex items-center gap-1">
+                    <Phone className="w-3 h-3" />
+                    {session.phone}
+                  </span>
+                  <span>{session.language}</span>
+                  <span>{session.date}</span>
+                </div>
+              </div>
+
+              <div className="text-right">
+                {session.score !== null ? (
+                  <p className={`text-lg font-bold ${getScoreColor(session.score)}`} style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                    {session.score}
+                  </p>
+                ) : (
+                  <p className="text-lg font-bold text-slate-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>—</p>
+                )}
+                <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>{session.duration}</p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {getStatusIcon(session.status)}
+                <Button
+                  onClick={() => handleViewDetails(session.id)}
+                  variant="ghost"
+                  size="sm"
+                  className="text-white/60 hover:text-white hover:bg-white/5"
+                >
+                  View
+                </Button>
+                <Button
+                  onClick={() => handleDownloadReport(session.id)}
+                  variant="ghost"
+                  size="sm"
+                  className="text-white/60 hover:text-white hover:bg-white/5"
+                >
+                  <Download className="w-4 h-4" />
+                </Button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {filteredSessions.length === 0 && (
+          <div className="text-center py-12">
+            <Users className="w-12 h-12 text-slate-600 mx-auto mb-4" />
+            <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>No sessions found matching your search</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 });

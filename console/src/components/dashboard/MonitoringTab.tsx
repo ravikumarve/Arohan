@@ -1,9 +1,8 @@
-// Monitoring Tab Component with memoization
+// Monitoring Tab Component with memoization — Glass design system
 
 import { memo, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, Cpu, HardDrive, MemoryStick, AlertTriangle, CheckCircle, Clock, Zap, TrendingUp, TrendingDown, RefreshCw } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -216,14 +215,14 @@ const MonitoringTab = memo(() => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">System Monitoring</h2>
-          <p className="text-slate-400">Real-time system health and performance metrics</p>
+          <p style={{ color: 'var(--text-tertiary)' }}>Real-time system health and performance metrics</p>
         </div>
         <div className="flex gap-2">
           <Button
             onClick={handleRefresh}
             disabled={loading}
             variant="outline"
-            className="border-slate-700 hover:bg-slate-800"
+            className="border-white/10 text-white hover:bg-white/5 hover:border-white/20"
           >
             {loading ? (
               <LoadingSpinner size="sm" />
@@ -237,7 +236,7 @@ const MonitoringTab = memo(() => {
           <Button
             onClick={() => setAutoRefresh(!autoRefresh)}
             variant={autoRefresh ? 'default' : 'outline'}
-            className={autoRefresh ? 'bg-green-600 hover:bg-green-700' : 'border-slate-700 hover:bg-slate-800'}
+            className={autoRefresh ? 'bg-green-600 hover:bg-green-700' : 'border-white/10 text-white hover:bg-white/5 hover:border-white/20'}
           >
             <Zap className="w-4 h-4 mr-2" />
             Auto Refresh
@@ -248,202 +247,198 @@ const MonitoringTab = memo(() => {
       {/* System Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* CPU */}
-        <Card className="bg-slate-900/50 border-slate-800">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm text-slate-400">CPU Usage</CardTitle>
-              <Cpu className="w-4 h-4 text-slate-400" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between mb-2">
-              <span className={`text-2xl font-bold ${getMetricColor(systemMetrics.cpu.usage)}`}>
-                {systemMetrics.cpu.usage}%
-              </span>
-              <TrendingUp className="w-4 h-4 text-green-400" />
-            </div>
-            <div className="w-full bg-slate-800 rounded-full h-2 mb-2">
-              <div
-                className={`${getMetricBarColor(systemMetrics.cpu.usage)} h-2 rounded-full transition-all`}
-                style={{ width: `${systemMetrics.cpu.usage}%` }}
-              />
-            </div>
-            <p className="text-xs text-slate-400">
-              {systemMetrics.cpu.cores} cores • {systemMetrics.cpu.temperature}°C
-            </p>
-          </CardContent>
-        </Card>
+        <div className="glass rounded-lg p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs tracking-wider uppercase" style={{ color: 'var(--text-tertiary)', fontFamily: 'JetBrains Mono, monospace' }}>CPU Usage</span>
+            <Cpu className="w-4 h-4" style={{ color: 'var(--text-tertiary)' }} />
+          </div>
+          <div className="flex items-center justify-between mb-2">
+            <span className={`text-2xl font-bold ${getMetricColor(systemMetrics.cpu.usage)}`} style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+              {systemMetrics.cpu.usage}%
+            </span>
+            <TrendingUp className="w-4 h-4 text-green-400" />
+          </div>
+          <div className="w-full rounded-full h-2 mb-2" style={{ background: 'rgba(255,255,255,0.05)' }}>
+            <div
+              className={`${getMetricBarColor(systemMetrics.cpu.usage)} h-2 rounded-full transition-all`}
+              style={{ width: `${systemMetrics.cpu.usage}%` }}
+            />
+          </div>
+          <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+            {systemMetrics.cpu.cores} cores • {systemMetrics.cpu.temperature}°C
+          </p>
+        </div>
 
         {/* Memory */}
-        <Card className="bg-slate-900/50 border-slate-800">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm text-slate-400">Memory Usage</CardTitle>
-              <MemoryStick className="w-4 h-4 text-slate-400" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between mb-2">
-              <span className={`text-2xl font-bold ${getMetricColor(systemMetrics.memory.percentage)}`}>
-                {systemMetrics.memory.percentage}%
-              </span>
-              <TrendingDown className="w-4 h-4 text-green-400" />
-            </div>
-            <div className="w-full bg-slate-800 rounded-full h-2 mb-2">
-              <div
-                className={`${getMetricBarColor(systemMetrics.memory.percentage)} h-2 rounded-full transition-all`}
-                style={{ width: `${systemMetrics.memory.percentage}%` }}
-              />
-            </div>
-            <p className="text-xs text-slate-400">
-              {systemMetrics.memory.used}GB / {systemMetrics.memory.total}GB
-            </p>
-          </CardContent>
-        </Card>
+        <div className="glass rounded-lg p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs tracking-wider uppercase" style={{ color: 'var(--text-tertiary)', fontFamily: 'JetBrains Mono, monospace' }}>Memory Usage</span>
+            <MemoryStick className="w-4 h-4" style={{ color: 'var(--text-tertiary)' }} />
+          </div>
+          <div className="flex items-center justify-between mb-2">
+            <span className={`text-2xl font-bold ${getMetricColor(systemMetrics.memory.percentage)}`} style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+              {systemMetrics.memory.percentage}%
+            </span>
+            <TrendingDown className="w-4 h-4 text-green-400" />
+          </div>
+          <div className="w-full rounded-full h-2 mb-2" style={{ background: 'rgba(255,255,255,0.05)' }}>
+            <div
+              className={`${getMetricBarColor(systemMetrics.memory.percentage)} h-2 rounded-full transition-all`}
+              style={{ width: `${systemMetrics.memory.percentage}%` }}
+            />
+          </div>
+          <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+            {systemMetrics.memory.used}GB / {systemMetrics.memory.total}GB
+          </p>
+        </div>
 
         {/* Disk */}
-        <Card className="bg-slate-900/50 border-slate-800">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm text-slate-400">Disk Usage</CardTitle>
-              <HardDrive className="w-4 h-4 text-slate-400" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between mb-2">
-              <span className={`text-2xl font-bold ${getMetricColor(systemMetrics.disk.percentage)}`}>
-                {systemMetrics.disk.percentage}%
-              </span>
-              <TrendingUp className="w-4 h-4 text-green-400" />
-            </div>
-            <div className="w-full bg-slate-800 rounded-full h-2 mb-2">
-              <div
-                className={`${getMetricBarColor(systemMetrics.disk.percentage)} h-2 rounded-full transition-all`}
-                style={{ width: `${systemMetrics.disk.percentage}%` }}
-              />
-            </div>
-            <p className="text-xs text-slate-400">
-              {systemMetrics.disk.used}GB / {systemMetrics.disk.total}GB
-            </p>
-          </CardContent>
-        </Card>
+        <div className="glass rounded-lg p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs tracking-wider uppercase" style={{ color: 'var(--text-tertiary)', fontFamily: 'JetBrains Mono, monospace' }}>Disk Usage</span>
+            <HardDrive className="w-4 h-4" style={{ color: 'var(--text-tertiary)' }} />
+          </div>
+          <div className="flex items-center justify-between mb-2">
+            <span className={`text-2xl font-bold ${getMetricColor(systemMetrics.disk.percentage)}`} style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+              {systemMetrics.disk.percentage}%
+            </span>
+            <TrendingUp className="w-4 h-4 text-green-400" />
+          </div>
+          <div className="w-full rounded-full h-2 mb-2" style={{ background: 'rgba(255,255,255,0.05)' }}>
+            <div
+              className={`${getMetricBarColor(systemMetrics.disk.percentage)} h-2 rounded-full transition-all`}
+              style={{ width: `${systemMetrics.disk.percentage}%` }}
+            />
+          </div>
+          <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+            {systemMetrics.disk.used}GB / {systemMetrics.disk.total}GB
+          </p>
+        </div>
 
         {/* Network */}
-        <Card className="bg-slate-900/50 border-slate-800">
-          <CardHeader className="pb-3">
+        <div className="glass rounded-lg p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs tracking-wider uppercase" style={{ color: 'var(--text-tertiary)', fontFamily: 'JetBrains Mono, monospace' }}>Network</span>
+            <Activity className="w-4 h-4" style={{ color: 'var(--text-tertiary)' }} />
+          </div>
+          <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm text-slate-400">Network</CardTitle>
-              <Activity className="w-4 h-4 text-slate-400" />
+              <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>Inbound</span>
+              <span className="text-sm font-medium text-green-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                {systemMetrics.network.inbound} MB/s
+              </span>
             </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Inbound</span>
-                <span className="text-sm font-medium text-green-400">
-                  {systemMetrics.network.inbound} MB/s
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Outbound</span>
-                <span className="text-sm font-medium text-blue-400">
-                  {systemMetrics.network.outbound} MB/s
-                </span>
-              </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>Outbound</span>
+              <span className="text-sm font-medium text-blue-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                {systemMetrics.network.outbound} MB/s
+              </span>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Services Status */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <CardTitle className="text-white">Service Status</CardTitle>
-          <CardDescription className="text-slate-400">Health check for all services</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {services.map((service, index) => (
-              <motion.div
-                key={service.name}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="flex items-center gap-4 p-4 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors border border-slate-700/50 hover:border-slate-700"
-              >
-                <div className="flex items-center gap-3 flex-1">
-                  {getStatusIcon(service.status)}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="text-white font-medium">{service.name}</p>
-                      {getStatusBadge(service.status)}
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-slate-400">
-                      <span>Uptime: {service.uptime}</span>
-                      <span>Response: {service.responseTime}</span>
-                      <span>Requests: {service.requests}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-500">{service.lastCheck}</span>
-                  <Button
-                    onClick={() => handleViewLogs(service.name)}
-                    variant="ghost"
-                    size="sm"
-                    className="text-slate-400 hover:text-white hover:bg-slate-700"
-                  >
-                    Logs
-                  </Button>
-                </div>
-              </motion.div>
-            ))}
+      <div className="glass rounded-lg p-6">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+              Service Status
+            </h3>
+            <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Health check for all services</p>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Recent Alerts */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <CardTitle className="text-white">Recent Alerts</CardTitle>
-          <CardDescription className="text-slate-400">System notifications and warnings</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {alerts.map((alert, index) => (
-              <motion.div
-                key={alert.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="flex items-center gap-4 p-4 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors border border-slate-700/50 hover:border-slate-700"
-              >
-                <div className="flex items-center gap-3 flex-1">
-                  {getAlertSeverityIcon(alert.severity)}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="text-white font-medium">{alert.message}</p>
-                      {getAlertSeverityBadge(alert.severity)}
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-slate-400">
-                      <span>{alert.service}</span>
-                      <span>{alert.timestamp}</span>
-                    </div>
+        </div>
+        <div className="space-y-2">
+          {services.map((service, index) => (
+            <motion.div
+              key={service.name}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="flex items-center gap-4 p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+              }}
+            >
+              <div className="flex items-center gap-3 flex-1">
+                {getStatusIcon(service.status)}
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="text-white font-medium">{service.name}</p>
+                    {getStatusBadge(service.status)}
+                  </div>
+                  <div className="flex items-center gap-4 text-sm" style={{ color: 'var(--text-tertiary)' }}>
+                    <span>Uptime: {service.uptime}</span>
+                    <span>Response: {service.responseTime}</span>
+                    <span>Requests: {service.requests}</span>
                   </div>
                 </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>{service.lastCheck}</span>
                 <Button
-                  onClick={() => handleViewAlert(alert.id)}
+                  onClick={() => handleViewLogs(service.name)}
                   variant="ghost"
                   size="sm"
-                  className="text-slate-400 hover:text-white hover:bg-slate-700"
+                  className="text-white/60 hover:text-white hover:bg-white/5"
                 >
-                  View
+                  Logs
                 </Button>
-              </motion.div>
-            ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Recent Alerts */}
+      <div className="glass rounded-lg p-6">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+              Recent Alerts
+            </h3>
+            <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>System notifications and warnings</p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+        <div className="space-y-2">
+          {alerts.map((alert, index) => (
+            <motion.div
+              key={alert.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="flex items-center gap-4 p-4 rounded-lg"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+              }}
+            >
+              <div className="flex items-center gap-3 flex-1">
+                {getAlertSeverityIcon(alert.severity)}
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="text-white font-medium">{alert.message}</p>
+                    {getAlertSeverityBadge(alert.severity)}
+                  </div>
+                  <div className="flex items-center gap-4 text-sm" style={{ color: 'var(--text-tertiary)' }}>
+                    <span>{alert.service}</span>
+                    <span>{alert.timestamp}</span>
+                  </div>
+                </div>
+              </div>
+              <Button
+                onClick={() => handleViewAlert(alert.id)}
+                variant="ghost"
+                size="sm"
+                className="text-white/60 hover:text-white hover:bg-white/5"
+              >
+                View
+              </Button>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 });

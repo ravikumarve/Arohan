@@ -3,7 +3,6 @@
 import { memo, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Bot, Zap, Play, Settings, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -12,11 +11,9 @@ import { useTimeout } from '@/hooks/use-timeout';
 
 const AgentsTab = memo(() => {
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
-  
-  // Use custom hook for timeout management
+
   const { safeSetTimeout, isMounted } = useTimeout();
 
-  // Memoize agents data
   const agents = useMemo(() => [
     {
       name: 'Proctor Agent',
@@ -49,9 +46,9 @@ const AgentsTab = memo(() => {
 
   const handleTestAgent = useCallback((agentName: string) => {
     if (!isMounted.current) return;
-    
+
     setLoadingStates(prev => ({ ...prev, [agentName]: true }));
-    
+
     safeSetTimeout(() => {
       if (isMounted.current) {
         setLoadingStates(prev => ({ ...prev, [agentName]: false }));
@@ -102,7 +99,7 @@ const AgentsTab = memo(() => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Agent Testing</h2>
-          <p className="text-slate-400">Test and monitor AI agents</p>
+          <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Test and monitor AI agents</p>
         </div>
         <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
           <Zap className="w-4 h-4 mr-2" />
@@ -119,40 +116,54 @@ const AgentsTab = memo(() => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="bg-slate-900/50 border-slate-800 hover:border-slate-700 transition-colors h-full">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-2">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                    <Bot className="w-5 h-5 text-white" />
-                  </div>
-                  {getStatusBadge(agent.status)}
+            <div className="glass-accent rounded-lg p-5 h-full flex flex-col">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                  <Bot className="w-5 h-5 text-white" />
                 </div>
-                <CardTitle className="text-white">{agent.name}</CardTitle>
-                <CardDescription className="text-slate-400 line-clamp-2">
-                  {agent.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+                {getStatusBadge(agent.status)}
+              </div>
+              <h3 className="text-base font-medium text-white mb-1" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+                {agent.name}
+              </h3>
+              <p className="text-xs leading-relaxed mb-4" style={{ color: 'var(--text-tertiary)' }}>
+                {agent.description}
+              </p>
+              <div className="flex-1 space-y-4">
                 {/* Stats */}
                 <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="bg-slate-800/50 p-2 rounded">
-                    <p className="text-slate-400 text-xs">Success Rate</p>
-                    <p className="text-white font-medium">{agent.successRate}</p>
+                  <div
+                    style={{
+                      background: 'rgba(255,255,255,0.02)',
+                      border: '1px solid var(--border-glass)',
+                      borderRadius: '0.5rem',
+                      padding: '0.5rem',
+                    }}
+                  >
+                    <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Success Rate</p>
+                    <p className="text-white font-medium" style={{ fontFamily: 'JetBrains Mono, monospace' }}>{agent.successRate}</p>
                   </div>
-                  <div className="bg-slate-800/50 p-2 rounded">
-                    <p className="text-slate-400 text-xs">Uptime</p>
-                    <p className="text-white font-medium">{agent.uptime}</p>
+                  <div
+                    style={{
+                      background: 'rgba(255,255,255,0.02)',
+                      border: '1px solid var(--border-glass)',
+                      borderRadius: '0.5rem',
+                      padding: '0.5rem',
+                    }}
+                  >
+                    <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Uptime</p>
+                    <p className="text-white font-medium" style={{ fontFamily: 'JetBrains Mono, monospace' }}>{agent.uptime}</p>
                   </div>
                 </div>
 
                 {/* Last Run */}
                 <div className="flex items-center gap-2 text-sm">
                   {getStatusIcon(agent.status)}
-                  <span className="text-slate-400">Last run: {agent.lastRun}</span>
+                  <span style={{ color: 'var(--text-tertiary)' }}>Last run: {agent.lastRun}</span>
                 </div>
 
                 {/* Version */}
-                <div className="text-xs text-slate-500">
+                <div className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
                   Version {agent.version}
                 </div>
 
@@ -177,7 +188,7 @@ const AgentsTab = memo(() => {
                     onClick={() => handleConfigureAgent(agent.name)}
                     variant="outline"
                     size="sm"
-                    className="border-slate-700 hover:bg-slate-800"
+                    className="border-white/10 text-white hover:bg-white/5 hover:border-white/20"
                   >
                     <Settings className="w-3 h-3" />
                   </Button>
@@ -185,44 +196,70 @@ const AgentsTab = memo(() => {
                     onClick={() => handleViewLogs(agent.name)}
                     variant="outline"
                     size="sm"
-                    className="border-slate-700 hover:bg-slate-800"
+                    className="border-white/10 text-white hover:bg-white/5 hover:border-white/20"
                   >
                     <Clock className="w-3 h-3" />
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </motion.div>
         ))}
       </div>
 
       {/* Quick Stats */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <CardTitle className="text-white">Agent Performance</CardTitle>
-          <CardDescription className="text-slate-400">Overall system metrics</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-slate-800/50 p-4 rounded-lg">
-              <p className="text-slate-400 text-sm">Total Agents</p>
-              <p className="text-2xl font-bold text-white">3</p>
-            </div>
-            <div className="bg-slate-800/50 p-4 rounded-lg">
-              <p className="text-slate-400 text-sm">Active Agents</p>
-              <p className="text-2xl font-bold text-green-400">3</p>
-            </div>
-            <div className="bg-slate-800/50 p-4 rounded-lg">
-              <p className="text-slate-400 text-sm">Avg Success Rate</p>
-              <p className="text-2xl font-bold text-white">98.3%</p>
-            </div>
-            <div className="bg-slate-800/50 p-4 rounded-lg">
-              <p className="text-slate-400 text-sm">Total Tests Today</p>
-              <p className="text-2xl font-bold text-white">247</p>
-            </div>
+      <div className="glass rounded-lg p-6">
+        <h3 className="text-base font-medium text-white mb-1" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+          Agent Performance
+        </h3>
+        <p className="text-xs mb-5" style={{ color: 'var(--text-tertiary)' }}>Overall system metrics</p>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div
+            style={{
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid var(--border-glass)',
+              borderRadius: '0.5rem',
+              padding: '1rem',
+            }}
+          >
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Total Agents</p>
+            <p className="text-2xl font-bold text-white" style={{ fontFamily: 'JetBrains Mono, monospace' }}>3</p>
           </div>
-        </CardContent>
-      </Card>
+          <div
+            style={{
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid var(--border-glass)',
+              borderRadius: '0.5rem',
+              padding: '1rem',
+            }}
+          >
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Active Agents</p>
+            <p className="text-2xl font-bold text-green-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>3</p>
+          </div>
+          <div
+            style={{
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid var(--border-glass)',
+              borderRadius: '0.5rem',
+              padding: '1rem',
+            }}
+          >
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Avg Success Rate</p>
+            <p className="text-2xl font-bold text-white" style={{ fontFamily: 'JetBrains Mono, monospace' }}>98.3%</p>
+          </div>
+          <div
+            style={{
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid var(--border-glass)',
+              borderRadius: '0.5rem',
+              padding: '1rem',
+            }}
+          >
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Total Tests Today</p>
+            <p className="text-2xl font-bold text-white" style={{ fontFamily: 'JetBrains Mono, monospace' }}>247</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 });

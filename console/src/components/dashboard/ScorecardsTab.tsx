@@ -3,7 +3,6 @@
 import { memo, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FileText, TrendingUp, TrendingDown, Award, AlertTriangle, Download, Eye, Filter, Search } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -13,7 +12,7 @@ import { useTimeout } from '@/hooks/use-timeout';
 const ScorecardsTab = memo(() => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   // Use custom hook for timeout management
   const { safeSetTimeout, isMounted } = useTimeout();
 
@@ -104,7 +103,7 @@ const ScorecardsTab = memo(() => {
   // Filter scorecards based on search query
   const filteredScorecards = useMemo(() => {
     if (!searchQuery) return scorecards;
-    
+
     const query = searchQuery.toLowerCase();
     return scorecards.filter(scorecard =>
       scorecard.candidate.toLowerCase().includes(query) ||
@@ -126,7 +125,7 @@ const ScorecardsTab = memo(() => {
 
   const handleExportAll = useCallback(() => {
     if (!isMounted.current) return;
-    
+
     setLoading(true);
     safeSetTimeout(() => {
       if (isMounted.current) {
@@ -173,13 +172,13 @@ const ScorecardsTab = memo(() => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Scorecards</h2>
-          <p className="text-slate-400">Candidate assessment results and analytics</p>
+          <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Candidate assessment results and analytics</p>
         </div>
         <Button
           onClick={handleExportAll}
           disabled={loading}
           variant="outline"
-          className="border-slate-700 hover:bg-slate-800"
+          className="border-white/10 text-white hover:bg-white/5 hover:border-white/20"
         >
           {loading ? (
             'Exporting...'
@@ -193,25 +192,23 @@ const ScorecardsTab = memo(() => {
       </div>
 
       {/* Search and Filter */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardContent className="pt-6">
-          <div className="flex gap-3">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <Input
-                placeholder="Search scorecards..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
-              />
-            </div>
-            <Button variant="outline" className="border-slate-700 hover:bg-slate-800">
-              <Filter className="w-4 h-4 mr-2" />
-              Filters
-            </Button>
+      <div className="glass rounded-lg p-6">
+        <div className="flex gap-3">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-tertiary)' }} />
+            <Input
+              placeholder="Search scorecards..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
+            />
           </div>
-        </CardContent>
-      </Card>
+          <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 hover:border-white/20">
+            <Filter className="w-4 h-4 mr-2" />
+            Filters
+          </Button>
+        </div>
+      </div>
 
       {/* Scorecards Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -222,162 +219,172 @@ const ScorecardsTab = memo(() => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
           >
-            <Card className="bg-slate-900/50 border-slate-800 hover:border-slate-700 transition-colors">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-white">{scorecard.candidate}</CardTitle>
-                      <CardDescription className="text-slate-400 text-xs">
-                        {scorecard.role} • {scorecard.date}
-                      </CardDescription>
-                    </div>
+            <div className="glass-accent rounded-lg p-5 space-y-4">
+              {/* Card Header */}
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-white" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    {scorecard.shortlistFlag && (
-                      <Badge className="bg-green-500/10 text-green-400 border-green-500/30">
-                        <Award className="w-3 h-3 mr-1" />
-                        Shortlisted
-                      </Badge>
-                    )}
-                    {getFluencyBadge(scorecard.languageFluency)}
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Overall Score */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    {getScoreTrend(scorecard.overallScore)}
-                    <span className="text-slate-400 text-sm">Overall Score</span>
-                  </div>
-                  <span className={`text-2xl font-bold ${getScoreColor(scorecard.overallScore)}`}>
-                    {scorecard.overallScore}
-                  </span>
-                </div>
-
-                {/* Score Bar */}
-                <div className="w-full bg-slate-800 rounded-full h-2">
-                  <div
-                    className={`${getScoreBarColor(scorecard.overallScore)} h-2 rounded-full transition-all`}
-                    style={{ width: `${scorecard.overallScore}%` }}
-                  />
-                </div>
-
-                {/* Detailed Scores */}
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div className="bg-slate-800/50 p-2 rounded">
-                    <p className="text-slate-400 text-xs">Communication</p>
-                    <p className={`font-medium ${getScoreColor(scorecard.communicationScore)}`}>
-                      {scorecard.communicationScore}
-                    </p>
-                  </div>
-                  <div className="bg-slate-800/50 p-2 rounded">
-                    <p className="text-slate-400 text-xs">Domain Knowledge</p>
-                    <p className={`font-medium ${getScoreColor(scorecard.domainKnowledgeScore)}`}>
-                      {scorecard.domainKnowledgeScore}
-                    </p>
-                  </div>
-                  <div className="bg-slate-800/50 p-2 rounded">
-                    <p className="text-slate-400 text-xs">Situational Judgment</p>
-                    <p className={`font-medium ${getScoreColor(scorecard.situationalJudgmentScore)}`}>
-                      {scorecard.situationalJudgmentScore}
-                    </p>
-                  </div>
-                  <div className="bg-slate-800/50 p-2 rounded">
-                    <p className="text-slate-400 text-xs">Confidence</p>
-                    <p className={`font-medium ${getScoreColor(scorecard.confidenceScore)}`}>
-                      {scorecard.confidenceScore}
+                  <div>
+                    <p className="text-sm font-medium text-white">{scorecard.candidate}</p>
+                    <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+                      {scorecard.role} • {scorecard.date}
                     </p>
                   </div>
                 </div>
-
-                {/* Recommended Roles */}
-                <div>
-                  <p className="text-slate-400 text-xs mb-2">Recommended Roles</p>
-                  <div className="flex flex-wrap gap-2">
-                    {scorecard.recommendedRoles.map((role, i) => (
-                      <Badge key={i} variant="outline" className="border-slate-700 text-slate-300">
-                        {role}
-                      </Badge>
-                    ))}
-                  </div>
+                <div className="flex items-center gap-2">
+                  {scorecard.shortlistFlag && (
+                    <Badge className="bg-green-500/10 text-green-400 border-green-500/30">
+                      <Award className="w-3 h-3 mr-1" />
+                      Shortlisted
+                    </Badge>
+                  )}
+                  {getFluencyBadge(scorecard.languageFluency)}
                 </div>
+              </div>
 
-                {/* Assessor Notes */}
-                <div className="bg-slate-800/30 p-3 rounded text-sm text-slate-400 line-clamp-2">
-                  {scorecard.assessorNotes}
+              {/* Overall Score */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {getScoreTrend(scorecard.overallScore)}
+                  <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>Overall Score</span>
                 </div>
+                <span
+                  className={`text-2xl font-bold ${getScoreColor(scorecard.overallScore)}`}
+                  style={{ fontFamily: 'JetBrains Mono, monospace' }}
+                >
+                  {scorecard.overallScore}
+                </span>
+              </div>
 
-                {/* Actions */}
-                <div className="flex gap-2 pt-2">
-                  <Button
-                    onClick={() => handleViewDetails(scorecard.id)}
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 border-slate-700 hover:bg-slate-800"
-                  >
-                    <Eye className="w-3 h-3 mr-1" />
-                    View Details
-                  </Button>
-                  <Button
-                    onClick={() => handleDownloadReport(scorecard.id)}
-                    variant="outline"
-                    size="sm"
-                    className="border-slate-700 hover:bg-slate-800"
-                  >
-                    <Download className="w-3 h-3" />
-                  </Button>
+              {/* Score Bar */}
+              <div className="w-full rounded-full h-2" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                <div
+                  className={`${getScoreBarColor(scorecard.overallScore)} h-2 rounded-full transition-all`}
+                  style={{ width: `${scorecard.overallScore}%` }}
+                />
+              </div>
+
+              {/* Detailed Scores */}
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', borderRadius: '0.5rem', padding: '0.5rem' }}>
+                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Communication</p>
+                  <p className={`font-medium ${getScoreColor(scorecard.communicationScore)}`} style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                    {scorecard.communicationScore}
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
+                <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', borderRadius: '0.5rem', padding: '0.5rem' }}>
+                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Domain Knowledge</p>
+                  <p className={`font-medium ${getScoreColor(scorecard.domainKnowledgeScore)}`} style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                    {scorecard.domainKnowledgeScore}
+                  </p>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', borderRadius: '0.5rem', padding: '0.5rem' }}>
+                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Situational Judgment</p>
+                  <p className={`font-medium ${getScoreColor(scorecard.situationalJudgmentScore)}`} style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                    {scorecard.situationalJudgmentScore}
+                  </p>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', borderRadius: '0.5rem', padding: '0.5rem' }}>
+                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Confidence</p>
+                  <p className={`font-medium ${getScoreColor(scorecard.confidenceScore)}`} style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                    {scorecard.confidenceScore}
+                  </p>
+                </div>
+              </div>
+
+              {/* Recommended Roles */}
+              <div>
+                <p className="text-xs mb-2" style={{ color: 'var(--text-secondary)' }}>Recommended Roles</p>
+                <div className="flex flex-wrap gap-2">
+                  {scorecard.recommendedRoles.map((role, i) => (
+                    <Badge key={i} variant="outline" className="border-white/10 text-white/80">
+                      {role}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* Assessor Notes */}
+              <div
+                className="text-sm line-clamp-2"
+                style={{
+                  background: 'rgba(255,255,255,0.02)',
+                  border: '1px solid var(--border-glass)',
+                  borderRadius: '0.5rem',
+                  padding: '0.75rem',
+                  color: 'var(--text-tertiary)',
+                }}
+              >
+                {scorecard.assessorNotes}
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-2">
+                <Button
+                  onClick={() => handleViewDetails(scorecard.id)}
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 border-white/10 text-white hover:bg-white/5 hover:border-white/20"
+                >
+                  <Eye className="w-3 h-3 mr-1" />
+                  View Details
+                </Button>
+                <Button
+                  onClick={() => handleDownloadReport(scorecard.id)}
+                  variant="outline"
+                  size="sm"
+                  className="border-white/10 text-white hover:bg-white/5 hover:border-white/20"
+                >
+                  <Download className="w-3 h-3" />
+                </Button>
+              </div>
+            </div>
           </motion.div>
         ))}
       </div>
 
       {filteredScorecards.length === 0 && (
         <div className="text-center py-12">
-          <FileText className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-          <p className="text-slate-400">No scorecards found matching your search</p>
+          <FileText className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--text-tertiary)' }} />
+          <p style={{ color: 'var(--text-tertiary)' }}>No scorecards found matching your search</p>
         </div>
       )}
 
-      {/* Quick Stats */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <CardTitle className="text-white">Scorecard Analytics</CardTitle>
-          <CardDescription className="text-slate-400">Overall assessment metrics</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-slate-800/50 p-4 rounded-lg">
-              <p className="text-slate-400 text-sm">Total Scorecards</p>
-              <p className="text-2xl font-bold text-white">{scorecards.length}</p>
-            </div>
-            <div className="bg-slate-800/50 p-4 rounded-lg">
-              <p className="text-slate-400 text-sm">Shortlisted</p>
-              <p className="text-2xl font-bold text-green-400">
-                {scorecards.filter(s => s.shortlistFlag).length}
-              </p>
-            </div>
-            <div className="bg-slate-800/50 p-4 rounded-lg">
-              <p className="text-slate-400 text-sm">Avg Score</p>
-              <p className="text-2xl font-bold text-white">
-                {Math.round(scorecards.reduce((acc, s) => acc + s.overallScore, 0) / scorecards.length)}
-              </p>
-            </div>
-            <div className="bg-slate-800/50 p-4 rounded-lg">
-              <p className="text-slate-400 text-sm">High Performers (80+)</p>
-              <p className="text-2xl font-bold text-green-400">
-                {scorecards.filter(s => s.overallScore >= 80).length}
-              </p>
-            </div>
+      {/* Scorecard Analytics */}
+      <div className="glass rounded-lg p-6 space-y-5">
+        <div>
+          <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+            Scorecard Analytics
+          </h3>
+          <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Overall assessment metrics</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', borderRadius: '0.5rem', padding: '1rem' }}>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Total Scorecards</p>
+            <p className="text-2xl font-bold text-white" style={{ fontFamily: 'JetBrains Mono, monospace' }}>{scorecards.length}</p>
           </div>
-        </CardContent>
-      </Card>
+          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', borderRadius: '0.5rem', padding: '1rem' }}>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Shortlisted</p>
+            <p className="text-2xl font-bold text-green-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+              {scorecards.filter(s => s.shortlistFlag).length}
+            </p>
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', borderRadius: '0.5rem', padding: '1rem' }}>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Avg Score</p>
+            <p className="text-2xl font-bold text-white" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+              {Math.round(scorecards.reduce((acc, s) => acc + s.overallScore, 0) / scorecards.length)}
+            </p>
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', borderRadius: '0.5rem', padding: '1rem' }}>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>High Performers (80+)</p>
+            <p className="text-2xl font-bold text-green-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+              {scorecards.filter(s => s.overallScore >= 80).length}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 });
