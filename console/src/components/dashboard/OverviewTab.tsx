@@ -1,9 +1,9 @@
-// Overview Tab Component with memoization and proper error handling
+// Overview Tab — Console Design System
+// Glass-effect metric cards, system health, quick actions, activity feed
 
 import { memo, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Bot, BarChart3, CheckCircle, Activity, Phone, MessageSquare, Zap } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -12,16 +12,13 @@ import { useTimeout } from '@/hooks/use-timeout';
 const OverviewTab = memo(() => {
   const [loading, setLoading] = useState(false);
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
-  
-  // Use custom hook for timeout management
   const { safeSetTimeout, isMounted } = useTimeout();
 
-  // Memoize static data to prevent unnecessary re-renders
   const stats = useMemo(() => [
-    { label: 'Total Sessions', value: '1,234', change: '+12%', icon: Users, color: 'from-blue-500 to-cyan-500' },
-    { label: 'Active Agents', value: '3', change: '0%', icon: Bot, color: 'from-purple-500 to-pink-500' },
-    { label: 'Avg Score', value: '78.5', change: '+5%', icon: BarChart3, color: 'from-green-500 to-emerald-500' },
-    { label: 'Success Rate', value: '94.2%', change: '+2%', icon: CheckCircle, color: 'from-orange-500 to-red-500' },
+    { label: 'Total Sessions', value: '1,234', change: '+12%', icon: Users },
+    { label: 'Active Agents', value: '3', change: '0%', icon: Bot },
+    { label: 'Avg Score', value: '78.5', change: '+5%', icon: BarChart3 },
+    { label: 'Success Rate', value: '94.2%', change: '+2%', icon: CheckCircle },
   ], []);
 
   const systemHealth = useMemo(() => [
@@ -41,10 +38,8 @@ const OverviewTab = memo(() => {
     { id: 5, type: 'alert', message: 'System health check passed', time: '15 min ago', icon: Activity },
   ], []);
 
-  // Memoize callback functions to prevent unnecessary re-renders
   const handleLiveStatus = useCallback(() => {
     if (!isMounted.current) return;
-    
     setLoading(true);
     safeSetTimeout(() => {
       if (isMounted.current) {
@@ -56,7 +51,6 @@ const OverviewTab = memo(() => {
 
   const handleTestIVR = useCallback(() => {
     if (!isMounted.current) return;
-    
     setLoadingStates(prev => ({ ...prev, ivr: true }));
     safeSetTimeout(() => {
       if (isMounted.current) {
@@ -68,7 +62,6 @@ const OverviewTab = memo(() => {
 
   const handleTestWhatsApp = useCallback(() => {
     if (!isMounted.current) return;
-    
     setLoadingStates(prev => ({ ...prev, whatsapp: true }));
     safeSetTimeout(() => {
       if (isMounted.current) {
@@ -80,7 +73,6 @@ const OverviewTab = memo(() => {
 
   const handleRunDiagnostics = useCallback(() => {
     if (!isMounted.current) return;
-    
     setLoadingStates(prev => ({ ...prev, diagnostics: true }));
     safeSetTimeout(() => {
       if (isMounted.current) {
@@ -105,34 +97,7 @@ const OverviewTab = memo(() => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-white">Overview</h2>
-          <p className="text-slate-400">System performance and activity</p>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            onClick={handleLiveStatus}
-            disabled={loading}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-          >
-            {loading ? (
-              <>
-                <Zap className="w-4 h-4 mr-2 animate-spin" />
-                Checking...
-              </>
-            ) : (
-              <>
-                <Activity className="w-4 h-4 mr-2" />
-                Live Status
-              </>
-            )}
-          </Button>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
+      {/* Stats Grid — Glass cards with mono values */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
           <motion.div
@@ -141,156 +106,179 @@ const OverviewTab = memo(() => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
           >
-            <Card className="bg-slate-900/50 border-slate-800 hover:border-slate-700 transition-colors">
-              <CardHeader className="pb-3">
-                <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center mb-2`}>
-                  <stat.icon className="w-5 h-5 text-white" />
+            <div className="glass-accent rounded-lg p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className="w-9 h-9 rounded-md flex items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(135deg, var(--accent-indigo), var(--accent-violet))',
+                    boxShadow: '0 0 12px rgba(99, 102, 241, 0.3)',
+                  }}
+                >
+                  <stat.icon className="w-4 h-4 text-white" />
                 </div>
-                <CardDescription className="text-slate-400">{stat.label}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-2xl text-white">{stat.value}</CardTitle>
-                  <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500/30">
-                    {stat.change}
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
+                <span className="text-xs tracking-wider uppercase" style={{ color: 'var(--text-tertiary)', fontFamily: 'JetBrains Mono, monospace' }}>
+                  {stat.label}
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between">
+                <span
+                  className="text-2xl font-bold text-white"
+                  style={{ fontFamily: 'JetBrains Mono, monospace' }}
+                >
+                  {stat.value}
+                </span>
+                <Badge
+                  variant="outline"
+                  className="border-green-500/30 text-green-400 bg-green-500/10 text-[0.65rem] tracking-wider"
+                  style={{ fontFamily: 'JetBrains Mono, monospace' }}
+                >
+                  {stat.change}
+                </Badge>
+              </div>
+            </div>
           </motion.div>
         ))}
       </div>
 
       {/* System Health */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <CardTitle className="text-white">System Health</CardTitle>
-          <CardDescription className="text-slate-400">Real-time service status</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {systemHealth.map((service, index) => (
-              <motion.div
-                key={service.service}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`w-2 h-2 rounded-full ${
+      <div className="glass rounded-lg p-6">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h3 className="text-base font-medium text-white" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+              System Health
+            </h3>
+            <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Real-time service status</p>
+          </div>
+          <Button
+            onClick={handleLiveStatus}
+            disabled={loading}
+            size="sm"
+            className="text-xs bg-white/5 border border-white/10 text-white hover:bg-white/10"
+          >
+            {loading ? (
+              <><Zap className="w-3 h-3 mr-1.5 animate-spin" /> Checking...</>
+            ) : (
+              <><Activity className="w-3 h-3 mr-1.5" /> Live Status</>
+            )}
+          </Button>
+        </div>
+        <div className="space-y-2">
+          {systemHealth.map((service, index) => (
+            <motion.div
+              key={service.service}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="flex items-center justify-between p-3 rounded-md"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+              }}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-1.5 h-1.5 rounded-full ${
                     service.status === 'healthy' ? 'bg-green-500' :
                     service.status === 'degraded' ? 'bg-yellow-500' :
                     'bg-red-500'
-                  }`} />
-                  <span className="text-white font-medium">{service.service}</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Badge className={getStatusColor(service.status)}>
-                    {service.status}
-                  </Badge>
-                  <span className="text-slate-400 text-sm">{service.uptime}</span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+                  }`}
+                />
+                <span className="text-sm text-white font-medium">{service.service}</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <Badge className={getStatusColor(service.status)}>
+                  {service.status}
+                </Badge>
+                <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>{service.uptime}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
 
       {/* Quick Actions */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <CardTitle className="text-white">Quick Actions</CardTitle>
-          <CardDescription className="text-slate-400">Common tasks and tests</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <Button
-              onClick={handleTestIVR}
-              disabled={loadingStates.ivr}
-              variant="outline"
-              className="border-slate-700 hover:bg-slate-800 hover:border-slate-600"
-            >
-              {loadingStates.ivr ? (
-                <>
-                  <Zap className="w-4 h-4 mr-2 animate-spin" />
-                  Testing...
-                </>
-              ) : (
-                <>
-                  <Phone className="w-4 h-4 mr-2" />
-                  Test IVR
-                </>
-              )}
-            </Button>
-            <Button
-              onClick={handleTestWhatsApp}
-              disabled={loadingStates.whatsapp}
-              variant="outline"
-              className="border-slate-700 hover:bg-slate-800 hover:border-slate-600"
-            >
-              {loadingStates.whatsapp ? (
-                <>
-                  <Zap className="w-4 h-4 mr-2 animate-spin" />
-                  Testing...
-                </>
-              ) : (
-                <>
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Test WhatsApp
-                </>
-              )}
-            </Button>
-            <Button
-              onClick={handleRunDiagnostics}
-              disabled={loadingStates.diagnostics}
-              variant="outline"
-              className="border-slate-700 hover:bg-slate-800 hover:border-slate-600"
-            >
-              {loadingStates.diagnostics ? (
-                <>
-                  <Zap className="w-4 h-4 mr-2 animate-spin" />
-                  Running...
-                </>
-              ) : (
-                <>
-                  <Activity className="w-4 h-4 mr-2" />
-                  Run Diagnostics
-                </>
-              )}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="glass rounded-lg p-6">
+        <h3 className="text-base font-medium text-white mb-1" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+          Quick Actions
+        </h3>
+        <p className="text-xs mb-5" style={{ color: 'var(--text-tertiary)' }}>Common tasks and tests</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <Button
+            onClick={handleTestIVR}
+            disabled={loadingStates.ivr}
+            variant="outline"
+            className="border-white/10 text-white hover:bg-white/5 hover:border-white/20"
+          >
+            {loadingStates.ivr ? (
+              <><Zap className="w-4 h-4 mr-2 animate-spin" /> Testing...</>
+            ) : (
+              <><Phone className="w-4 h-4 mr-2" /> Test IVR</>
+            )}
+          </Button>
+          <Button
+            onClick={handleTestWhatsApp}
+            disabled={loadingStates.whatsapp}
+            variant="outline"
+            className="border-white/10 text-white hover:bg-white/5 hover:border-white/20"
+          >
+            {loadingStates.whatsapp ? (
+              <><Zap className="w-4 h-4 mr-2 animate-spin" /> Testing...</>
+            ) : (
+              <><MessageSquare className="w-4 h-4 mr-2" /> Test WhatsApp</>
+            )}
+          </Button>
+          <Button
+            onClick={handleRunDiagnostics}
+            disabled={loadingStates.diagnostics}
+            variant="outline"
+            className="border-white/10 text-white hover:bg-white/5 hover:border-white/20"
+          >
+            {loadingStates.diagnostics ? (
+              <><Zap className="w-4 h-4 mr-2 animate-spin" /> Running...</>
+            ) : (
+              <><Activity className="w-4 h-4 mr-2" /> Run Diagnostics</>
+            )}
+          </Button>
+        </div>
+      </div>
 
       {/* Recent Activity */}
-      <Card className="bg-slate-900/50 border-slate-800">
-        <CardHeader>
-          <CardTitle className="text-white">Recent Activity</CardTitle>
-          <CardDescription className="text-slate-400">Latest system events</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {recentActivity.map((activity, index) => (
-              <motion.div
-                key={activity.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors"
+      <div className="glass rounded-lg p-6">
+        <h3 className="text-base font-medium text-white mb-1" style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk"), sans-serif' }}>
+          Recent Activity
+        </h3>
+        <p className="text-xs mb-5" style={{ color: 'var(--text-tertiary)' }}>Latest system events</p>
+        <div className="space-y-2">
+          {recentActivity.map((activity, index) => (
+            <motion.div
+              key={activity.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="flex items-center gap-3 p-3 rounded-md"
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border-glass)',
+              }}
+            >
+              <div
+                className="w-8 h-8 rounded-md flex items-center justify-center"
+                style={{
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border-glass)',
+                }}
               >
-                <div className="w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center">
-                  <activity.icon className="w-4 h-4 text-slate-300" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-white text-sm">{activity.message}</p>
-                  <p className="text-slate-400 text-xs">{activity.time}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+                <activity.icon className="w-4 h-4" style={{ color: 'var(--text-secondary)' }} />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-white">{activity.message}</p>
+                <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>{activity.time}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 });
