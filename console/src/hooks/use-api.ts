@@ -1,7 +1,7 @@
 // Custom hooks for data fetching and state management
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { ApiError, ApiResponse } from '@/lib/types';
+import type { ApiError, ApiResponse } from '@arohan/shared';
 import apiClient from '@/lib/api-client';
 
 // Generic API hook for data fetching

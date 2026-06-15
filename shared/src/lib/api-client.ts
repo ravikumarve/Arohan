@@ -106,6 +106,7 @@ export class ApiClient {
     if (axios.isAxiosError(error)) {
       return {
         success: false,
+        data: undefined as never,
         error: error.response?.data?.error || error.message,
         message: error.response?.data?.message || 'An error occurred',
         timestamp: new Date().toISOString(),
@@ -114,6 +115,7 @@ export class ApiClient {
     
     return {
       success: false,
+      data: undefined as never,
       error: 'Unknown error',
       message: 'An unexpected error occurred',
       timestamp: new Date().toISOString(),

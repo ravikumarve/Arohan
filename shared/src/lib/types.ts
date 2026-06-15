@@ -249,10 +249,17 @@ export interface CandidateFilters {
 
 export interface ApiResponse<T> {
   success: boolean;
-  data?: T;
+  data: T;
   message?: string;
   error?: string;
   timestamp: string;
+}
+
+export interface ApiError {
+  message: string;
+  status?: number;
+  code?: string;
+  details?: any;
 }
 
 export interface PaginatedResponse<T> {
