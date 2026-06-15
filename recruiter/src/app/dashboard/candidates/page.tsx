@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, Filter, Download, RefreshCw, Users, Phone, MapPin, Calendar, CheckCircle, XCircle, Clock, Star, Award, MoreVertical } from 'lucide-react';
+import { cn } from '@arohan/shared';
 
 const mockCandidates = [
   { id: '1', name: 'Rajesh Kumar', phone: '+91 98765 43210', email: 'rajesh.k@email.com', role: 'Delivery Partner', location: 'Bangalore, Karnataka', status: 'screened', score: 78, lastActive: '2025-05-10T10:30:00Z' },
@@ -52,7 +53,7 @@ export default function RecruiterCandidatesPage() {
           <p className="text-neutral-400">View and manage candidate profiles and screening results</p>
         </div>
         <div className="flex gap-3">
-          <button onClick={() => setShowFilters(!showFilters)} className="px-4 py-2 border border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-800 rounded-lg transition-colors flex items-center gap-2">
+          <button onClick={() => setShowFilters(!showFilters)} className={cn("px-4 py-2 border rounded-lg transition-colors flex items-center gap-2", showFilters ? "border-violet-500 text-violet-400 bg-violet-500/10" : "border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-800")}>
             <Filter className="w-4 h-4" /> Filters
           </button>
           <button className="px-4 py-2 border border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-800 rounded-lg transition-colors flex items-center gap-2">
