@@ -31,76 +31,135 @@ export default function RecruiterSidebar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  const isActive = (href: string) => {
+    if (href === '/dashboard') return pathname === '/dashboard';
+    return pathname.startsWith(href);
+  };
+
   return (
     <>
       {/* Mobile menu button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-recruiter-primary rounded-lg text-white"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg"
+        style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: '#fff' }}
         aria-label="Toggle menu"
       >
-        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
       {/* Sidebar */}
       <aside
         className={`
           fixed lg:static inset-y-0 left-0 z-40
-          w-64 bg-recruiter-background-secondary border-r border-recruiter-background-tertiary
+          w-[260px] flex flex-col
           transform transition-transform duration-300 ease-in-out
           ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
+        style={{
+          background: 'rgba(8, 9, 14, 0.8)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRight: '1px solid var(--border-dim, rgba(255,255,255,0.05))',
+        }}
         aria-label="Recruiter navigation"
       >
-        <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="flex items-center gap-3 p-6 border-b border-recruiter-background-tertiary">
-            <div className="w-10 h-10 bg-gradient-to-br from-recruiter-primary to-recruiter-primary-light rounded-xl flex items-center justify-center">
-              <LayoutDashboard className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-white">AROHAN</h1>
-              <p className="text-xs text-recruiter-primary-light">Recruiter Dashboard</p>
+        {/* Header — violet/pink gradient logo */}
+        <div
+          className="flex items-center gap-3 px-6"
+          style={{
+            height: '72px',
+            borderBottom: '1px solid var(--border-dim, rgba(255,255,255,0.05))',
+          }}
+        >
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+            style={{
+              background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+              boxShadow: '0 0 20px rgba(236, 72, 153, 0.3)',
+            }}
+          >
+            <LayoutDashboard className="w-[16px] h-[16px] text-white" />
+          </div>
+          <div>
+            <div className="font-bold text-sm tracking-wider" style={{ color: '#ffffff' }}>AROHAN</div>
+            <div
+              className="text-[0.65rem] uppercase tracking-wider mt-0.5"
+              style={{ color: 'var(--text-muted, #94a3b8)', fontFamily: 'JetBrains Mono, monospace' }}
+            >
+              Recruiter Dashboard
             </div>
           </div>
+        </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2 overflow-y-auto" aria-label="Dashboard navigation">
-            {menuItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className={`
-                    flex items-center gap-3 px-4 py-3 rounded-lg transition-all
-                    ${
-                      isActive
-                        ? 'bg-gradient-to-r from-recruiter-primary/20 to-recruiter-primary/10 text-white border border-recruiter-primary/30'
-                        : 'text-recruiter-primary-light hover:text-white hover:bg-recruiter-background-tertiary'
-                    }
-                  `}
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  <item.icon className="w-5 h-5" aria-hidden="true" />
-                  <span className="font-medium flex-1">{item.label}</span>
-                  {item.badge && (
-                    <span className="text-xs bg-recruiter-background-tertiary px-2 py-1 rounded-full">
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto px-4 py-6 flex flex-col gap-0.5" aria-label="Dashboard navigation">
+          {menuItems.map((item) => {
+            const active = isActive(item.href);
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className="flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-medium transition-all"
+                style={{
+                  background: active
+                    ? 'linear-gradient(90deg, rgba(139,92,246,0.1), transparent)'
+                    : 'transparent',
+                  color: active ? '#ffffff' : 'var(--text-muted, #94a3b8)',
+                  borderLeft: active ? '3px solid #ec4899' : '3px solid transparent',
+                  borderTop: '1px solid transparent',
+                  borderBottom: '1px solid transparent',
+                  borderRight: '1px solid transparent',
+                  borderImage: active ? undefined : undefined,
+                }}
+                onMouseEnter={(e) => {
+                  if (active) return;
+                  e.currentTarget.style.background = 'var(--bg-hover, #161925)';
+                  e.currentTarget.style.color = '#ffffff';
+                }}
+                onMouseLeave={(e) => {
+                  if (active) return;
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = 'var(--text-muted, #94a3b8)';
+                }}
+                aria-current={active ? 'page' : undefined}
+              >
+                <div className="flex items-center gap-3">
+                  <item.icon
+                    className="w-[18px] h-[18px]"
+                    style={{ opacity: active ? 1 : 0.7, color: active ? '#ec4899' : undefined }}
+                    aria-hidden="true"
+                  />
+                  <span>{item.label}</span>
+                </div>
+                {item.badge && (
+                  <span
+                    className="text-[0.65rem] px-2 py-0.5 rounded-full"
+                    style={{
+                      fontFamily: 'JetBrains Mono, monospace',
+                      background: active ? 'rgba(236,72,153,0.15)' : 'rgba(255,255,255,0.05)',
+                      color: active ? '#ec4899' : 'var(--text-muted, #94a3b8)',
+                    }}
+                  >
+                    {item.badge}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </nav>
 
-          {/* Footer */}
-          <div className="p-4 border-t border-recruiter-background-tertiary">
-            <div className="text-xs text-recruiter-primary-light">
-              <p>Version 1.0.0</p>
-              <p className="mt-1">© 2026 AROHAN</p>
-            </div>
-          </div>
+        {/* Footer */}
+        <div
+          className="px-6 py-5 text-[0.7rem]"
+          style={{
+            color: 'var(--text-faint, #475569)',
+            borderTop: '1px solid var(--border-dim, rgba(255,255,255,0.05))',
+            fontFamily: 'JetBrains Mono, monospace',
+          }}
+        >
+          <div>Version 1.0.0</div>
+          <div className="mt-1">&copy; 2026 AROHAN</div>
         </div>
       </aside>
 
