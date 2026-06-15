@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Filter, Download, RefreshCw, Users, Phone, MapPin, Calendar, CheckCircle, XCircle, Clock, Star, Award, MoreVertical } from 'lucide-react';
-import { cn } from '@arohan/shared';
+import { Search, Filter, Download, Users, CheckCircle, XCircle, Clock, Award, MoreVertical } from 'lucide-react';
 
 const mockCandidates = [
   { id: '1', name: 'Rajesh Kumar', phone: '+91 98765 43210', email: 'rajesh.k@email.com', role: 'Delivery Partner', location: 'Bangalore, Karnataka', status: 'screened', score: 78, lastActive: '2025-05-10T10:30:00Z' },
@@ -11,6 +10,12 @@ const mockCandidates = [
   { id: '4', name: 'Sunita Devi', phone: '+91 65432 10987', email: 'sunita.d@email.com', role: 'Field Sales', location: 'Chennai, Tamil Nadu', status: 'rejected', score: 45, lastActive: '2025-05-08T16:45:00Z' },
   { id: '5', name: 'Ravi Verma', phone: '+91 54321 09876', email: 'ravi.v@email.com', role: 'Delivery Partner', location: 'Delhi, NCR', status: 'screened', score: 72, lastActive: '2025-05-10T11:00:00Z' },
 ];
+
+const statusConfig: Record<string, string> = {
+  shortlisted: 'status-badge-recruiter shortlisted',
+  screened: 'status-badge-recruiter screened',
+  pending: 'status-badge-recruiter pending',
+};
 
 export default function RecruiterCandidatesPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -28,130 +33,190 @@ export default function RecruiterCandidatesPage() {
     return matchesSearch && matchesStatus && matchesScore;
   });
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'shortlisted': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-      case 'screened': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'rejected': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      case 'pending': return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-      default: return 'bg-neutral-800 text-neutral-400';
+  const getStatusBadge = (status: string) => {
+    const className = statusConfig[status];
+    if (className) {
+      return <span className={className}>{status}</span>;
     }
+    return (
+      <span
+        className="status-badge-recruiter"
+        style={{
+          background: 'rgba(239, 68, 68, 0.1)',
+          color: '#ef4444',
+          borderColor: 'rgba(239, 68, 68, 0.2)',
+        }}
+      >
+        {status}
+      </span>
+    );
   };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-emerald-400';
-    if (score >= 60) return 'text-amber-400';
-    if (score > 0) return 'text-red-400';
-    return 'text-neutral-500';
+  const getScoreStyle = (score: number) => {
+    if (score >= 80) return { color: '#10b981' };
+    if (score >= 60) return { color: '#f59e0b' };
+    if (score > 0) return { color: '#ef4444' };
+    return { color: 'var(--text-faint, #475569)' };
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Candidates</h1>
-          <p className="text-neutral-400">View and manage candidate profiles and screening results</p>
-        </div>
-        <div className="flex gap-3">
-          <button onClick={() => setShowFilters(!showFilters)} className={cn("px-4 py-2 border rounded-lg transition-colors flex items-center gap-2", showFilters ? "border-violet-500 text-violet-400 bg-violet-500/10" : "border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-800")}>
-            <Filter className="w-4 h-4" /> Filters
-          </button>
-          <button className="px-4 py-2 border border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-800 rounded-lg transition-colors flex items-center gap-2">
-            <Download className="w-4 h-4" /> Export
-          </button>
-        </div>
-      </div>
+    <div className="p-8 h-full overflow-y-auto">
+      <div className="max-w-[1400px] mx-auto flex flex-col gap-8">
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Total</span><Users className="w-5 h-5 text-violet-400" /></div>
-          <div className="text-2xl font-bold text-white">{mockCandidates.length}</div>
+        {/* Page header */}
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h1 className="text-[1.8rem] font-semibold tracking-tight" style={{ color: '#ffffff' }}>
+              Candidates
+            </h1>
+            <p className="text-sm font-mono tracking-wide" style={{ color: '#8b5cf6' }}>
+              View and manage candidate profiles and screening results
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={showFilters ? "btn-recruiter-primary text-sm" : "btn-recruiter-secondary text-sm"}
+            >
+              <Filter size={14} /> Filters
+            </button>
+            <button className="btn-recruiter-secondary text-sm">
+              <Download size={14} /> Export
+            </button>
+          </div>
         </div>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Screened</span><Clock className="w-5 h-5 text-blue-400" /></div>
-          <div className="text-2xl font-bold text-white">3</div>
-        </div>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Shortlisted</span><CheckCircle className="w-5 h-5 text-emerald-400" /></div>
-          <div className="text-2xl font-bold text-white">1</div>
-        </div>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Rejected</span><XCircle className="w-5 h-5 text-red-400" /></div>
-          <div className="text-2xl font-bold text-white">1</div>
-        </div>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4"><span className="text-neutral-400 text-sm">Avg Score</span><Award className="w-5 h-5 text-amber-400" /></div>
-          <div className="text-2xl font-bold text-white">64.8</div>
-        </div>
-      </div>
 
-      {showFilters && (
-        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">Status</label>
-              <select onChange={(e) => setStatusFilter(e.target.value)} className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-lg px-3 py-2">
-                <option value="all">All</option>
-                <option value="pending">Pending</option>
-                <option value="screened">Screened</option>
-                <option value="shortlisted">Shortlisted</option>
-                <option value="rejected">Rejected</option>
-              </select>
+        {/* Metric cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="metric-card-recruiter">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium" style={{ color: 'var(--text-muted, #94a3b8)' }}>Total</span>
+              <Users size={16} style={{ color: '#8b5cf6' }} />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">Score</label>
-              <select onChange={(e) => setScoreFilter(e.target.value)} className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-lg px-3 py-2">
-                <option value="all">All Scores</option>
-                <option value="high">High (80+)</option>
-                <option value="medium">Medium (60-79)</option>
-                <option value="low">Low (0-59)</option>
-              </select>
+            <div className="mc-value-recruiter">{mockCandidates.length}</div>
+          </div>
+          <div className="metric-card-recruiter">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium" style={{ color: 'var(--text-muted, #94a3b8)' }}>Screened</span>
+              <Clock size={16} style={{ color: '#3b82f6' }} />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">Search</label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-500" />
-                <input type="text" placeholder="Search candidates..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-neutral-800 border border-neutral-700 text-white placeholder-neutral-500 rounded-lg pl-10 pr-3 py-2" />
+            <div className="mc-value-recruiter">3</div>
+          </div>
+          <div className="metric-card-recruiter">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium" style={{ color: 'var(--text-muted, #94a3b8)' }}>Shortlisted</span>
+              <CheckCircle size={16} style={{ color: '#10b981' }} />
+            </div>
+            <div className="mc-value-recruiter">1</div>
+          </div>
+          <div className="metric-card-recruiter">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium" style={{ color: 'var(--text-muted, #94a3b8)' }}>Rejected</span>
+              <XCircle size={16} style={{ color: '#ef4444' }} />
+            </div>
+            <div className="mc-value-recruiter">1</div>
+          </div>
+          <div className="metric-card-recruiter">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium" style={{ color: 'var(--text-muted, #94a3b8)' }}>Avg Score</span>
+              <Award size={16} style={{ color: '#f59e0b' }} />
+            </div>
+            <div className="mc-value-recruiter">64.8</div>
+          </div>
+        </div>
+
+        {/* Filters panel */}
+        {showFilters && (
+          <div className="panel-recruiter">
+            <div className="panel-body-recruiter">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-muted, #94a3b8)' }}>Status</label>
+                  <select onChange={(e) => setStatusFilter(e.target.value)} className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-lg px-3 py-2">
+                    <option value="all">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="screened">Screened</option>
+                    <option value="shortlisted">Shortlisted</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-muted, #94a3b8)' }}>Score</label>
+                  <select onChange={(e) => setScoreFilter(e.target.value)} className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-lg px-3 py-2">
+                    <option value="all">All Scores</option>
+                    <option value="high">High (80+)</option>
+                    <option value="medium">Medium (60-79)</option>
+                    <option value="low">Low (0-59)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-muted, #94a3b8)' }}>Search</label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-faint, #475569)' }} />
+                    <input type="text" placeholder="Search candidates..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-neutral-800 border border-neutral-700 text-white placeholder-neutral-500 rounded-lg pl-10 pr-3 py-2" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <div className="bg-neutral-900 border border-neutral-800 rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-neutral-800">
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Candidate</th>
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Role</th>
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Status</th>
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Score</th>
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Location</th>
-              <th className="text-left text-neutral-400 font-medium text-sm p-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((candidate) => (
-              <tr key={candidate.id} className="border-b border-neutral-800 hover:bg-neutral-800/50 transition-colors">
-                <td className="p-4">
-                  <div className="font-medium text-white">{candidate.name}</div>
-                  <div className="text-sm text-neutral-400">{candidate.phone}</div>
-                </td>
-                <td className="p-4 text-neutral-300">{candidate.role}</td>
-                <td className="p-4">
-                  <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full border ${getStatusColor(candidate.status)}`}>{candidate.status}</span>
-                </td>
-                <td className="p-4">
-                  <span className={`font-medium ${getScoreColor(candidate.score)}`}>{candidate.score > 0 ? candidate.score : '--'}</span>
-                </td>
-                <td className="p-4 text-neutral-300">{candidate.location}</td>
-                <td className="p-4">
-                  <button className="p-2 hover:bg-neutral-800 rounded-lg transition-colors text-neutral-400 hover:text-white"><MoreVertical className="w-4 h-4" /></button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {/* Candidates Table */}
+        <div className="panel-recruiter">
+          <div className="panel-header-recruiter">
+            <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>All Candidates</h2>
+            <span className="text-xs font-mono" style={{ color: 'var(--text-faint, #475569)' }}>{filtered.length} results</span>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full" style={{ borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-dim, rgba(255,255,255,0.05))' }}>
+                  <th className="p-4 text-left text-[0.75rem] uppercase tracking-wider font-semibold" style={{ color: 'var(--text-faint, #475569)' }}>Candidate</th>
+                  <th className="p-4 text-left text-[0.75rem] uppercase tracking-wider font-semibold" style={{ color: 'var(--text-faint, #475569)' }}>Role</th>
+                  <th className="p-4 text-left text-[0.75rem] uppercase tracking-wider font-semibold" style={{ color: 'var(--text-faint, #475569)' }}>Status</th>
+                  <th className="p-4 text-left text-[0.75rem] uppercase tracking-wider font-semibold" style={{ color: 'var(--text-faint, #475569)' }}>Score</th>
+                  <th className="p-4 text-left text-[0.75rem] uppercase tracking-wider font-semibold" style={{ color: 'var(--text-faint, #475569)' }}>Location</th>
+                  <th className="p-4 text-left text-[0.75rem] uppercase tracking-wider font-semibold" style={{ color: 'var(--text-faint, #475569)' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((candidate) => (
+                  <tr
+                    key={candidate.id}
+                    style={{ borderBottom: '1px solid var(--border-dim, rgba(255,255,255,0.05))' }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.01)'; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                  >
+                    <td className="p-4">
+                      <div className="text-sm font-semibold" style={{ color: '#ffffff' }}>{candidate.name}</div>
+                      <div className="text-xs font-mono" style={{ color: 'var(--text-muted, #94a3b8)' }}>{candidate.phone}</div>
+                    </td>
+                    <td className="p-4">
+                      <div className="text-sm" style={{ color: '#ffffff' }}>{candidate.role}</div>
+                    </td>
+                    <td className="p-4">
+                      {getStatusBadge(candidate.status)}
+                    </td>
+                    <td className="p-4">
+                      <span className="font-mono font-semibold" style={getScoreStyle(candidate.score)}>
+                        {candidate.score > 0 ? candidate.score : '--'}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <div className="text-sm" style={{ color: 'var(--text-muted, #94a3b8)' }}>{candidate.location}</div>
+                    </td>
+                    <td className="p-4">
+                      <button className="btn-recruiter-secondary" style={{ padding: '0.35rem', borderRadius: '6px' }}>
+                        <MoreVertical size={14} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
   );
