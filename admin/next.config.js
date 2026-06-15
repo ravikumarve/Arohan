@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   compress: true,
   productionBrowserSourceMaps: false,
+  transpilePackages: ['@arohan/shared'],
   env: {
     NEXT_PUBLIC_APP_NAME: 'AROHAN Platform Admin',
     NEXT_PUBLIC_APP_VERSION: '1.0.0',

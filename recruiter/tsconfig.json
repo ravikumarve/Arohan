@@ -21,6 +21,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@arohan/shared/*": [
+        "../shared/src/*"
       ]
     },
     "plugins": [
