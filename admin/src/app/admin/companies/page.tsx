@@ -11,8 +11,6 @@ const mockCompanies = [
   { id: '5', name: 'HealthFirst Clinics', email: 'recruitment@healthfirst.in', phone: '+91 11 4567 8901', location: 'Delhi, NCR', status: 'inactive', users: 8, plan: 'Growth' },
 ];
 
-export const dynamic = 'force-dynamic';
-
 const planStyles: Record<string, string> = {
   Enterprise: 'badge-cobalt enterprise',
   Growth: 'badge-cobalt growth',

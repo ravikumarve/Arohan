@@ -11,8 +11,6 @@ const mockLogs = [
   { id: '5', user: 'System', action: 'API Rate Limit', entity: 'API', entityId: 'API-001', details: 'Rate limit exceeded for endpoint /api/v1/candidates', timestamp: '2025-05-10 08:55:22', severity: 'warning' },
 ];
 
-export const dynamic = 'force-dynamic';
-
 const severityConfig: Record<string, { icon: typeof Info; bg: string; color: string }> = {
   info: { icon: Info, bg: 'rgba(99, 102, 241, 0.15)', color: '#6366f1' },
   warning: { icon: AlertTriangle, bg: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' },

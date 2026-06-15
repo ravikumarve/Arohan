@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import {
   Users, Building2, Activity, IndianRupee, Search, Bell,
-  Sun, Download, Calendar, Shield,
+  Sun, Download, Calendar, Shield, Zap,
 } from 'lucide-react';
 
 const metrics = [
@@ -71,6 +72,35 @@ const statusStyles: Record<string, string> = {
 
 export default function AdminOverview() {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
+
+  const handleExportReport = useCallback(() => {
+    setLoadingStates(prev => ({ ...prev, export: true }));
+    setTimeout(() => {
+      setLoadingStates(prev => ({ ...prev, export: false }));
+      toast.success('Report exported successfully');
+    }, 1000);
+  }, []);
+
+  const handleLast30Days = useCallback(() => {
+    toast.info('Showing data for last 30 days');
+  }, []);
+
+  const handleViewAll = useCallback(() => {
+    toast.info('Viewing all tenants');
+  }, []);
+
+  const handleViewLogs = useCallback(() => {
+    toast.info('Opening audit logs');
+  }, []);
+
+  const handleToggleTheme = useCallback(() => {
+    toast.info('Theme toggle coming soon');
+  }, []);
+
+  const handleNotifications = useCallback(() => {
+    toast.info('No new notifications');
+  }, []);
 
   return (
     <>
@@ -107,6 +137,7 @@ export default function AdminOverview() {
             }}
             onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover, #1e2230)'; e.currentTarget.style.color = '#f8fafc'; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted, #94a3b8)'; }}
+            onClick={handleToggleTheme}
           >
             <Sun size={16} />
           </button>
@@ -119,6 +150,7 @@ export default function AdminOverview() {
             }}
             onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover, #1e2230)'; e.currentTarget.style.color = '#f8fafc'; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted, #94a3b8)'; }}
+            onClick={handleNotifications}
           >
             <Bell size={16} />
             <span
@@ -144,13 +176,20 @@ export default function AdminOverview() {
               </p>
             </div>
             <div className="flex gap-3">
-              <button className="btn-cobalt-secondary text-sm">
+              <button className="btn-cobalt-secondary text-sm" onClick={handleLast30Days}>
                 <Calendar size={14} />
                 Last 30 Days
               </button>
-              <button className="btn-cobalt-primary text-sm">
-                <Download size={14} />
-                Export Report
+              <button
+                onClick={handleExportReport}
+                disabled={loadingStates.export}
+                className="btn-cobalt-primary text-sm"
+              >
+                {loadingStates.export ? (
+                  <><Zap size={14} className="animate-spin" /> Exporting...</>
+                ) : (
+                  <><Download size={14} /> Export Report</>
+                )}
               </button>
             </div>
           </div>
@@ -190,7 +229,7 @@ export default function AdminOverview() {
             <div className="panel">
               <div className="panel-header">
                 <h2 className="panel-title" style={{ color: '#f8fafc' }}>Recent Tenants</h2>
-                <button className="btn-cobalt-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>
+                <button className="btn-cobalt-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }} onClick={handleViewAll}>
                   View All
                 </button>
               </div>
@@ -256,7 +295,7 @@ export default function AdminOverview() {
                   <Shield size={16} style={{ color: '#6366f1' }} />
                   Security & Audit
                 </h2>
-                <button className="btn-cobalt-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>
+                <button className="btn-cobalt-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }} onClick={handleViewLogs}>
                   Logs
                 </button>
               </div>

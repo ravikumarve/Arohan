@@ -11,8 +11,6 @@ const mockUsers = [
   { id: '5', name: 'Ravi Verma', email: 'ravi.verma@arohan.ai', phone: '+91 54321 09876', role: 'Viewer', status: 'active', lastLogin: '2025-05-10 08:00 AM' },
 ];
 
-export const dynamic = 'force-dynamic';
-
 export default function AdminUsersPage() {
   const [search, setSearch] = useState('');
 

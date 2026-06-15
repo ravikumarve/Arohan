@@ -11,8 +11,6 @@ const mockInvoices = [
   { id: 'INV-2025-005', company: 'HealthFirst Clinics', amount: 22000, status: 'overdue', date: '2025-04-15', dueDate: '2025-04-29' },
 ];
 
-export const dynamic = 'force-dynamic';
-
 export default function AdminBillingPage() {
   const [search, setSearch] = useState('');
 

@@ -16,9 +16,6 @@ const mockAlerts = [
   { id: '2', message: 'STT Pipeline latency spike', severity: 'critical', time: '5 min ago' },
   { id: '3', message: 'Database backup completed', severity: 'info', time: '15 min ago' },
 ];
-
-export const dynamic = 'force-dynamic';
-
 const severityStyles: Record<string, { bg: string; color: string }> = {
   info: { bg: 'rgba(99, 102, 241, 0.15)', color: '#6366f1' },
   warning: { bg: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' },
