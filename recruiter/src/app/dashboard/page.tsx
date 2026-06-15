@@ -1,5 +1,7 @@
 'use client';
 
+import { useCallback } from 'react';
+import { toast } from 'sonner';
 import { Users, Megaphone, Phone, Star, ArrowUp, Search, Filter } from 'lucide-react';
 
 const metrics = [
@@ -53,6 +55,22 @@ const avatarColorVariants: Record<string, string> = {
 };
 
 export default function RecruiterOverview() {
+  const handleUploadCandidates = useCallback(() => {
+    toast.info('Upload candidates feature coming soon');
+  }, []);
+
+  const handleCreateCampaign = useCallback(() => {
+    toast.info('Create campaign form coming soon');
+  }, []);
+
+  const handleLast30Days = useCallback(() => {
+    toast.info('Showing data for last 30 days');
+  }, []);
+
+  const handleToggleFilters = useCallback(() => {
+    toast.info('Filter options coming soon');
+  }, []);
+
   return (
     <div className="p-8 h-full overflow-y-auto">
       <div className="max-w-[1400px] mx-auto flex flex-col gap-8">
@@ -68,8 +86,8 @@ export default function RecruiterOverview() {
             </p>
           </div>
           <div className="flex gap-3">
-            <button className="btn-recruiter-secondary text-sm">Upload Candidates</button>
-            <button className="btn-recruiter-primary text-sm">Create Campaign</button>
+            <button className="btn-recruiter-secondary text-sm" onClick={handleUploadCandidates}>Upload Candidates</button>
+            <button className="btn-recruiter-primary text-sm" onClick={handleCreateCampaign}>Create Campaign</button>
           </div>
         </div>
 
@@ -99,7 +117,7 @@ export default function RecruiterOverview() {
           <div className="panel-recruiter">
             <div className="panel-header-recruiter">
               <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>Hiring Funnel</h2>
-              <button className="btn-recruiter-secondary" style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem' }}>
+              <button className="btn-recruiter-secondary" style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem' }} onClick={handleLast30Days}>
                 Last 30 Days
               </button>
             </div>
@@ -157,7 +175,7 @@ export default function RecruiterOverview() {
         <div className="panel-recruiter">
           <div className="panel-header-recruiter">
             <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>Recent Candidates</h2>
-            <button className="btn-recruiter-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>
+            <button className="btn-recruiter-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }} onClick={handleToggleFilters}>
               <Filter size={12} />
               Filters
             </button>

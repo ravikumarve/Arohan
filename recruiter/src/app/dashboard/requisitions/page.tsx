@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Plus, Search, Filter, MapPin, Users, Briefcase, MoreVertical, CheckCircle, PauseCircle } from 'lucide-react';
 
 const mockRequisitions = [
@@ -13,6 +14,14 @@ export default function RecruiterRequisitionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
+
+  const handleNewRequisition = useCallback(() => {
+    toast.info('New requisition form coming soon');
+  }, []);
+
+  const handleRequisitionAction = useCallback((title: string) => {
+    toast.info(`Actions for "${title}"`, { description: 'Edit, pause, or close requisition' });
+  }, []);
 
   const filtered = mockRequisitions.filter(r => {
     const matchesSearch = r.title.toLowerCase().includes(searchQuery.toLowerCase()) || r.location.toLowerCase().includes(searchQuery.toLowerCase());
@@ -55,7 +64,7 @@ export default function RecruiterRequisitionsPage() {
             <button onClick={() => setShowFilters(!showFilters)} className="btn-recruiter-secondary">
               <Filter className="w-4 h-4" /> Filters
             </button>
-            <button className="btn-recruiter-primary">
+            <button className="btn-recruiter-primary" onClick={handleNewRequisition}>
               <Plus className="w-4 h-4" /> New Requisition
             </button>
           </div>
@@ -221,6 +230,7 @@ export default function RecruiterRequisitionsPage() {
                         (e.currentTarget as HTMLElement).style.color = 'var(--text-muted, #94a3b8)';
                         (e.currentTarget as HTMLElement).style.background = 'transparent';
                       }}
+                      onClick={() => handleRequisitionAction(req.title)}
                     >
                       <MoreVertical className="w-4 h-4" />
                     </button>

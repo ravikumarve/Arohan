@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Calendar, Clock, Phone, Video, CheckCircle, XCircle, AlertCircle, MoreVertical, Calendar as CalendarIcon, Users, Star, TrendingUp } from 'lucide-react';
 
 const mockInterviews = [
@@ -20,6 +21,14 @@ const metrics = [
 export default function RecruiterInterviewsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+
+  const handleScheduleInterview = useCallback(() => {
+    toast.info('Schedule interview form coming soon');
+  }, []);
+
+  const handleInterviewAction = useCallback((name: string) => {
+    toast.info(`Actions for ${name}`, { description: 'View details, reschedule, or cancel interview' });
+  }, []);
 
   const filtered = mockInterviews.filter(i => {
     const matchesSearch = i.candidateName.toLowerCase().includes(searchQuery.toLowerCase());
@@ -50,7 +59,7 @@ export default function RecruiterInterviewsPage() {
               Schedule and manage candidate interviews
             </p>
           </div>
-          <button className="btn-recruiter-primary">
+          <button className="btn-recruiter-primary" onClick={handleScheduleInterview}>
             <Calendar className="w-4 h-4" /> Schedule Interview
           </button>
         </div>
@@ -142,6 +151,7 @@ export default function RecruiterInterviewsPage() {
                         style={{ color: 'var(--text-muted, #94a3b8)' }}
                         onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#ffffff'; (e.currentTarget as HTMLElement).style.background = 'var(--bg-hover, #161925)'; }}
                         onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted, #94a3b8)'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                        onClick={() => handleInterviewAction(interview.candidateName)}
                       >
                         <MoreVertical className="w-4 h-4" />
                       </button>

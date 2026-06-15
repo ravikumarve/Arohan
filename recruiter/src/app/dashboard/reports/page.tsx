@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { FileText, Download } from 'lucide-react';
 
 const reportTypes = [
@@ -19,6 +20,14 @@ const recentReports = [
 
 export default function ReportsPage() {
   const [dateRange, setDateRange] = useState('last-30-days');
+
+  const handleExportAll = useCallback(() => {
+    toast.success('Exporting all reports...');
+  }, []);
+
+  const handleDownloadReport = useCallback((name: string) => {
+    toast.success(`Downloading "${name}"`);
+  }, []);
 
   return (
     <div className="p-8 h-full overflow-y-auto">
@@ -45,7 +54,7 @@ export default function ReportsPage() {
               <option value="last-90-days">Last 90 Days</option>
               <option value="this-year">This Year</option>
             </select>
-            <button className="btn-recruiter-primary text-sm">
+            <button className="btn-recruiter-primary text-sm" onClick={handleExportAll}>
               <Download className="w-4 h-4" />
               Export All
             </button>
@@ -74,6 +83,7 @@ export default function ReportsPage() {
                   style={{ color: '#8b5cf6' }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#a78bfa'; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#8b5cf6'; }}
+                  onClick={() => handleDownloadReport(report.name)}
                 >
                   <Download className="w-4 h-4" />
                   Download
@@ -111,6 +121,7 @@ export default function ReportsPage() {
                   style={{ color: '#8b5cf6' }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#a78bfa'; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#8b5cf6'; }}
+                  onClick={() => handleDownloadReport(report.name)}
                 >
                   <Download className="w-4 h-4" />
                 </button>

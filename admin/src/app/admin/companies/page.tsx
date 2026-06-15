@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Building2, Search, Users, CheckCircle, MoreVertical } from 'lucide-react';
 
 const mockCompanies = [
@@ -26,6 +27,14 @@ const statusStyles: Record<string, string> = {
 export default function AdminCompaniesPage() {
   const [search, setSearch] = useState('');
 
+  const handleAddCompany = useCallback(() => {
+    toast.info('Add company form coming soon');
+  }, []);
+
+  const handleCompanyAction = useCallback((companyName: string) => {
+    toast.info(`Actions for ${companyName}`, { description: 'Edit, suspend, or manage company' });
+  }, []);
+
   const filtered = mockCompanies.filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
     c.email.toLowerCase().includes(search.toLowerCase())
@@ -48,7 +57,7 @@ export default function AdminCompaniesPage() {
               Manage companies and their subscriptions
             </p>
           </div>
-          <button className="btn-cobalt-primary text-sm">
+          <button className="btn-cobalt-primary text-sm" onClick={handleAddCompany}>
             <Building2 size={14} />
             Add Company
           </button>
@@ -186,6 +195,7 @@ export default function AdminCompaniesPage() {
                         }}
                         onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover, #1e2230)'; e.currentTarget.style.color = '#f8fafc'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted, #94a3b8)'; }}
+                        onClick={() => handleCompanyAction(company.name)}
                       >
                         <MoreVertical size={16} />
                       </button>

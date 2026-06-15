@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Search, Filter, Download, Users, CheckCircle, XCircle, Clock, Award, MoreVertical } from 'lucide-react';
 
 const mockCandidates = [
@@ -22,6 +23,14 @@ export default function RecruiterCandidatesPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [scoreFilter, setScoreFilter] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
+
+  const handleExport = useCallback(() => {
+    toast.success('Exporting candidates data...');
+  }, []);
+
+  const handleCandidateAction = useCallback((name: string) => {
+    toast.info(`Actions for ${name}`, { description: 'View profile, shortlist, or contact candidate' });
+  }, []);
 
   const filtered = mockCandidates.filter(c => {
     const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) || c.phone.includes(searchQuery);
@@ -80,7 +89,7 @@ export default function RecruiterCandidatesPage() {
             >
               <Filter size={14} /> Filters
             </button>
-            <button className="btn-recruiter-secondary text-sm">
+            <button className="btn-recruiter-secondary text-sm" onClick={handleExport}>
               <Download size={14} /> Export
             </button>
           </div>
@@ -206,7 +215,7 @@ export default function RecruiterCandidatesPage() {
                       <div className="text-sm" style={{ color: 'var(--text-muted, #94a3b8)' }}>{candidate.location}</div>
                     </td>
                     <td className="p-4">
-                      <button className="btn-recruiter-secondary" style={{ padding: '0.35rem', borderRadius: '6px' }}>
+                      <button className="btn-recruiter-secondary" style={{ padding: '0.35rem', borderRadius: '6px' }} onClick={() => handleCandidateAction(candidate.name)}>
                         <MoreVertical size={14} />
                       </button>
                     </td>

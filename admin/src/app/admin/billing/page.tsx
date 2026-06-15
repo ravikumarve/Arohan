@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { DollarSign, Search, XCircle, Clock, FileText, Download, Calendar } from 'lucide-react';
 
 const mockInvoices = [
@@ -13,6 +14,18 @@ const mockInvoices = [
 
 export default function AdminBillingPage() {
   const [search, setSearch] = useState('');
+
+  const handleLast30Days = useCallback(() => {
+    toast.info('Showing data for last 30 days');
+  }, []);
+
+  const handleCreateInvoice = useCallback(() => {
+    toast.info('Create invoice form coming soon');
+  }, []);
+
+  const handleDownloadInvoice = useCallback((invoiceId: string, company: string) => {
+    toast.success(`Downloading invoice ${invoiceId} for ${company}`);
+  }, []);
 
   const filtered = mockInvoices.filter(i => 
     i.company.toLowerCase().includes(search.toLowerCase()) || 
@@ -47,11 +60,11 @@ export default function AdminBillingPage() {
             </p>
           </div>
           <div className="flex gap-3">
-            <button className="btn-cobalt-secondary text-sm">
+            <button className="btn-cobalt-secondary text-sm" onClick={handleLast30Days}>
               <Calendar size={14} />
               Last 30 Days
             </button>
-            <button className="btn-cobalt-primary text-sm">
+            <button className="btn-cobalt-primary text-sm" onClick={handleCreateInvoice}>
               <FileText size={14} />
               Create Invoice
             </button>
@@ -189,6 +202,7 @@ export default function AdminBillingPage() {
                         }}
                         onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover, #1e2230)'; e.currentTarget.style.color = '#f8fafc'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted, #94a3b8)'; }}
+                        onClick={() => handleDownloadInvoice(invoice.id, invoice.company)}
                       >
                         <Download size={14} />
                       </button>

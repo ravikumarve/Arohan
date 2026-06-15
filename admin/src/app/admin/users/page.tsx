@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Users, Search, Shield, CheckCircle, XCircle, MoreVertical } from 'lucide-react';
 
 const mockUsers = [
@@ -13,6 +14,16 @@ const mockUsers = [
 
 export default function AdminUsersPage() {
   const [search, setSearch] = useState('');
+  const [actionUser, setActionUser] = useState<string | null>(null);
+
+  const handleAddUser = useCallback(() => {
+    toast.info('Add user form coming soon');
+  }, []);
+
+  const handleUserAction = useCallback((userId: string, userName: string) => {
+    setActionUser(actionUser === userId ? null : userId);
+    toast.info(`Actions for ${userName}`, { description: 'Edit, suspend, or delete user' });
+  }, [actionUser]);
 
   const filtered = mockUsers.filter(u =>
     u.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -63,7 +74,7 @@ export default function AdminUsersPage() {
               Manage platform users and roles
             </p>
           </div>
-          <button className="btn-cobalt-primary">
+          <button className="btn-cobalt-primary" onClick={handleAddUser}>
             <Users size={16} />
             Add User
           </button>
@@ -164,6 +175,7 @@ export default function AdminUsersPage() {
                         }}
                         onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover, #1e2230)'; e.currentTarget.style.color = '#f8fafc'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted, #94a3b8)'; }}
+                        onClick={() => handleUserAction(user.id, user.name)}
                       >
                         <MoreVertical size={14} />
                       </button>

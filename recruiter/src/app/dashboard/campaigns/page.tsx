@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Plus, Search, Filter, TrendingUp, Users, DollarSign, Play, Pause, MoreVertical } from 'lucide-react';
 
 const mockCampaigns = [
@@ -13,6 +14,14 @@ export default function RecruiterCampaignsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
+
+  const handleNewCampaign = useCallback(() => {
+    toast.info('New campaign form coming soon');
+  }, []);
+
+  const handleCampaignAction = useCallback((name: string) => {
+    toast.info(`Actions for "${name}"`, { description: 'Edit, pause, or view campaign analytics' });
+  }, []);
 
   const filteredCampaigns = mockCampaigns.filter(c => {
     const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -47,7 +56,7 @@ export default function RecruiterCampaignsPage() {
             <button onClick={() => setShowFilters(!showFilters)} className="btn-recruiter-secondary text-sm">
               <Filter size={14} /> Filters
             </button>
-            <button className="btn-recruiter-primary text-sm">
+            <button className="btn-recruiter-primary text-sm" onClick={handleNewCampaign}>
               <Plus size={14} /> New Campaign
             </button>
           </div>
@@ -151,6 +160,7 @@ export default function RecruiterCampaignsPage() {
                         style={{ color: 'var(--text-muted, #94a3b8)' }}
                         onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#ffffff'; }}
                         onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted, #94a3b8)'; }}
+                        onClick={() => handleCampaignAction(campaign.name)}
                       >
                         <MoreVertical className="w-4 h-4" />
                       </button>

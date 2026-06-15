@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Bell, Mail, User, Building2, Shield, Palette } from 'lucide-react';
 
 export default function SettingsPage() {
@@ -11,6 +12,18 @@ export default function SettingsPage() {
     sms: false,
     weeklyReport: true,
   });
+
+  const handleSaveProfile = useCallback(() => {
+    toast.success('Profile saved successfully');
+  }, []);
+
+  const handleSaveCompany = useCallback(() => {
+    toast.success('Company settings saved successfully');
+  }, []);
+
+  const handleUpdatePassword = useCallback(() => {
+    toast.success('Password updated successfully');
+  }, []);
 
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
@@ -104,7 +117,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="flex justify-end">
-                    <button className="btn-recruiter-primary">
+                    <button className="btn-recruiter-primary" onClick={handleSaveProfile}>
                       Save Changes
                     </button>
                   </div>
@@ -149,7 +162,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="flex justify-end">
-                    <button className="btn-recruiter-primary">
+                    <button className="btn-recruiter-primary" onClick={handleSaveCompany}>
                       Save Changes
                     </button>
                   </div>
@@ -235,7 +248,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="flex justify-end">
-                    <button className="btn-recruiter-primary">
+                    <button className="btn-recruiter-primary" onClick={handleUpdatePassword}>
                       Update Password
                     </button>
                   </div>
