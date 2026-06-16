@@ -1,9 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Bell, Search, User, LogOut, Settings, Building2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function RecruiterHeader() {
+  const router = useRouter();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -79,7 +82,13 @@ export default function RecruiterHeader() {
                   />
                 </div>
                 <div className="p-4 border-t border-recruiter-background-tertiary">
-                  <button className="text-sm text-recruiter-primary hover:text-white transition-colors">
+                  <button
+                    onClick={() => {
+                      setIsNotificationsOpen(false);
+                      toast.info('All notifications view coming soon');
+                    }}
+                    className="text-sm text-recruiter-primary hover:text-white transition-colors"
+                  >
                     View all notifications
                   </button>
                 </div>
@@ -110,11 +119,24 @@ export default function RecruiterHeader() {
                   <p className="text-sm text-recruiter-primary-light">hr@logisticspro.com</p>
                 </div>
                 <div className="py-2">
-                  <button className="flex items-center gap-2 w-full px-4 py-2 text-left text-recruiter-primary-light hover:text-white hover:bg-recruiter-background-tertiary transition-colors">
+                  <button
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      router.push('/dashboard/settings');
+                    }}
+                    className="flex items-center gap-2 w-full px-4 py-2 text-left text-recruiter-primary-light hover:text-white hover:bg-recruiter-background-tertiary transition-colors"
+                  >
                     <Settings className="w-4 h-4" />
                     <span>Settings</span>
                   </button>
-                  <button className="flex items-center gap-2 w-full px-4 py-2 text-left text-recruiter-primary-light hover:text-white hover:bg-recruiter-background-tertiary transition-colors">
+                  <button
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      toast.success('Logged out successfully');
+                      router.push('/login');
+                    }}
+                    className="flex items-center gap-2 w-full px-4 py-2 text-left text-recruiter-primary-light hover:text-white hover:bg-recruiter-background-tertiary transition-colors"
+                  >
                     <LogOut className="w-4 h-4" />
                     <span>Logout</span>
                   </button>

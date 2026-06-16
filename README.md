@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/dashboard/arohan.png" alt="AROHAN Console" width="720">
+  <img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/console/overview.png" alt="AROHAN Console" width="720">
 </p>
 
 <h1 align="center">AROHAN — Voice-Native Mass Screening Mesh for Bharat</h1>
@@ -71,17 +71,17 @@ Three dashboards, one design system — each serving a distinct stakeholder. All
 <table>
   <tr>
     <td width="33%" align="center">
-      <img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/dashboard/arohan.png" width="280" alt="Console"><br>
+      <img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/console/overview.png" width="280" alt="Console"><br>
       <strong>⚙️ Console</strong><br>
       <sub>Internal Ops · Port 3000</sub>
     </td>
     <td width="33%" align="center">
-      <img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/admin/admin-admin.png" width="280" alt="Admin"><br>
+      <img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/admin/overview.png" width="280" alt="Admin"><br>
       <strong>🛡️ Admin</strong><br>
       <sub>Platform Admin · Port 3001</sub>
     </td>
     <td width="33%" align="center">
-      <img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/recruiter/recruiter-_dashboard.png" width="280" alt="Recruiter"><br>
+      <img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/recruiter/overview.png" width="280" alt="Recruiter"><br>
       <strong>💼 Recruiter</strong><br>
       <sub>Employer Portal · Port 3002</sub>
     </td>
@@ -121,16 +121,16 @@ Background: pure black (`#000000`) · Card surfaces: `bg-neutral-900` · Text: w
 
 <table>
   <tr>
-    <td><strong>Admin — Users</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/admin/admin-admin_users.png" width="300"></td>
-    <td><strong>Admin — Billing</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/admin/admin-admin_billing.png" width="300"></td>
+    <td><strong>Admin — Users</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/admin/users.png" width="300"></td>
+    <td><strong>Admin — Billing</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/admin/billing.png" width="300"></td>
   </tr>
   <tr>
-    <td><strong>Recruiter — Analytics</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/recruiter/recruiter-_dashboard_analytics.png" width="300"></td>
-    <td><strong>Recruiter — Candidates</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/recruiter/recruiter-_dashboard_candidates.png" width="300"></td>
+    <td><strong>Recruiter — Analytics</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/recruiter/analytics.png" width="300"></td>
+    <td><strong>Recruiter — Candidates</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/recruiter/candidates.png" width="300"></td>
   </tr>
   <tr>
-    <td><strong>Console — Monitoring</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/dashboard/main-dashboard-full.png" width="300"></td>
-    <td><strong>Admin — Audit</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/admin/admin-admin_audit.png" width="300"></td>
+    <td><strong>Console — Monitoring</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/console/monitoring.png" width="300"></td>
+    <td><strong>Admin — Audit</strong><br><img src="https://raw.githubusercontent.com/ravikumarve/Arohan/main/screenshots/admin/audit.png" width="300"></td>
   </tr>
 </table>
 

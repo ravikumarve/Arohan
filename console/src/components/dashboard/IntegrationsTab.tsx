@@ -155,6 +155,11 @@ const IntegrationsTab = memo(() => {
     toast.info(`Configuration panel for ${integrationId} would open here`);
   }, [isMounted]);
 
+  const handleAddIntegration = useCallback(() => {
+    if (!isMounted.current) return;
+    toast.info('Add integration form coming soon');
+  }, [isMounted]);
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'connected':
@@ -206,7 +211,7 @@ const IntegrationsTab = memo(() => {
           </h2>
           <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Manage third-party service connections</p>
         </div>
-        <Button className="bg-white/5 border border-white/10 text-white hover:bg-white/10">
+        <Button onClick={handleAddIntegration} className="bg-white/5 border border-white/10 text-white hover:bg-white/10">
           <Plug className="w-4 h-4 mr-2" />
           Add Integration
         </Button>

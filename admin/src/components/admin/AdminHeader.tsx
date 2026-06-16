@@ -1,13 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Bell, Search, User, LogOut, Settings, Menu } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface AdminHeaderProps {
   onMenuClick?: () => void;
 }
 
 export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
+  const router = useRouter();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -88,7 +91,13 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                   />
                 </div>
                 <div className="p-4 border-t border-border">
-                  <button className="text-sm text-primary hover:text-foreground transition-colors">
+                  <button
+                    onClick={() => {
+                      setIsNotificationsOpen(false);
+                      toast.info('All notifications view coming soon');
+                    }}
+                    className="text-sm text-primary hover:text-foreground transition-colors"
+                  >
                     View all notifications
                   </button>
                 </div>
@@ -119,11 +128,24 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                   <p className="text-sm text-muted-foreground">admin@arohan.com</p>
                 </div>
                 <div className="py-2">
-                  <button className="flex items-center gap-2 w-full px-4 py-2 text-left text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
+                  <button
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      router.push('/admin/settings');
+                    }}
+                    className="flex items-center gap-2 w-full px-4 py-2 text-left text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  >
                     <Settings className="w-4 h-4" />
                     <span>Settings</span>
                   </button>
-                  <button className="flex items-center gap-2 w-full px-4 py-2 text-left text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
+                  <button
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      toast.success('Logged out successfully');
+                      router.push('/login');
+                    }}
+                    className="flex items-center gap-2 w-full px-4 py-2 text-left text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  >
                     <LogOut className="w-4 h-4" />
                     <span>Logout</span>
                   </button>

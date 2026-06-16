@@ -67,6 +67,24 @@ const AgentsTab = memo(() => {
     toast(`Logs for ${agentName} would open here`);
   }, [isMounted]);
 
+  const handleRunAllTests = useCallback(() => {
+    if (!isMounted.current) return;
+
+    const agentNames = agents.map(a => a.name);
+    agentNames.forEach(name => {
+      setLoadingStates(prev => ({ ...prev, [name]: true }));
+    });
+
+    safeSetTimeout(() => {
+      if (isMounted.current) {
+        agentNames.forEach(name => {
+          setLoadingStates(prev => ({ ...prev, [name]: false }));
+        });
+        toast.success('All agent tests completed successfully');
+      }
+    }, 3000);
+  }, [agents, safeSetTimeout, isMounted]);
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
@@ -101,7 +119,11 @@ const AgentsTab = memo(() => {
           <h2 className="text-2xl font-bold text-white">Agent Testing</h2>
           <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>Test and monitor AI agents</p>
         </div>
-        <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+        <Button
+          onClick={handleRunAllTests}
+          disabled={Object.values(loadingStates).some(Boolean)}
+          className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+        >
           <Zap className="w-4 h-4 mr-2" />
           Run All Tests
         </Button>

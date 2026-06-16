@@ -110,6 +110,11 @@ const SessionsTab = memo(() => {
     }, 1500);
   }, [safeSetTimeout, isMounted]);
 
+  const handleFilters = useCallback(() => {
+    if (!isMounted.current) return;
+    toast.info('Filter options coming soon');
+  }, [isMounted]);
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
@@ -184,7 +189,7 @@ const SessionsTab = memo(() => {
               className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
             />
           </div>
-          <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 hover:border-white/20">
+          <Button onClick={handleFilters} variant="outline" className="border-white/10 text-white hover:bg-white/5 hover:border-white/20">
             <Filter className="w-4 h-4 mr-2" />
             Filters
           </Button>

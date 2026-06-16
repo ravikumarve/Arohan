@@ -172,8 +172,8 @@ next-env.d.ts
 package-lock.json
 nohup.out
 
-# Screenshots
-/screenshots/
+# Screenshots (tracked - do not ignore)
+# /screenshots/
 
 # Session files
 session-*.md
